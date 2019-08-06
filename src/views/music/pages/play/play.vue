@@ -201,12 +201,7 @@ export default {
 	flex-direction: column;
 	height: 100%;
 	font-size: 0.5rem;
-	i{
-		&:active{
-			color: black;
-			transform: scale(0.9);
-		}
-	}
+
 	.header{
 		display: flex;
 		flex-basis: 1rem;

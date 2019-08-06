@@ -2,13 +2,23 @@ import Index from './pages/index/index';
 import Play from './pages/play/play';
 import Menu from './pages/menu/menu';
 import My from './pages/my/my';
+import Find from './pages/find/find';
 import Search from './pages/search/search';
+
+import Example from './components/Example';
 
 let routes = [
     {
-        path: '/music',
+        path: '/music/index',
         name: 'index',
-        component: Index
+        component: Index,
+        children: [
+            {path: 'my', component: My},
+            {path: '', component: Find},
+            {path: 'find', component: Find},
+            {path: 'friend', component: Example},
+            {path: 'video', component: Example}
+        ]
     },
     {
         path: '/music/play',
