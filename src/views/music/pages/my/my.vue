@@ -1,15 +1,33 @@
 <template>
-  <div class="my-container">
-      <h1>my</h1>
-      <section class="tools"></section>
-      <section class="my-lists"></section>
-      <secxtion class="music-list"></secxtion>
-  </div>
+	<div class="my-container">
+		<section class="tools">
+			<div class="tools-row">
+				<Circular v-for="tool in toolsList" :title="tool.title" :picUrl="tool.picUrl" :key="tool.picUrl"/>
+			</div>
+		</section>
+		<section class="my-lists"></section>
+		<secxtion class="music-list"></secxtion>
+	</div>
 </template>
 
 <script>
+import Circular from '../../components/Circular';
 export default {
-  name: 'My'
+	name: 'My',
+	data() {
+		return {
+			toolsList: [
+				{picUrl: '/static/images/logo.png', title: '最新电音'},
+				{picUrl: '/static/images/logo.png', title: '私人FM'},
+				{picUrl: '/static/images/logo.png', title: '私藏推荐'},
+				{picUrl: '/static/images/logo.png', title: '古典推荐'},
+				{picUrl: '/static/images/logo.png', title: '跑步FM'},
+			]
+		}
+	},
+	components: {
+		Circular
+	}
 }
 </script>
 
@@ -22,7 +40,11 @@ export default {
           display: flex;
           flex-basis: 1.5rem;
           flex-grow: 1;
-          flex-shrink: 1;
+		  flex-shrink: 1;
+		  .tools-row{
+			  display: flex;
+
+		  }
         }
         .my-lists{
           display: flex;

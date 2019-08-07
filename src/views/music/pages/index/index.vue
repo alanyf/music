@@ -1,5 +1,5 @@
 <template>
-<div class="index-container" @click="hiddenSidebar">
+<div class="index-container">
 	<header class="header">
 		<div class="letf-sidebar-button">
 		<i class="el-icon-menu" @click.stop="showSidebar"></i>
@@ -17,7 +17,7 @@
 		<router-view></router-view>
 	</article>
 	<footer class="footer"></footer>
-	<Account :isShow="isShowSidebar"/>
+	<Account :isShow="isShowSidebar" @hiddenSidebar="hiddenSidebar"/>
 </div>
 </template>
 

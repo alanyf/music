@@ -1,6 +1,7 @@
 <template>
-  <div class="account-container" :style="{left: positionLtft}" @click.stop>
-      <h1>账户中心</h1>
+  <div class="account-container" :style="{left: positionLtft}">
+      <div class="account-content"><h1>账户中心</h1></div>
+      <div class="mask" @click.stop="hidden"></div>
   </div>
 </template>
 
@@ -9,7 +10,12 @@ export default {
     name: 'Account',
     data(){
         return {
-            left: 0
+            
+        }
+    },
+    methods: {
+        hidden(){
+            this.$emit('hiddenSidebar');
         }
     },
     props: {
@@ -31,10 +37,20 @@ export default {
 <style lang="less">
     .account-container{
         display: flex;
-        width: 80%;
+        width: 100%;
 		height: 100%;
-		background-color: aliceblue;
 		position: absolute;
-		left: 0;
+        left: 0;
+        .account-content{
+            width: 80%;
+            height: 100%;
+		    background-color: aliceblue;
+        }
+        .mask{
+            width: 20%;
+            height: 100%;
+            opacity: 0.3;
+            background-color: black;
+        }
     }
 </style>

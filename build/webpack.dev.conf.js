@@ -91,6 +91,14 @@ module.exports = merge(baseWebpackConfig, {
     /* new webpack.ProvidePlugin({
         d3: 'd3'
     })*/
+    new CopyWebpackPlugin([
+      {
+        from: path.resolve(__dirname, '../src/views/music/assets'),
+        to: config.dev.assetsPublicPath,
+        ignore: ['.*']
+      }
+
+    ]),
   ],
   optimization: {
       /*

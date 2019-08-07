@@ -14,7 +14,7 @@
 				</div>
 			</div>
 			<div v-else class="head-img" :style="{ transform: `rotate(${rotateDeg}deg)`}">
-				<img src="./img/head-img1.png"/>
+				<img src="../../assets/images/head-img1.png"/>
 			</div>
 		</section>
 		<section class="operation">
@@ -25,7 +25,7 @@
 			<div class="more"><i class="el-icon-more-outline"></i></div>
 		</section>
 		<section class="play-progress-bar">
-	　		<audio ref='audio' id="audio" preload="auto" class="audio" src="./media/song.mp3"></audio>
+	　		<audio ref='audio' id="audio" preload="auto" class="audio" src="../../assets/media/song.mp3"></audio>
 			<div class="time-now">{{timeNow}}</div>
 			<div class="progress-bar">
 				<el-slider v-model="playProcess" @change="processChange" :show-tooltip="false" :max="processLength"></el-slider>
