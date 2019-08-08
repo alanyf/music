@@ -2,16 +2,39 @@
 	<div class="my-container">
 		<section class="tools">
 			<div class="tools-row">
-				<Circular v-for="tool in toolsList" :title="tool.title" :picUrl="tool.picUrl" :key="tool.picUrl"/>
+				<Circular v-for="tool in toolsList" :title="tool.title" :icon="tool.icon" :key="tool.icon"/>
 			</div>
 		</section>
 		<section class="my-lists">
 			<div class="list-row" v-for="item in myList" :key="item.listName">
-				<div class="icon"><img :src="item.picUrl"/></div>
+				<div class="icon">
+					<i :class="item.icon"></i>
+				</div>
 				<div class="list-name">{{item.title}}<div class="item-num">({{item.num}})</div></div>
 			</div>
 		</section>
-		<secxtion class="music-list"></secxtion>
+		<secxtion class="music-list">
+			<div class="list-item">
+				<div class="header-bar">
+					<div class="door-icon" @click="triggerMusicList(index)">
+						<i :class="`el-icon-arrow-down ${isShowMusicList?'':'rotate'}`" ></i>
+					</div>
+					<div class="title">{{musicList.title}}<div class="item-num">({{musicList.list.length}})</div></div>
+					<div class="add-icon"><i class="el-icon-plus"></i></div>
+					<div class="more-icon"><i class="el-icon-more rotate-90"></i></div>
+				</div>
+				<div class="list-content" v-if="isShowMusicList">
+					<div class="list-row" v-for="item in musicList.list" :key="item.title" >
+						<div class="head-img"><img :src="item.picUrl"/></div>
+						<div class="row-content">
+							<div class="list-title">{{item.title}}</div>
+							<div class="list-info">{{item.num}}首，已下载{{item.downloadNum}}首</div>
+						</div>
+						<div class="more-icon"><i class="el-icon-more rotate-90"></i></div>
+					</div>
+				</div>
+			</div>
+		</secxtion>
 	</div>
 </template>
 
@@ -22,19 +45,38 @@ export default {
 	data() {
 		return {
 			toolsList: [
-				{picUrl: '/static/images/logo.png', title: '最新电音'},
-				{picUrl: '/static/images/logo.png', title: '私人FM'},
-				{picUrl: '/static/images/logo.png', title: '私藏推荐'},
-				{picUrl: '/static/images/logo.png', title: '古典推荐'},
-				{picUrl: '/static/images/logo.png', title: '跑步FM'},
+				{icon: 'el-icon-alarm-clock', title: '最新电音'},
+				{icon: 'el-icon-basketball', title: '私人FM'},
+				{icon: 'el-icon-heavy-rain', title: '私藏推荐'},
+				{icon: 'el-icon-dish', title: '古典推荐'},
+				{icon: 'el-icon-sugar', title: '跑步FM'},
+				{icon: 'el-icon-pear', title: '电台'},
 			],
 			myList: [
-				{picUrl: '/static/images/logo.png', title: '本地音乐', num: 19,  to: '/music/localList'},
-				{picUrl: '/static/images/logo.png', title: '最近播放', num: 102, to: '/music/localList'},
-				{picUrl: '/static/images/logo.png', title: '下载管理', num: 6,   to: '/music/localList'},
-				{picUrl: '/static/images/logo.png', title: '我的电台', num: 0,   to: '/music/localList'},
-				{picUrl: '/static/images/logo.png', title: '我的收藏', num: 3,   to: '/music/localList'}
-			]
+				{icon: 'el-icon-umbrella', title: '本地音乐', num: 19,  to: '/music/localList'},
+				{icon: 'el-icon-paperclip', title: '最近播放', num: 102, to: '/music/localList'},
+				{icon: 'el-icon-attract', title: '下载管理', num: 6,   to: '/music/localList'},
+				{icon: 'el-icon-reading', title: '我的电台', num: 0,   to: '/music/localList'},
+				{icon: 'el-icon-suitcase', title: '我的收藏', num: 3,   to: '/music/localList'}
+			],
+			musicList: {
+				title: '我的歌单', list: [
+					{picUrl: '/static/images/head-img-1.jpeg', title: '民谣', num: 210, downloadNum: 5},
+					{picUrl: '/static/images/head-img-2.jpeg', title: '抒情', num: 378, downloadNum: 24},
+					{picUrl: '/static/images/head-img-3.jpeg', title: '欧美', num: 32, downloadNum: 35},
+					{picUrl: '/static/images/head-img-4.jpeg', title: '流行', num: 45, downloadNum: 6},
+					{picUrl: '/static/images/head-img-5.jpeg', title: '布鲁斯', num: 98, downloadNum: 4},
+					{picUrl: '/static/images/head-img-6.jpeg', title: 'R&B', num: 24, downloadNum: 6},
+					{picUrl: '/static/images/head-img-7.jpeg', title: '古典', num: 34, downloadNum: 23},
+					{picUrl: '/static/images/head-img-8.jpeg', title: '钢琴曲', num: 58, downloadNum: 4},
+				]
+			},
+			isShowMusicList: true
+		}
+	},
+	methods: {
+		triggerMusicList(){
+			this.isShowMusicList = !this.isShowMusicList;
 		}
 	},
 	components: {
@@ -52,22 +94,21 @@ export default {
         .tools{
           display: flex;
           flex-basis: 1.5rem;
-          flex-grow: 1;
 		  flex-shrink: 1;
+		  
 		  .tools-row{
-			  display: flex;
-
+			  	display: flex;
+				overflow: scroll;
+				margin: 0.2rem 0;
 		  }
         }
         .my-lists{
 			display: flex;
-			flex-basis: 9rem;
-			flex-grow: 1;
-			flex-shrink: 1;
+			flex-basis: 7rem;
 			flex-direction: column;
 			.list-row{
 				display: flex;
-				height: 1.7rem;
+				height: 1.5rem;
 				text-align: left;
 				.icon{
 					flex-basis: 2rem;
@@ -75,23 +116,24 @@ export default {
 					display: flex;
 					align-items: center;
 					justify-content: center;
-					img{
-						width: 1.3rem;
-						height: 1.3rem;
-						border-radius: 50%;
+					line-height: 1.4rem;
+					text-align: center;
+					i{
+						font-size: 0.7rem;
+						transition: none;
 					}
 				}
 				.list-name{
 					display: flex;
 					flex-basis: 8rem;
-					line-height: 1.7rem;
+					line-height: 1.4rem;
 					font-size: 0.44rem;
 					border-bottom: 1px solid #ddd;
-					
 					.item-num{
 						color: #aaa;
 						font-size: 0.3rem;
-						line-height: 1.7rem;
+						line-height: 1.4rem;
+						margin-left: 0.1rem;
 					}
 					
 				}
@@ -103,10 +145,109 @@ export default {
 			}
         }
         .music-list{
-          display: flex;
-          flex-basis: 6rem;
-          flex-grow: 1;
-          flex-shrink: 1;
+			display: flex;
+			flex-basis: 6rem;
+			flex-direction: column;
+			.header-bar{
+				display: flex;
+				flex-basis: 0.8rem;
+				.door-icon{
+					flex-basis: 1rem;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					font-weight: lighter;
+					
+					i{
+						transition-property: transform; /*过渡属性名*/
+						transition-duration:0.1s; /*过渡花费时间 默认0*/
+						transition-timing-function:linear; 
+						transform: none;
+					}
+					.rotate{
+						transform: rotate(-90deg);
+					}
+					// i:hover{
+					// 	transform:rotate(-90deg);
+					// }
+				}
+				.title{
+					display: flex;
+					flex-basis: 7rem;
+					text-align: left;
+				}
+				.add-icon{
+					flex-basis: 1rem;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					font-weight: lighter;
+				}
+				.more-icon{
+					flex-basis: 1rem;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					font-weight: lighter;
+				}
+			}
+			.list-content{
+				display: flex;
+				flex-direction: column;
+				.list-row{
+					display: flex;
+					flex-basis: 1.4rem;
+					.head-img{
+						flex-basis: 2rem;
+						height: 1.4rem;
+						display: flex;
+						align-items: center;
+						justify-content: center;
+						img{
+							width: 1rem;
+							height: 1rem;
+							border-radius: 5%;
+						}
+					}
+					.row-content{
+						display: flex;
+						flex-basis: 7rem;
+						height: 1.4rem;
+						font-size: 0.4rem;
+						flex-direction: column;
+						text-align: left;
+							vertical-align: top;
+						.list-title{
+							flex-basis: 60%;
+							display: flex;
+							align-items: flex-end;
+						}
+						.list-info{
+							flex-basis: 40%;
+							font-size: 0.3rem;
+							color: #999;
+						}
+					}
+					.more-icon{
+						flex-basis: 1rem;
+						display: flex;
+						align-items: center;
+						justify-content: center;
+						color: #666;
+						font-weight: lighter;
+						
+					}
+				}
+			}
+			.hidden{
+				height: 0;
+			}
         }
-    }
+	}
+	.rotate-90{
+		transform:rotate(-90deg);
+		&:active{
+			transform:rotate(-90deg) scale(0.9);
+		}
+	}
 </style>

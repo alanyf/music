@@ -1,6 +1,8 @@
 <template>
 	<div class="circular-container">
-		<div class="circular-pic" ><img :src="picUrl" class="img"/></div>
+		<div class="circular-pic" >
+			<i :class="icon"></i>
+		</div>
 		<div class="circular-title">{{title}}</div>
 	</div>
 </template>
@@ -10,7 +12,7 @@
 export default {
 	name: 'Circular',
 	props: {
-		picUrl: {
+		icon: {
 			type: String,
 			required: true
 		},
@@ -33,10 +35,13 @@ export default {
 			height: 1.4rem;
 			border-radius: 50%;
 			overflow: hidden;
-			.img{
-				width: 100%;
-				height: 100%;
+			line-height: 1.4rem;
+			text-align: center;
+			i{
+				font-size: 1.1rem;
+				transition: none;
 			}
+			
 		}
 		.circular-title{
 			font-size: 0.35rem;

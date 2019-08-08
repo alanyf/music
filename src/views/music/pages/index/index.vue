@@ -5,7 +5,7 @@
 		<i class="el-icon-menu" @click.stop="showSidebar"></i>
 		</div>
 		<div class="link-tabs">
-			<div v-for="tab in tabsArr" :key="tab.to" :class="`link-tab ${$route.path===tab.to&&'focus'}`">
+			<div v-for="(tab, i) in tabsArr" :key="tab.to" :class="`link-tab ${focus(tab, i)}`">
 				<router-link :to="tab.to">{{tab.text}}</router-link>
 			</div>
 		</div>
@@ -47,10 +47,16 @@ export default {
 		},
 		hiddenSidebar(){
 			this.isShowSidebar = false;
+		},
+		focus(tab, index){
+			return (this.$route.path===tab.to || (this.$route.path==='/music/index' && index === 1 ) ) ? 'focus' : '';
 		}
 	},
 	components: {
 		Account
+	},
+	computed: {
+		
 	}
 }
 </script>
@@ -65,10 +71,14 @@ export default {
 		font-size: 0.5rem;
 		.header{
 			display: flex;
-			flex-basis: 1rem;
+			height: 1rem;
+			width: 100%;
 			flex-grow: 1;
 			flex-shrink: 1;
 			padding: 0.2rem 0;
+			position: fixed;
+			background-color: #fff;
+			top: 0;
 			.letf-sidebar-button{
 				flex-basis: 1.5rem;
 			}
@@ -100,6 +110,7 @@ export default {
 			flex-basis: 16rem;
 			flex-grow: 1;
 			flex-shrink: 1;
+			margin-top: 1rem;
 		}
 		.footer{
 			position: fixed;
