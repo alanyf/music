@@ -65,7 +65,8 @@ export default {
                     flex-basis: 1.5rem;
                 }
                 .set-list{
-                    
+                    display: flex;
+                    flex-direction: column;
                 }
             }
             .footer{
