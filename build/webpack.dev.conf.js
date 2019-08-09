@@ -20,6 +20,9 @@ Object.keys(baseWebpackConfig.entry).forEach(function (name) {
   baseWebpackConfig.entry[name] = ['./build/dev-client'].concat(baseWebpackConfig.entry[name])
 })
 
+//console.log(path.resolve(__dirname, '../src/views/music/assets'));
+//console.log(path.resolve(__dirname, '../dist/music'));
+
 module.exports = merge(baseWebpackConfig, {
 
   module: {
@@ -94,8 +97,8 @@ module.exports = merge(baseWebpackConfig, {
     new CopyWebpackPlugin([
       {
         from: path.resolve(__dirname, '../src/views/music/assets'),
-        to: config.dev.assetsPublicPath,
-        ignore: ['.*']
+        to:  path.resolve(config.dev.assetsPublicPath, '/dist/music'),
+        //ignore: ['.*']
       }
 
     ]),

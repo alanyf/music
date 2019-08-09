@@ -1,8 +1,15 @@
 <template>
-  <div class="account-container" :style="{left: positionLtft}">
-      <div class="account-content"><h1>账户中心</h1></div>
-      <div class="mask" @click.stop="hidden"></div>
-  </div>
+    <div class="account-container" :style="{left: positionLtft}">
+        <div class="account-content">
+            <div class="account-main-content">
+                <header class="account-header"></header>
+                <div class="tools"></div>
+                <div class="set-list"></div>
+            </div>
+            <footer class="footer"></footer>
+        </div>
+        <div class="mask" @click.stop="hidden"></div>
+    </div>
 </template>
 
 <script>
@@ -44,12 +51,31 @@ export default {
         .account-content{
             width: 80%;
             height: 100%;
-		    background-color: aliceblue;
+            background-color: aliceblue;
+            display: flex;
+            .account-main-content{
+                display: flex;
+                flex-direction: column;
+                width: 100%;
+                height: 100%;
+                .account-header{
+                    flex-basis: 6rem;
+                }
+                .tools{
+                    flex-basis: 1.5rem;
+                }
+                .set-list{
+                    
+                }
+            }
+            .footer{
+                flex-basis: 1rem;
+            }
         }
         .mask{
             width: 20%;
             height: 100%;
-            opacity: 0.3;
+            opacity: 0.5;
             background-color: black;
         }
     }

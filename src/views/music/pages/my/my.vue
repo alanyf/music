@@ -150,14 +150,13 @@ export default {
 			flex-direction: column;
 			.header-bar{
 				display: flex;
-				flex-basis: 0.8rem;
+				flex-basis: 1rem;
 				.door-icon{
 					flex-basis: 1rem;
 					display: flex;
 					align-items: center;
 					justify-content: center;
 					font-weight: lighter;
-					
 					i{
 						transition-property: transform; /*过渡属性名*/
 						transition-duration:0.1s; /*过渡花费时间 默认0*/
@@ -175,6 +174,13 @@ export default {
 					display: flex;
 					flex-basis: 7rem;
 					text-align: left;
+					line-height: 0.8rem;
+					.item-num{
+						margin-left: 0.1rem;
+						font-size: 0.35rem;
+						color: #999;
+						line-height: 0.8rem;
+					}
 				}
 				.add-icon{
 					flex-basis: 1rem;
@@ -216,7 +222,7 @@ export default {
 						font-size: 0.4rem;
 						flex-direction: column;
 						text-align: left;
-							vertical-align: top;
+						vertical-align: top;
 						.list-title{
 							flex-basis: 60%;
 							display: flex;
