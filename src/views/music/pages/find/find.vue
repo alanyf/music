@@ -1,19 +1,166 @@
 <template>
-  <div>
-      <h1>find</h1>
+  <div class="my-container">
+    <section class="carousels">
+      <el-carousel>
+        <el-carousel-item v-for="item in 4" :key="item">
+          <h3>{{ item }}</h3>
+        </el-carousel-item>
+      </el-carousel>
+    </section>
+    <section class="tools">
+      <div class="tools-row">
+        <Circular v-for="tool in toolsList" :title="tool.title" :icon="tool.icon" :key="tool.icon" />
+      </div>
+    </section>
+    <section class="recommend-list">
+      <div class="list-hearder">
+        <div class="hearder-title">推荐歌单</div>
+        <div class="hearder-button">
+          <el-button round>歌单广场</el-button>
+        </div>
+      </div>
+      <div class="list-content">
+        <div class="list-row" v-for="item in musicList" :key="item.title">
+          <div class="row-image">
+            <img :src="item.picUrl" />
+            <div class="row-title">{{item.title}}</div>
+          </div>
+        </div>
+      </div>
+    </section>
   </div>
 </template>
 
 <script>
+import Circular from "../../components/Circular";
 export default {
-  name: 'Find'
-}
+  name: "Find",
+  data() {
+    return {
+      toolsList: [
+        { icon: "el-icon-attract", title: "每日推荐" },
+        { icon: "el-icon-s-custom", title: "歌单" },
+        { icon: "el-icon-star-on", title: "排行榜" },
+        { icon: "el-icon-dish", title: "电台" },
+        { icon: "el-icon-bicycle", title: "直播" }
+      ],
+      musicList: [
+        {
+          picUrl: "/static/images/head-img-1.jpeg",
+          title: "[华语私人定制]你爱的好歌都在这儿"
+        },
+        {
+          picUrl: "/static/images/head-img-2.jpeg",
+          title: "男友嗓|俏皮声线的温柔暴击"
+        },
+        {
+          picUrl: "/static/images/head-img-3.jpeg",
+          title: "乐队的夏天|31支乐队的酷爽一夏"
+        },
+        { picUrl: "/static/images/head-img-4.jpeg", title: "后摇的夏天" },
+        {
+          picUrl: "/static/images/head-img-5.jpeg",
+          title: "夏至已至:准备好一双舞鞋和躁动的心"
+        },
+        {
+          picUrl: "/static/images/head-img-6.jpeg",
+          title: "励志演讲|愿你还在坚持你的梦想"
+        }
+      ]
+    };
+  },
+  components: {
+    Circular
+  }
+};
 </script>
 
 <style lang="less">
-    .container{
-        display: flex;
-        width: 100%;
-        height: 100%;
+.my-container {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  flex-direction: column;
+  .carousels {
+    margin: 0.2rem 0.5rem;
+    .el-carousel {
+      border-radius: 0.2rem;
+      .el-carousel__item h3 {
+        color: #475669;
+        font-size: 18px;
+        opacity: 0.75;
+        line-height: 300px;
+        margin: 0;
+      }
+      .el-carousel__item:nth-child(2n) {
+        background-color: #99a9bf;
+      }
+      .el-carousel__item:nth-child(2n + 1) {
+        background-color: #d3dce6;
+      }
     }
+  }
+  .tools {
+    display: flex;
+    flex-basis: 1.2rem;
+    flex-shrink: 1;
+    border-block-end: #a6bad3;
+    border-block-end-style: solid;
+    border-block-end-width: 0.005rem;
+    .tools-row {
+      display: flex;
+      margin: 0.2rem 0;
+    }
+  }
+  .recommend-list {
+    margin: 0.2rem 0.5rem;
+    display: flex;
+    flex-basis: 6rem;
+    flex-direction: column;
+    .list-hearder {
+      display: flex;
+      flex-basis: 1rem;
+      justify-content: space-between;
+      .hearder-title {
+        font-size: 0.5rem;
+        font-weight: 600;
+        line-height: 0.8rem;
+      }
+      .hearder-button {
+        flex-basis: 0.2rem;
+      }
+    }
+    .list-content {
+      display: flex;
+      flex-flow: row wrap;
+      align-content: flex-start;
+      .list-row {
+        flex: 0 0 33.33%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        .row-image {
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+          align-items: center;
+          img {
+            width: 2rem;
+            height: 2rem;
+            border-radius: 5%;
+          }
+          .row-title {
+            flex-wrap: wrap;
+            flex-basis: 40%;
+            font-size: 0.3rem;
+            height: 0.5rem;
+            width: 2rem;
+            color: #999;
+            overflow-wrap: break-word;
+          }
+        }
+      }
+    }
+  }
+}
 </style>
