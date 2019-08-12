@@ -40,6 +40,7 @@ export default {
 			i{
 				font-size: 1.1rem;
 				transition: none;
+				color: red;
 			}
 			
 		}

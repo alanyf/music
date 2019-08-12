@@ -45,12 +45,12 @@ export default {
 	data() {
 		return {
 			toolsList: [
-				{icon: 'el-icon-alarm-clock', title: '最新电音'},
-				{icon: 'el-icon-basketball', title: '私人FM'},
-				{icon: 'el-icon-heavy-rain', title: '私藏推荐'},
+				{icon: 'el-icon-attract', title: '最新电音'},
+				{icon: 'el-icon-s-custom', title: '私人FM'},
+				{icon: 'el-icon-star-on', title: '私藏推荐'},
 				{icon: 'el-icon-dish', title: '古典推荐'},
-				{icon: 'el-icon-sugar', title: '跑步FM'},
-				{icon: 'el-icon-pear', title: '电台'},
+				{icon: 'el-icon-bicycle', title: '跑步FM'},
+				{icon: 'el-icon-service', title: '电台'},
 			],
 			myList: [
 				{icon: 'el-icon-umbrella', title: '本地音乐', num: 19,  to: '/music/localList'},
