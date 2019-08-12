@@ -22,22 +22,22 @@ let routes = [
     },
     {
         path: '/music/play',
-        name: 'play',
+        name: '播放',
         component: Play
     },
     {
         path: '/music/menu',
-        name: 'menu',
+        name: '菜单',
         component: Menu
     },
     {
         path: '/music/my',
-        name: 'my',
+        name: '我的',
         component: My
     },
     {
         path: '/music/search',
-        name: 'search',
+        name: '搜索',
         component: Search
     }
 

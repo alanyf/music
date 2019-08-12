@@ -16,13 +16,14 @@
 	<article class="main-content">
 		<router-view></router-view>
 	</article>
-	<footer class="footer"></footer>
+	<footer class="footer"> <BottomPlayer></BottomPlayer></footer>
 	<Account :isShow="isShowSidebar" @hiddenSidebar="hiddenSidebar"/>
 </div>
 </template>
 
 <script>
 import Account from '../account/account';
+import BottomPlayer from '../../components/player/BottomPlayer';
 export default {
 	name: 'Index',
 	data(){
@@ -53,7 +54,8 @@ export default {
 		}
 	},
 	components: {
-		Account
+		Account,
+		BottomPlayer
 	},
 	computed: {
 		
