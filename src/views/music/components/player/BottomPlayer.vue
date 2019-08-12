@@ -1,7 +1,7 @@
 <template>
     <div class="bottomplayer">
         <div class="icon">
-            <img :class="cdCls" src="../../assets/logo.png" width="40" height="40" />
+            <img :class="cdCls" src="../../assets/images/logo.png" width="40" height="40" />
         </div>
         <div class="text">
             <h2 class="name" >盼暖春来</h2>
