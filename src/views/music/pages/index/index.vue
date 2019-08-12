@@ -33,7 +33,7 @@ export default {
 				{ text: '朋友', to: '/music/index/friend' },
 				{ text: '视频', to: '/music/index/video' },
 			],
-			isShowSidebar: true
+			isShowSidebar: false
 		}
 	},
 	mounted(){

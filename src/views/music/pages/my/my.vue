@@ -91,6 +91,7 @@ export default {
         width: 100%;
 		height: 100%;
 		flex-direction: column;
+		font-size: 0.5rem;
         .tools{
           display: flex;
           flex-basis: 1.5rem;
