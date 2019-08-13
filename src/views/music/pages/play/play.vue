@@ -25,7 +25,7 @@
 			<div class="more"><i class="el-icon-more-outline"></i></div>
 		</section>
 		<section class="play-progress-bar">
-	　		<audio ref='audio' id="audio" preload="auto" class="audio" src="../../assets/media/song.mp3"></audio>
+	　		<audio ref='audio' id="audio" preload="auto" autoplay class="audio" src="/static/media/song.mp3"></audio>
 			<div class="time-now">{{timeNow}}</div>
 			<div class="progress-bar">
 				<el-slider v-model="playProcess" @change="processChange" :show-tooltip="false" :max="processLength"></el-slider>
@@ -56,7 +56,10 @@ export default {
 			music: {
 				title: '情非得已',
 				url: 'http://qsqwxsdcscececefc',
-				word: '难以忘记初次见你\n一双迷人的眼睛\n在我脑海里你的身影\n挥散不去\n握你的双手感觉你的温柔\n真的有点透不过气\n你的天真 我想珍惜\n看到你受委屈我会伤心 哦\n只怕我自己会爱上你\n不敢让自己靠的太近\n怕我没什么能够给你\n爱你也需要很大的勇气\n只怕我自己会爱上你\n也许有天会情不自禁\n想念只让自己苦了自己\n爱上你是我情非得已',
+				singer: '庾澄庆',
+				album: '电视剧《流星花园》主题曲',
+				video: null,
+				word: '\n难以忘记初次见你\n一双迷人的眼睛\n在我脑海里你的身影\n挥散不去\n握你的双手感觉你的温柔\n真的有点透不过气\n你的天真 我想珍惜\n看到你受委屈我会伤心 哦\n只怕我自己会爱上你\n不敢让自己靠的太近\n怕我没什么能够给你\n爱你也需要很大的勇气\n只怕我自己会爱上你\n也许有天会情不自禁\n想念只让自己苦了自己\n爱上你是我情非得已\n什么原因\n我竟然又会遇见你\n我真的真的不愿意\n就这样陷入爱的陷阱哦\n只怕我自己会爱上你\n不敢让自己靠的太近\n怕我没什么能够给你\n爱你也需要很大的勇气\n只怕我自己会爱上你\n也许有天会情不自禁\n想念只让自己苦了自己\n爱上你是我情非得已\n爱上你是我情非得已',
 				wordArr: []
 			},
 			isShowWord: false, 		// 是否显示歌词
@@ -75,38 +78,31 @@ export default {
 		}
 	},
 	mounted(){
-		this.audio = this.$refs.audio;
-		this.totalTime = this.audio.duration || 38;
-		this.timeNow = this.secondToMinute(this.audio.currentTime);
-		this.timeTotal = this.secondToMinute(this.totalTime);
+		const audio = this.$refs.audio;
+		const that = this;
+		this.audio = audio;
+		audio.load();
+	    audio.oncanplay = function () {  
+            that.totalTime = audio.duration || 100;
+			that.timeTotal = that.secondToMinute(that.totalTime);
+			audio.play();
+      	}
+		this.timeNow = this.secondToMinute(audio.currentTime);
 		this.music.wordArr = this.music.word.split('\n');
 		this.contentHeight = this.$refs.mainContent.clientHeight;
-		this.audioPlay();
 		this.rotate();
+		this.addToRecentPlay();
 	},
 	methods: {
 		start(){
 			this.playState =  'playing';
 			this.audio.play();
-			this.audioPlay();
 			this.rotate();
-			console.log(this.audio);
 		},
 		stop(){
 			this.playState = 'stop';
 			this.audio.pause();
-			clearInterval(this.audioPlayInterval);
 			clearInterval(this.rotateInterval);
-		},
-		audioPlay(){
-			clearInterval(this.audioPlayInterval);
-			this.audioPlayInterval = setInterval(()=>{
-				this.audio.currentTime += 0.1;
-				if(this.audio.currentTime >= this.totalTime){
-					clearInterval(this.audioPlayInterval);
-					this.audio.currentTime = this.totalTime;
-				}
-			}, 100);
 		},
 		rotate(){
 			const that = this;
@@ -126,9 +122,6 @@ export default {
 			}, 50);
 		},
 		processChange(value){
-			//this.audioPlay();
-			//this.rotate();
-			//this.playState = 'playing';
 			this.audio.currentTime = this.totalTime * value/this.processLength;
 			this.timeNow = this.secondToMinute(this.audio.currentTime);
 		},
@@ -169,6 +162,17 @@ export default {
 		},
 		download(){
 			this.notification('下载成功');
+		},
+		addToRecentPlay(){
+			const obj = {"title": this.music.title, "url": this.music.url, "singer": this.music.singer, "album": this.music.album, "video": this.music.video};
+			const user = JSON.parse(localStorage.user);
+			const _list = user.recentPlay;
+			_list.unshift(obj);
+			if(_list.length > 100){
+				_list.pop();
+			}
+			user.recentPlay = _list;
+			localStorage.user = JSON.stringify(user);
 		}
 	},
 	components: {
@@ -182,7 +186,9 @@ export default {
 		}
 		
     }
-
+/*
+什么原因\n我竟然又会遇见你\n我真的真的不愿意\n就这样陷入爱的陷阱哦\n只怕我自己会爱上你\n不敢让自己靠的太近\n怕我没什么能够给你\n爱你也需要很大的勇气\n只怕我自己会爱上你\n也许有天会情不自禁\n想念只让自己苦了自己\n爱上你是我情非得已\n爱上你是我情非得已
+*/
 }
 </script>
 
@@ -231,13 +237,13 @@ export default {
 		display: flex;
 		justify-content: center;
 		align-items: center;
+		overflow: scroll;
 		.word-container{
 			font-size: 0.3rem;
 			line-height: 0.8rem;
 			color: #aaa;
 			width: 100%;
 			height: 100%;
-			overflow: hidden;
 			.word-content{
 				margin-top: 50%;
 				.focus{
