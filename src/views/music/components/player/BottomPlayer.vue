@@ -53,9 +53,9 @@
         bottom: 0;
         z-index: 100;
         width: 100%;
-        height: 80px;
+        height: 1.5rem;
         background: rgba(255, 255, 255, 0.85);
-
+        border-top: 1px solid #ddd;
         .icon {
             flex-basis: 1.8rem;
             flex: 0 0 20%;

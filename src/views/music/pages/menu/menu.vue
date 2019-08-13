@@ -1,39 +1,46 @@
 <template>
 <div class="menu-container">
-	<div class="music-list">
 		<!-- <header class="top-nav">
 			<div class="top-header"></div>
 			<div class="nav-tab"></div>
 		</header> -->
-		<header class="header">
-			<div class="arrow"><i class="el-icon-back"></i></div>
-			<div class="music-title">{{type}}</div>
-			<div class="share" >
-				<i class="el-icon-search margin-right"></i>
-				<i class="el-icon-more rotate-90"></i>
+	<header class="header">
+		<div class="arrow"><i class="el-icon-back"></i></div>
+		<div class="music-title">{{type}}</div>
+		<div class="share" >
+			<i class="el-icon-search margin-right"></i>
+			<i class="el-icon-more rotate-90"></i>
+		</div>
+	</header>
+	<article class="list-container">
+		<div class="list-row" v-for="music in playlist" :key="music.url">
+			<div class="music-info">
+				<div class="music-title">{{music.name}}</div>
+				<div class="detail-info">
+					<div class="music-quality"><div class="icon">{{music.quality}}</div></div>
+					<div class="author-album">{{music.author}} - {{music.album}}</div>
+				</div>
 			</div>
-		</header>
-		<article class="list-container">
-			<div class="row" v-for="music in musicList" :key="music.url">
-				{{music.name}}
+			<div class="music-mv">
+				<i v-if="music.mv" class="el-icon-monitor"></i>
 			</div>
-		</article>
-		<footer class="mini-player"></footer>
-	</div>
+			<div class="more-operation"><i class="el-icon-more rotate-90"></i></div>
+		</div>
+	</article>
+	<footer class="mini-player">
+		<BottomPlayer />
+	</footer>
 
 </div>
 </template>
 
 <script>
+import BottomPlayer from '../../components/player/BottomPlayer';
 export default {
 	name: 'Menu',
 	props: {
 		title: {
 			type: String,
-			required: true
-		},
-		musicLists: {
-			type: Object,
 			required: true
 		}
 	},
@@ -41,7 +48,10 @@ export default {
 		return {
 			tabSelected: 0,
 			type: '最近播放',
-			musicList: []
+			playlist: [
+				
+				// {name: '情非得已', url: '/static/media/song.mp3', quality: 'HQ', author: '庾澄庆', album: '流星花园主题曲'}
+			]
 		}
 	},
 	beforeMount(){
@@ -52,11 +62,20 @@ export default {
 		const urlLocal = '/music/playlist/detail';
 		this.$ajax.get(urlLocal).then((res)=>{
 			console.log(res);
-			this.musicList = res.data.playlist.tracks;
+			this.playlist = res.data.playlist.tracks.map(e=>{
+				const obj = {name: '情非得已', url: '/static/media/song.mp3', quality: 'HQ', author: '庾澄庆', mv: {url: ''}, album: '流星花园主题曲'};
+				for(let p in obj){
+					obj[p] = e[p] ? e[p] : obj[p];
+				}
+				return obj;
+			});
 		}).catch(err=>{
 			console.log(err);
 		});
 		
+	},
+	components: {
+		BottomPlayer
 	}
 }
 </script>
@@ -67,23 +86,19 @@ export default {
 		width: 100%;
 		height: 100%;
 		font-size: 0.5rem;
-		.music-list{
-			display: flex;
-			flex-direction: column;
-			width: 100%;
+		flex-direction: column;
 			.header{
 				display: flex;
-				flex-basis: 1rem;
-				flex-grow: 1;
-				flex-shrink: 1;
-				line-height: 2rem;
+				flex-basis: 1.5rem;
 				text-align: center;
 				align-items: center;
 				justify-content: center;
 				font-size: 0.6rem;
+				border-bottom: 1px solid rgb(240, 238, 238);
+				padding-bottom: 0.1rem;
 				.arrow{
 					flex-basis: 1.5rem;
-					line-height: 2rem;
+					line-height: 1.5rem;
 				}
 				.music-title{
 					flex-basis: 6rem;
@@ -99,10 +114,61 @@ export default {
 				}
 			}
 			.list-container{
-				width: 100%;
+				//width: 100%;
 				height: 100%;
+				flex-flow: 1;
 				overflow: scroll;
-				padding: 0 0.3rem;
+				padding: 0 0.5rem;
+				//padding: 0 0.25rem;
+				.list-row{
+					display: flex;
+					height: 1.5rem;
+					padding: 0.2rem 0;
+					text-align: left;
+					border-bottom: 1px solid rgb(240, 238, 238);
+					.music-info{
+						flex-basis: 8.5rem;
+						.music-title{
+							font-size: 0.45rem;
+							height: 0.6rem;
+							line-height: 0.6rem;
+						}
+						.detail-info{
+							font-size: 0.3rem;
+							height: 0.5rem;
+							line-height: 0.5rem;
+							display: flex;
+							color: #999;
+							.music-quality{
+								flex-basis: 0.6rem;
+								text-align: center;
+								display: flex;
+								align-items: center;
+								.icon{
+									font-size: 0.22rem;
+									font-weight: bolder;
+									height: 0.28rem;
+									line-height: 0.3rem;
+									border: 1px solid red;
+									color: red;
+									padding: 0 0.04rem;
+								}
+							}
+							.author-album{
+								flex-basis: 6rem;
+								flex-grow: 1;
+							}
+						}
+					}
+					.music-mv{
+						flex-basis: 1rem;
+						color: #888;
+					}
+					.more-operation{
+						flex-basis: 0.5rem;
+						color: #888;
+					}	
+				}
 			}
 			.mini-player{
 				position: fixed;
@@ -111,6 +177,6 @@ export default {
 				height: 1.5rem;
 				background-color: #eee;
 			}
-		}
+		
 	}
 </style>
