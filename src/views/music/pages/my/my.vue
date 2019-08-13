@@ -7,14 +7,14 @@
 		</section>
 		<section class="my-lists">
 			<div v-for="item in myList" :key="item.listName">
-				<router-link to="/music/menu">
-					<div class="list-row">
+				<!-- <router-link to="/music/menu"> -->
+					<div class="list-row" @click="gotoMusicList(item)">
 						<div class="icon">
 							<i :class="item.icon"></i>
 						</div>
 						<div class="list-name">{{item.title}}<div class="item-num">({{item.num}})</div></div>
 					</div>
-				</router-link>
+				<!-- </router-link> -->
 			</div>
 		</section>
 		<secxtion class="music-list">
@@ -30,7 +30,7 @@
 				<div class="list-content" v-if="isShowMusicList">
 					
 						<div v-for="item in musicList.list" :key="item.title" >
-							<router-link to="/music/menu">
+							<!-- <router-link to="/music/menu"> -->
 								<div class="list-row">
 									<div class="head-img"><img :src="item.picUrl"/></div>
 									<div class="row-content">
@@ -39,7 +39,7 @@
 									</div>
 									<div class="more-icon" @click.stop><i class="el-icon-more rotate-90"></i></div>
 								</div>
-							</router-link>
+							<!-- </router-link> -->
 						</div>
 				</div>
 			</div>
@@ -49,6 +49,7 @@
 
 <script>
 import Circular from '../../components/Circular';
+import GlobalBus from '../../components/GlobalBus';
 export default {
 	name: 'My',
 	data() {
@@ -86,10 +87,15 @@ export default {
 	methods: {
 		triggerMusicList(){
 			this.isShowMusicList = !this.isShowMusicList;
+		},
+		gotoMusicList(listObj){
+			console.log(listObj);
+			GlobalBus.$emit('getPlayListInfo', listObj);
 		}
 	},
 	components: {
-		Circular
+		Circular,
+		GlobalBus
 	}
 }
 </script>
@@ -101,6 +107,7 @@ export default {
 		height: 100%;
 		flex-direction: column;
 		font-size: 0.5rem;
+		background-color: #fff;
         .tools{
           display: flex;
           flex-basis: 1.5rem;

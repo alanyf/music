@@ -11,7 +11,6 @@ if (!Vue.prototype.$http) {
             if (typeof arguments[0] === 'string') {
                 arguments[0] = arguments[0].split('/music').join(host);
             }
-            console.log(arguments);
             return Vue.prototype.$ajax(...arguments);
         };
     });

@@ -2,6 +2,7 @@
   <div id="app">
     <RouteLink/>
     <router-view/>
+    <Menu/>
     <Play/>
   </div>
 </template>
@@ -9,6 +10,7 @@
 <script>
 import RouteLink from './components/RouteLink';
 import Play from './pages/play/play';
+import Menu from './pages/menu/menu';
 export default {
   name: 'App',
   data(){
@@ -16,7 +18,8 @@ export default {
   },
   components: {
       RouteLink,
-      Play
+      Play,
+      Menu
   }
 }
 </script>

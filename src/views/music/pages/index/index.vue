@@ -71,6 +71,7 @@ export default {
 		width: 100%;
 		height: 100%;
 		font-size: 0.5rem;
+		background-color: #fff;
 		.header{
 			display: flex;
 			height: 1rem;

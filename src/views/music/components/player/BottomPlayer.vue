@@ -20,11 +20,12 @@
 </template>
 
 <script>
+    import GlobalBus from '../GlobalBus';
     export default {
         name: "bottomplayer",
         data() {
             return {
-                playState: 'playing' //'playing' || 'stop',
+                playState: 'stop' //'playing' || 'stop',
             }
         },
         computed: {
@@ -35,9 +36,11 @@
         methods: {
             start() {
                 this.playState = 'playing';
+                GlobalBus.$emit('startPlay');
             },
             stop() {
                 this.playState = "stop";
+                GlobalBus.$emit('stopPlay');
             }
         }
     }
@@ -92,6 +95,10 @@
             width: 30px;
             padding: 0 10px;
             flex-basis: 1.8rem;
+            i{
+                font-size: 0.9rem;
+                color: #555;
+            }
         }
     }
 

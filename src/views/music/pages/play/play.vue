@@ -55,12 +55,14 @@ export default {
 	data(){
 		return {
 			music: {
+				id: 0,
 				name: '情非得已',
 				url: '/static/media/song.mp3',
 				picUrl: '/static/images/head-img1.png',
-				singer: '庾澄庆',
+				author: '庾澄庆',
 				album: '电视剧《流星花园》主题曲',
 				video: null,
+				quality: 'HQ',
 				word: '\n难以忘记初次见你\n一双迷人的眼睛\n在我脑海里你的身影\n挥散不去\n握你的双手感觉你的温柔\n真的有点透不过气\n你的天真 我想珍惜\n看到你受委屈我会伤心 哦\n只怕我自己会爱上你\n不敢让自己靠的太近\n怕我没什么能够给你\n爱你也需要很大的勇气\n只怕我自己会爱上你\n也许有天会情不自禁\n想念只让自己苦了自己\n爱上你是我情非得已\n什么原因\n我竟然又会遇见你\n我真的真的不愿意\n就这样陷入爱的陷阱哦\n只怕我自己会爱上你\n不敢让自己靠的太近\n怕我没什么能够给你\n爱你也需要很大的勇气\n只怕我自己会爱上你\n也许有天会情不自禁\n想念只让自己苦了自己\n爱上你是我情非得已\n爱上你是我情非得已',
 				wordArr: []
 			},
@@ -82,33 +84,45 @@ export default {
 	},
 	created() {
 		GlobalBus.$on('showPlayer', (music)=>{
-			console.log('music:', music);
+			
+				console.log('music:', music);
 			if(music.name !== this.music.name){
+				this.music.id = music.id;
 				this.music.name = music.name;
 				this.music.picUrl = music.picUrl;
+				this.music.author = music.author;
+				this.music.album = music.album;
 				this.audio.currentTime = 0;
 			}
-
+			const that = this;
 			this.$http.get('/music/song/url?id='+music.id).then((res)=>{
 				const song = res.data[0];
-				console.log(song);
-				this.audio.src = song.url;
+				console.log('song', song);
+				//this.audio.src = song.url;
+				that.music.url = song.url;
+				that.addToRecentPlay();
 			}).catch(err=>{
 				console.log(err);
 			});
-
 			this.getSongWord(music.id);
 
+
 			this.showPlayer();
-			console.log(music, this.music.name);
+			//console.log(music, this.music.name);
+			
+		});
+		GlobalBus.$on('startPlay', ()=>{
+			this.start();
+		});
+		GlobalBus.$on('stopPlay', ()=>{
+			this.stop();
 		});
 		
 	},
 	mounted(){ 
 		this.init();
 		this.rotate();
-		this.addToRecentPlay();
-		
+		// this.addToRecentPlay();
 	},
 	methods: {
 		init(){
@@ -128,7 +142,7 @@ export default {
 		getSongWord(id){
 			const urlLocal = '/music/lyric?id='+id;
 			this.$http.get(urlLocal).then((res)=>{
-				console.log('歌词：', res);
+				//console.log('歌词：', res);
 				const _split = res.lrc.lyric.split('\n');
 				const totalTime = _split.shift();
 				_split.pop();
@@ -141,7 +155,7 @@ export default {
 					}
 					return obj;
 				});
-				console.log(this.music.wordArr);
+				//console.log(this.music.wordArr);
 			}).catch(err=>{
 				console.log(err);
 			});
@@ -150,6 +164,7 @@ export default {
 			this.playState =  'playing';
 			this.audio.play();
 			this.rotate();
+			this.addToRecentPlay();
 		},
 		stop(){
 			this.playState = 'stop';
@@ -232,14 +247,31 @@ export default {
 		// 添加到最近播放
 		addToRecentPlay(){
 			//const obj = {"title": this.music.title, "url": this.music.url, "singer": this.music.singer, "album": this.music.album, "video": this.music.video};
-			//const user = JSON.parse(localStorage.user);
-			// const _list = user.recentPlay;
-			// _list.unshift(obj);
-			// if(_list.length > 100){
-			// 	_list.pop();
-			// }
-			// user.recentPlay = _list;
-			// localStorage.user = JSON.stringify(user);
+			
+			const locla_user = localStorage.user;
+			let user = null;
+			if(locla_user){
+				user = JSON.parse(localStorage.user);
+				
+				const _list = user.recentPlay;
+				if(_list[0].name !== this.music.name){
+					_list.unshift(this.music);
+					if(_list.length > 20){
+						_list.pop();
+					}
+					user.name = 'Alan';
+					user.recentPlay = _list;
+				}else{
+					return;
+				}
+			}else{
+				user = {
+					name: 'Alan',
+					recentPlay: [this.music]
+				}
+			}
+			localStorage.user = JSON.stringify(user);
+			console.log('user', user);
 		},
 		showPlayer(music){
 			this.isHidden = false;
@@ -285,7 +317,7 @@ export default {
 	font-size: 0.5rem;
 	background-color: #fff;
 	position: absolute;
-	z-index: 2;
+	z-index: 3;
 	top: 0;
 	left: 0;
 	.header{
@@ -423,7 +455,7 @@ export default {
 	}
 }
 
-.z-index-hidden{
-	z-index: -1;
-}
+// .z-index-hidden{
+// 	z-index: -1;
+// }
 </style>
