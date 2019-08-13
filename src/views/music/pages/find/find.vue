@@ -20,10 +20,31 @@
         </div>
       </div>
       <div class="list-content">
-        <div class="list-row" v-for="item in musicList" :key="item.title">
+        <div class="list-row" v-for="item in playList" :key="item.id">
           <div class="row-image">
             <img :src="item.picUrl" />
-            <div class="row-title">{{item.title}}</div>
+            <p class="play-count">
+              <i class="el-icon-video-play"></i>
+              {{Math.floor(item.playCount / 10000) }}万
+            </p>
+            <div class="row-title">{{item.name}}</div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="new-album">
+      <div class="list-hearder">
+        <div class="hearder-title">新碟</div>
+        <div class="hearder-button">
+          <el-button round>更多新碟</el-button>
+        </div>
+      </div>
+         <div class="list-content">
+        <div class="list-row" v-for="item in songList" :key="item.id">
+          <div class="row-image">
+            <img :src="item.picUrl" />
+            <div class="row-title">{{item.name}}</div>
+            <div class="row-title">{{item.artist}}</div>
           </div>
         </div>
       </div>
@@ -44,27 +65,62 @@ export default {
         { icon: "el-icon-dish", title: "电台" },
         { icon: "el-icon-bicycle", title: "直播" }
       ],
-      musicList: [
+      playList: [
         {
+          id: 1,
+          playCount: 26564652,
           picUrl: "/static/images/head-img-1.jpeg",
-          title: "[华语私人定制]你爱的好歌都在这儿"
+          name: "[华语私人定制]你爱的好歌都在这儿"
         },
         {
+          id: 2,
+          playCount: 24652,
           picUrl: "/static/images/head-img-2.jpeg",
-          title: "男友嗓|俏皮声线的温柔暴击"
+          name: "男友嗓|俏皮声线的温柔暴击"
         },
         {
+          id: 3,
+          playCount: 12222,
           picUrl: "/static/images/head-img-3.jpeg",
-          title: "乐队的夏天|31支乐队的酷爽一夏"
+          name: "乐队的夏天|31支乐队的酷爽一夏"
         },
-        { picUrl: "/static/images/head-img-4.jpeg", title: "后摇的夏天" },
         {
+          id: 4,
+          playCount: 12222121,
+          picUrl: "/static/images/head-img-4.jpeg",
+          name: "后摇的夏天"
+        },
+        {
+          id: 1,
+          playCount: 26564652,
           picUrl: "/static/images/head-img-5.jpeg",
-          title: "夏至已至:准备好一双舞鞋和躁动的心"
+          name: "夏至已至:准备好一双舞鞋和躁动的心"
         },
         {
+          id: 5,
+          playCount: 2612564652,
           picUrl: "/static/images/head-img-6.jpeg",
-          title: "励志演讲|愿你还在坚持你的梦想"
+          name: "励志演讲|愿你还在坚持你的梦想"
+        }
+      ],
+      songList: [
+        {
+          id: 1,
+          picUrl: "/static/images/head-img-6.jpeg",
+          name: "王一博热门单曲",
+          artist: ""
+        },
+        {
+          id: 2,
+          picUrl: "/static/images/head-img-7.jpeg",
+          name: "骄傲男孩",
+          artist: "白举纲"
+        },
+        {
+          id: 3,
+          picUrl: "/static/images/head-img-3.jpeg",
+          name: "没什么大不了",
+          artist: "高珊"
         }
       ]
     };
@@ -83,6 +139,7 @@ export default {
   flex-direction: column;
   .carousels {
     margin: 0.2rem 0.5rem;
+    z-index: -99;
     .el-carousel {
       border-radius: 0.2rem;
       .el-carousel__item h3 {
@@ -144,9 +201,9 @@ export default {
           flex-direction: column;
           justify-content: space-between;
           align-items: center;
-          img {
-            width: 2rem;
-            height: 2rem;
+          .img {
+            height: 100%;
+            width: 100%;
             border-radius: 5%;
           }
           .row-title {
@@ -154,9 +211,59 @@ export default {
             flex-basis: 40%;
             font-size: 0.3rem;
             height: 0.5rem;
-            width: 2rem;
             color: #999;
             overflow-wrap: break-word;
+            text-align: left;
+          }
+        }
+      }
+    }
+  }
+  .new-album {
+    margin: 0.2rem 0.5rem;
+    display: flex;
+    flex-basis: 6rem;
+    flex-direction: column;
+    .list-hearder {
+      display: flex;
+      flex-basis: 1rem;
+      justify-content: space-between;
+      .hearder-title {
+        font-size: 0.5rem;
+        font-weight: 600;
+        line-height: 0.8rem;
+      }
+      .hearder-button {
+        flex-basis: 0.2rem;
+      }
+    }
+     .list-content {
+      display: flex;
+      flex-flow: row wrap;
+      align-content: flex-start;
+      .list-row {
+        flex: 0 0 33.33%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        .row-image {
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+          align-items: center;
+          .img {
+            height: 100%;
+            width: 100%;
+            border-radius: 5%;
+          }
+          .row-title {
+            flex-wrap: wrap;
+            flex-basis: 40%;
+            font-size: 0.3rem;
+            height: 0.5rem;
+            color: #999;
+            overflow-wrap: break-word;
+            text-align: left;
           }
         }
       }
