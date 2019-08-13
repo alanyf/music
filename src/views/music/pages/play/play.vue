@@ -5,11 +5,11 @@
 			<div class="music-title">{{ music.title }}</div>
 			<div class="share" ><i class="el-icon-share" @click="share"></i></div>
 		</header>
-		<section class="main-content" ref="mainContent">
+		<section class="main-content" ref="mainContent" @click="showWord">
 			<div v-if="isShowWord" class="word-container">
 				<div class="word-content" :style="controlPosition">
-					<div v-for="(row, i) in music.wordArr" :key="row" :class="i===wordFocusIndex?'focus':''">
-						{{row}}
+					<div v-for="(row, i) in music.wordArr" :key="row.startTime" :class="i===wordFocusIndex?'focus':''">
+						{{row.text}}
 					</div>
 				</div>
 			</div>
@@ -77,23 +77,45 @@ export default {
 			contentHeight: 0,		// 中间歌词区域的高度
 		}
 	},
-	mounted(){
-		const audio = this.$refs.audio;
-		const that = this;
-		this.audio = audio;
-		audio.load();
-	    audio.oncanplay = function () {  
-            that.totalTime = audio.duration || 100;
-			that.timeTotal = that.secondToMinute(that.totalTime);
-			audio.play();
-      	}
-		this.timeNow = this.secondToMinute(audio.currentTime);
-		this.music.wordArr = this.music.word.split('\n');
-		this.contentHeight = this.$refs.mainContent.clientHeight;
+	mounted(){ 
+		this.init();
 		this.rotate();
 		this.addToRecentPlay();
 	},
 	methods: {
+		init(){
+			const audio = this.$refs.audio;
+			const that = this;
+			this.audio = audio;
+			audio.load();
+		    audio.oncanplay = function () {  
+	            that.totalTime = audio.duration || 100;
+				that.timeTotal = that.secondToMinute(that.totalTime);
+				audio.play();
+	      	}
+			this.timeNow = this.secondToMinute(audio.currentTime);
+			this.music.wordArr = this.music.word.split('\n');
+			this.contentHeight = this.$refs.mainContent.clientHeight;
+			const urlLocal = '/music/lyric?id=33894312';
+			this.$ajax.get(urlLocal).then((res)=>{
+				console.log(res);
+				const _split = res.data.lrc.lyric.split('\n');
+				const totalTime = _split.shift();
+				_split.pop();
+				this.music.wordArr = _split.map(e=>{
+					const time = this.minuteToSecond(e.match(/\[(\S*)]/)[1]);
+					const text = e.match(/](\S*)/)[1];
+					const obj = {
+						startTime: time,
+						text: text
+					}
+					return obj;
+				});
+				console.log(this.music.wordArr);
+			}).catch(err=>{
+				console.log(err);
+			});
+		},
 		start(){
 			this.playState =  'playing';
 			this.audio.play();
@@ -114,7 +136,7 @@ export default {
 				}
 				that.playProcess =  that.processLength * (that.audio.currentTime/that.totalTime) ;
 				that.timeNow = that.secondToMinute(that.audio.currentTime);
-				that.wordFocusIndex = parseInt( that.music.wordArr.length * this.audio.currentTime / this.totalTime);
+				that.wordFocusIndex = that.focusIndex();
 				if(that.playProcess >= that.processLength){
 					that.playProcess = that.processLength;
 					that.stop();
@@ -145,6 +167,20 @@ export default {
 				return n;
 			}
 		},
+		// 秒转化为分钟
+        minuteToSecond(minute){
+			const _split = minute.split(':');
+			const second = Number(_split[0])*60 + Number(_split[1]);
+			return second;
+		},
+		focusIndex(){
+			for(let i=0; i< this.music.wordArr.length-1;i++){
+				let row = this.music.wordArr[i+1];
+				if(this.audio.currentTime < row.startTime){
+					return i;
+				}
+			}
+		},
 		notification(text){
 			this.$notify({
 				message: text,
@@ -163,16 +199,17 @@ export default {
 		download(){
 			this.notification('下载成功');
 		},
+		// 添加到最近播放
 		addToRecentPlay(){
-			const obj = {"title": this.music.title, "url": this.music.url, "singer": this.music.singer, "album": this.music.album, "video": this.music.video};
-			const user = JSON.parse(localStorage.user);
-			const _list = user.recentPlay;
-			_list.unshift(obj);
-			if(_list.length > 100){
-				_list.pop();
-			}
-			user.recentPlay = _list;
-			localStorage.user = JSON.stringify(user);
+			//const obj = {"title": this.music.title, "url": this.music.url, "singer": this.music.singer, "album": this.music.album, "video": this.music.video};
+			//const user = JSON.parse(localStorage.user);
+			// const _list = user.recentPlay;
+			// _list.unshift(obj);
+			// if(_list.length > 100){
+			// 	_list.pop();
+			// }
+			// user.recentPlay = _list;
+			// localStorage.user = JSON.stringify(user);
 		}
 	},
 	components: {
