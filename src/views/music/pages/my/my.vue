@@ -6,11 +6,15 @@
 			</div>
 		</section>
 		<section class="my-lists">
-			<div class="list-row" v-for="item in myList" :key="item.listName">
-				<div class="icon">
-					<i :class="item.icon"></i>
-				</div>
-				<div class="list-name">{{item.title}}<div class="item-num">({{item.num}})</div></div>
+			<div v-for="item in myList" :key="item.listName">
+				<router-link to="/music/menu">
+					<div class="list-row">
+						<div class="icon">
+							<i :class="item.icon"></i>
+						</div>
+						<div class="list-name">{{item.title}}<div class="item-num">({{item.num}})</div></div>
+					</div>
+				</router-link>
 			</div>
 		</section>
 		<secxtion class="music-list">
@@ -20,18 +24,23 @@
 						<i :class="`el-icon-arrow-down ${isShowMusicList?'':'rotate'}`" ></i>
 					</div>
 					<div class="title">{{musicList.title}}<div class="item-num">({{musicList.list.length}})</div></div>
-					<div class="add-icon"><i class="el-icon-plus"></i></div>
-					<div class="more-icon"><i class="el-icon-more rotate-90"></i></div>
+					<div class="add-icon" @click.stop><i class="el-icon-plus"></i></div>
+					<div class="more-icon" @click.stop><i class="el-icon-more rotate-90"></i></div>
 				</div>
 				<div class="list-content" v-if="isShowMusicList">
-					<div class="list-row" v-for="item in musicList.list" :key="item.title" >
-						<div class="head-img"><img :src="item.picUrl"/></div>
-						<div class="row-content">
-							<div class="list-title">{{item.title}}</div>
-							<div class="list-info">{{item.num}}首，已下载{{item.downloadNum}}首</div>
+					
+						<div v-for="item in musicList.list" :key="item.title" >
+							<router-link to="/music/menu">
+								<div class="list-row">
+									<div class="head-img"><img :src="item.picUrl"/></div>
+									<div class="row-content">
+										<div class="list-title">{{item.title}}</div>
+										<div class="list-info">{{item.num}}首，已下载{{item.downloadNum}}首</div>
+									</div>
+									<div class="more-icon" @click.stop><i class="el-icon-more rotate-90"></i></div>
+								</div>
+							</router-link>
 						</div>
-						<div class="more-icon"><i class="el-icon-more rotate-90"></i></div>
-					</div>
 				</div>
 			</div>
 		</secxtion>
@@ -119,6 +128,7 @@ export default {
 					justify-content: center;
 					line-height: 1.4rem;
 					text-align: center;
+					font-size: 0.5rem;
 					i{
 						font-size: 0.7rem;
 						transition: none;

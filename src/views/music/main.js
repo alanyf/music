@@ -6,6 +6,7 @@ import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import App from './App.vue';
 import '@/utils/ajax';
+import '@/utils/url';
 
 Vue.use(ElementUI);
 Vue.use(VueRouter);

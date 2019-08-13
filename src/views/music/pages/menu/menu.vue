@@ -5,7 +5,7 @@
 			<div class="nav-tab"></div>
 		</header> -->
 	<header class="header">
-		<div class="arrow"><i class="el-icon-back"></i></div>
+		<div class="arrow" @click="back"><i class="el-icon-back"></i></div>
 		<div class="music-title">{{type}}</div>
 		<div class="share" >
 			<i class="el-icon-search margin-right"></i>
@@ -13,7 +13,7 @@
 		</div>
 	</header>
 	<article class="list-container">
-		<div class="list-row" v-for="music in playlist" :key="music.url">
+		<div class="list-row" v-for="music in playlist" :key="music.url" @click="playMusic(music)">
 			<div class="music-info">
 				<div class="music-title">{{music.name}}</div>
 				<div class="detail-info">
@@ -21,10 +21,10 @@
 					<div class="author-album">{{music.author}} - {{music.album}}</div>
 				</div>
 			</div>
-			<div class="music-mv">
+			<div class="music-mv" @click.stop>
 				<i v-if="music.mv" class="el-icon-monitor"></i>
 			</div>
-			<div class="more-operation"><i class="el-icon-more rotate-90"></i></div>
+			<div class="more-operation" @click.stop><i class="el-icon-more rotate-90"></i></div>
 		</div>
 	</article>
 	<footer class="mini-player">
@@ -36,6 +36,7 @@
 
 <script>
 import BottomPlayer from '../../components/player/BottomPlayer';
+import GlobalBus from '../../components/GlobalBus';
 export default {
 	name: 'Menu',
 	props: {
@@ -49,24 +50,31 @@ export default {
 			tabSelected: 0,
 			type: '最近播放',
 			playlist: [
-				
 				// {name: '情非得已', url: '/static/media/song.mp3', quality: 'HQ', author: '庾澄庆', album: '流星花园主题曲'}
 			]
 		}
 	},
-	beforeMount(){
-		
+	methods: {
+		playMusic(music){
+			GlobalBus.$emit('showPlayer', music);
+		},
+		back(){
+			this.$router.back();
+		}
 	},
 	mounted(){
 		//const url = 'http://localhost:3000/music/playlist/detail?id=24381616';
-		const urlLocal = '/music/playlist/detail';
-		this.$ajax.get(urlLocal).then((res)=>{
+		const host = 'http://localhost:3000';
+		const urlLocal = host+'/playlist/detail?id=243816';
+		this.$axios.get(urlLocal).then((res)=>{
 			console.log(res);
-			this.playlist = res.data.playlist.tracks.map(e=>{
-				const obj = {name: '情非得已', url: '/static/media/song.mp3', quality: 'HQ', author: '庾澄庆', mv: {url: ''}, album: '流星花园主题曲'};
+			this.playlist = res.playlist.tracks.map(e=>{
+				const obj = {name: '情非得已',id: 0, url: '/static/media/song.mp3', picUrl: e.al.picUrl, quality: 'HQ', author: '庾澄庆', mv: {url: ''}, album: '流星花园主题曲'};
 				for(let p in obj){
 					obj[p] = e[p] ? e[p] : obj[p];
 				}
+				obj.author = e.ar.map(singer=>singer.name).join(' ');
+				obj.album = e.al.name;
 				return obj;
 			});
 		}).catch(err=>{
@@ -132,6 +140,7 @@ export default {
 							font-size: 0.45rem;
 							height: 0.6rem;
 							line-height: 0.6rem;
+							overflow: hidden;
 						}
 						.detail-info{
 							font-size: 0.3rem;
@@ -157,6 +166,7 @@ export default {
 							.author-album{
 								flex-basis: 6rem;
 								flex-grow: 1;
+								overflow: hidden;
 							}
 						}
 					}

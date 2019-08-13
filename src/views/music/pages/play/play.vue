@@ -1,8 +1,8 @@
 <template>
-	<div class="play-container">
+	<div :class="`play-container ${isHidden?'z-index-hidden':''}`">
 		<header class="header">
-			<div class="arrow"><i class="el-icon-back"></i></div>
-			<div class="music-title">{{ music.title }}</div>
+			<div class="arrow" @click="hidePlayer"><i class="el-icon-back"></i></div>
+			<div class="music-title">{{ music.name }}</div>
 			<div class="share" ><i class="el-icon-share" @click="share"></i></div>
 		</header>
 		<section class="main-content" ref="mainContent" @click="showWord">
@@ -13,8 +13,8 @@
 					</div>
 				</div>
 			</div>
-			<div v-else class="head-img" :style="{ transform: `rotate(${rotateDeg}deg)`}">
-				<img src="../../assets/images/head-img1.png"/>
+			<div v-show="!isShowWord" class="head-img" :style="{ transform: `rotate(${rotateDeg}deg)`}">
+				<img :src="music.picUrl"/>
 			</div>
 		</section>
 		<section class="operation">
@@ -25,7 +25,7 @@
 			<div class="more"><i class="el-icon-more-outline"></i></div>
 		</section>
 		<section class="play-progress-bar">
-	　		<audio ref='audio' id="audio" preload="auto" autoplay class="audio" src="/static/media/song.mp3"></audio>
+	　		<audio ref='audio' id="audio" preload="auto" class="audio" :src="music.url"></audio>
 			<div class="time-now">{{timeNow}}</div>
 			<div class="progress-bar">
 				<el-slider v-model="playProcess" @change="processChange" :show-tooltip="false" :max="processLength"></el-slider>
@@ -49,13 +49,15 @@
 
 <script>
 import Autio from '../../components/Audio';
+import GlobalBus from '../../components/GlobalBus';
 export default {
 	name: 'Index',
 	data(){
 		return {
 			music: {
-				title: '情非得已',
-				url: 'http://qsqwxsdcscececefc',
+				name: '情非得已',
+				url: '/static/media/song.mp3',
+				picUrl: '/static/images/head-img1.png',
 				singer: '庾澄庆',
 				album: '电视剧《流星花园》主题曲',
 				video: null,
@@ -75,12 +77,38 @@ export default {
 			totalTime: 1, 			// 歌曲总时间，分钟：秒
 			wordFocusIndex: 0,		// 歌曲播放到歌词的行数
 			contentHeight: 0,		// 中间歌词区域的高度
+			isHidden: true,			// 控制是否让播放歌曲页面显示在最上面
 		}
+	},
+	created() {
+		GlobalBus.$on('showPlayer', (music)=>{
+			console.log('music:', music);
+			if(music.name !== this.music.name){
+				this.music.name = music.name;
+				this.music.picUrl = music.picUrl;
+				this.audio.currentTime = 0;
+			}
+
+			this.$http.get('/music/song/url?id='+music.id).then((res)=>{
+				const song = res.data[0];
+				console.log(song);
+				this.audio.src = song.url;
+			}).catch(err=>{
+				console.log(err);
+			});
+
+			this.getSongWord(music.id);
+
+			this.showPlayer();
+			console.log(music, this.music.name);
+		});
+		
 	},
 	mounted(){ 
 		this.init();
 		this.rotate();
 		this.addToRecentPlay();
+		
 	},
 	methods: {
 		init(){
@@ -96,10 +124,12 @@ export default {
 			this.timeNow = this.secondToMinute(audio.currentTime);
 			this.music.wordArr = this.music.word.split('\n');
 			this.contentHeight = this.$refs.mainContent.clientHeight;
-			const urlLocal = '/music/lyric?id=33894312';
-			this.$ajax.get(urlLocal).then((res)=>{
-				console.log(res);
-				const _split = res.data.lrc.lyric.split('\n');
+		},
+		getSongWord(id){
+			const urlLocal = '/music/lyric?id='+id;
+			this.$http.get(urlLocal).then((res)=>{
+				console.log('歌词：', res);
+				const _split = res.lrc.lyric.split('\n');
 				const totalTime = _split.shift();
 				_split.pop();
 				this.music.wordArr = _split.map(e=>{
@@ -210,6 +240,14 @@ export default {
 			// }
 			// user.recentPlay = _list;
 			// localStorage.user = JSON.stringify(user);
+		},
+		showPlayer(music){
+			this.isHidden = false;
+			this.start();
+		},
+		hidePlayer(){
+			this.isHidden = true;
+			//this.stop();
 		}
 	},
 	components: {
@@ -242,9 +280,14 @@ export default {
 .play-container{
 	display: flex;
 	flex-direction: column;
+	width: 100%;
 	height: 100%;
 	font-size: 0.5rem;
-
+	background-color: #fff;
+	position: absolute;
+	z-index: 2;
+	top: 0;
+	left: 0;
 	.header{
 		display: flex;
 		flex-basis: 1rem;
@@ -378,5 +421,9 @@ export default {
 			flex-basis: 1.8rem;
 		}
 	}
+}
+
+.z-index-hidden{
+	z-index: -1;
 }
 </style>
