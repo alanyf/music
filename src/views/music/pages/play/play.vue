@@ -68,7 +68,7 @@ export default {
 			},
 			isShowWord: false, 		// 是否显示歌词
 			processLength: 100,		// 进度条长度
-			playState: 'playing', 	// 'playing' || 'stop',
+			playState: 'stop', 	// 'playing' || 'stop',
 			rotateDeg: 0, 			// 旋转角度
 			rotateInterval: null,   // 系数，用来控制旋转与暂停
 			playProcess: 0, 		// 播放进度
