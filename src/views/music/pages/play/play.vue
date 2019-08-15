@@ -8,7 +8,7 @@
 		<section class="main-content" ref="mainContent" @click="showWord">
 			<div v-if="isShowWord" class="word-container">
 				<div class="word-content" :style="controlPosition">
-					<div v-for="(row, i) in music.wordArr" :key="row.startTime" :class="i===wordFocusIndex?'focus':''">
+					<div v-for="(row, i) in wordArr" :key="row.startTime" :class="i===wordFocusIndex?'focus':''">
 						{{row.text}}
 					</div>
 				</div>
@@ -36,8 +36,8 @@
 			<div class="play-model"><i class="el-icon-refresh-right"></i></div>
 			<div class="previou-music"><i class="el-icon-arrow-left"></i></div>
 			<div class="play-control">
-				<i v-if="playState==='playing'" class="el-icon-video-pause" @click="stop"></i>
-				<i v-else class="el-icon-video-play" @click="start"></i>
+				<i v-if="playState" class="el-icon-video-pause" @click="clickStop"></i>
+				<i v-else class="el-icon-video-play" @click="clickPlay"></i>
 			</div>
 			<div class="next-music">
 				<i class="el-icon-arrow-right"></i>	
@@ -50,25 +50,28 @@
 <script>
 import Autio from '../../components/Audio';
 import GlobalBus from '../../components/GlobalBus';
+//import { setTimeout } from 'timers';
 export default {
 	name: 'Index',
 	data(){
 		return {
 			music: {
-				id: 0,
-				name: '情非得已',
-				url: '/static/media/song.mp3',
-				picUrl: '/static/images/head-img1.png',
-				author: '庾澄庆',
-				album: '电视剧《流星花园》主题曲',
-				video: null,
-				quality: 'HQ',
-				word: '\n难以忘记初次见你\n一双迷人的眼睛\n在我脑海里你的身影\n挥散不去\n握你的双手感觉你的温柔\n真的有点透不过气\n你的天真 我想珍惜\n看到你受委屈我会伤心 哦\n只怕我自己会爱上你\n不敢让自己靠的太近\n怕我没什么能够给你\n爱你也需要很大的勇气\n只怕我自己会爱上你\n也许有天会情不自禁\n想念只让自己苦了自己\n爱上你是我情非得已\n什么原因\n我竟然又会遇见你\n我真的真的不愿意\n就这样陷入爱的陷阱哦\n只怕我自己会爱上你\n不敢让自己靠的太近\n怕我没什么能够给你\n爱你也需要很大的勇气\n只怕我自己会爱上你\n也许有天会情不自禁\n想念只让自己苦了自己\n爱上你是我情非得已\n爱上你是我情非得已',
-				wordArr: []
+			// 	id: 0,
+			// 	name: '情非得已',
+			// 	url: '/static/media/song.mp3',
+			// 	picUrl: '/static/images/head-img1.png',
+			// 	author: '庾澄庆',
+			// 	album: '电视剧《流星花园》主题曲',
+			// 	video: null,
+			// 	quality: 'HQ',
+			// 	word: '\n难以忘记初次见你\n一双迷人的眼睛\n在我脑海里你的身影\n挥散不去\n握你的双手感觉你的温柔\n真的有点透不过气\n你的天真 我想珍惜\n看到你受委屈我会伤心 哦\n只怕我自己会爱上你\n不敢让自己靠的太近\n怕我没什么能够给你\n爱你也需要很大的勇气\n只怕我自己会爱上你\n也许有天会情不自禁\n想念只让自己苦了自己\n爱上你是我情非得已\n什么原因\n我竟然又会遇见你\n我真的真的不愿意\n就这样陷入爱的陷阱哦\n只怕我自己会爱上你\n不敢让自己靠的太近\n怕我没什么能够给你\n爱你也需要很大的勇气\n只怕我自己会爱上你\n也许有天会情不自禁\n想念只让自己苦了自己\n爱上你是我情非得已\n爱上你是我情非得已',
+			// 	wordArr: []
+			// 
 			},
+			wordArr: [],			// 歌词数组
 			isShowWord: false, 		// 是否显示歌词
 			processLength: 100,		// 进度条长度
-			playState: 'stop', 	// 'playing' || 'stop',
+			playState: false, 		// 播放状态：true:'playing' || false:'stop',
 			rotateDeg: 0, 			// 旋转角度
 			rotateInterval: null,   // 系数，用来控制旋转与暂停
 			playProcess: 0, 		// 播放进度
@@ -83,46 +86,45 @@ export default {
 		}
 	},
 	created() {
-		GlobalBus.$on('showPlayer', (music)=>{
-			
-				console.log('music:', music);
-			if(music.name !== this.music.name){
-				this.music.id = music.id;
-				this.music.name = music.name;
-				this.music.picUrl = music.picUrl;
-				this.music.author = music.author;
-				this.music.album = music.album;
-				this.audio.currentTime = 0;
+		const that = this;
+		GlobalBus.$on('playMusic', (music)=>{
+			if(music.id !== that.music.id){
+				that.$http.get('/music/song/url?id='+music.id).then((res)=>{
+					that.music = music;
+					const song = res.data[0];
+					if(song.url){
+						that.music.url = song.url;
+						that.addToRecentPlay();
+						that.changeMusic();
+						that.clickPlay();
+					}else{
+						that.errorMsg('抱歉，《'+ music.name +'》还没有版权～');
+					}
+				}).catch(err=>{
+					console.log(err);
+				});
 			}
-			const that = this;
-			this.$http.get('/music/song/url?id='+music.id).then((res)=>{
-				const song = res.data[0];
-				console.log('song', song);
-				//this.audio.src = song.url;
-				that.music.url = song.url;
-				that.addToRecentPlay();
-			}).catch(err=>{
-				console.log(err);
-			});
-			this.getSongWord(music.id);
-
-
-			this.showPlayer();
-			//console.log(music, this.music.name);
+		});
+		GlobalBus.$on('showMainPlayer', (music)=>{
+			if(music.id !== that.music.id){
+				that.music = music;
+			}
+			that.showPlayer();
 			
 		});
-		GlobalBus.$on('startPlay', ()=>{
-			this.start();
+		GlobalBus.$on('changeMainPlayState', (state, music)=>{
+			if(music.id !== that.music.id){
+				that.music = music;
+			}
+			if(state){
+				that.start();
+			}else{
+				that.stop();
+			}
 		});
-		GlobalBus.$on('stopPlay', ()=>{
-			this.stop();
-		});
-		
 	},
 	mounted(){ 
 		this.init();
-		this.rotate();
-		// this.addToRecentPlay();
 	},
 	methods: {
 		init(){
@@ -131,22 +133,21 @@ export default {
 			this.audio = audio;
 			audio.load();
 		    audio.oncanplay = function () {  
-	            that.totalTime = audio.duration || 100;
+	            that.totalTime = audio.duration || 0;
 				that.timeTotal = that.secondToMinute(that.totalTime);
-				audio.play();
+				// audio.play();
 	      	}
 			this.timeNow = this.secondToMinute(audio.currentTime);
-			this.music.wordArr = this.music.word.split('\n');
 			this.contentHeight = this.$refs.mainContent.clientHeight;
 		},
+		// 获取歌词
 		getSongWord(id){
 			const urlLocal = '/music/lyric?id='+id;
 			this.$http.get(urlLocal).then((res)=>{
 				//console.log('歌词：', res);
-				const _split = res.lrc.lyric.split('\n');
-				const totalTime = _split.shift();
-				_split.pop();
-				this.music.wordArr = _split.map(e=>{
+				const wordSplit = res.lrc.lyric.split('\n');
+				wordSplit.pop();
+				this.wordArr = wordSplit.map(e=>{
 					const time = this.minuteToSecond(e.match(/\[(\S*)]/)[1]);
 					const text = e.match(/](\S*)/)[1];
 					const obj = {
@@ -155,22 +156,36 @@ export default {
 					}
 					return obj;
 				});
-				//console.log(this.music.wordArr);
+				//console.log(this.wordArr);
 			}).catch(err=>{
 				console.log(err);
 			});
 		},
+		// 开始
 		start(){
-			this.playState =  'playing';
-			this.audio.play();
+			this.playState =  true;
+			// 设置500ms延时，以防有时音乐未加载导致的播放失败
+			setTimeout(()=>{
+				this.audio.play();
+			}, 500);
 			this.rotate();
 			this.addToRecentPlay();
 		},
+		// 停止
 		stop(){
-			this.playState = 'stop';
+			this.playState = false;
 			this.audio.pause();
 			clearInterval(this.rotateInterval);
 		},
+		clickPlay(){
+			this.start();
+			this.changeMiniPlayState(true);
+		},
+		clickStop(){
+			this.stop();
+			this.changeMiniPlayState(false);
+		},
+		// 图片旋转
 		rotate(){
 			const that = this;
 			clearInterval(this.rotateInterval);
@@ -188,12 +203,17 @@ export default {
 				}
 			}, 50);
 		},
+		// 更新进度条
 		processChange(value){
 			this.audio.currentTime = this.totalTime * value/this.processLength;
 			this.timeNow = this.secondToMinute(this.audio.currentTime);
 		},
+		// 是否显示歌词
 		showWord(){
 			this.isShowWord = !this.isShowWord;
+			if(this.isShowWord && this.wordArr.length === 0){
+				this.getSongWord(this.music.id);
+			}
 		},
 		// 秒转化为分钟
         secondToMinute(second){
@@ -218,36 +238,33 @@ export default {
 			const second = Number(_split[0])*60 + Number(_split[1]);
 			return second;
 		},
+		// 计算文字
 		focusIndex(){
-			for(let i=0; i< this.music.wordArr.length-1;i++){
-				let row = this.music.wordArr[i+1];
+			for(let i=0; i< this.wordArr.length-1;i++){
+				let row = this.wordArr[i+1];
 				if(this.audio.currentTime < row.startTime){
 					return i;
 				}
 			}
 		},
-		notification(text){
-			this.$notify({
-				message: text,
-				duration: 1000,
-				offset: document.body.clientWidth/3,
-				showClose: false,
-				customClass: 'notification'
-			});
-		},
+		// 分享
 		share(){
-			this.notification('分享成功');
+			this.tipMsg('分享成功');
 		},
+		// 收藏
 		collection(){
-			this.notification('收藏成功');
+			this.tipMsg('收藏成功');
 		},
+		// 下载
 		download(){
-			this.notification('下载成功');
+			this.tipMsg('下载成功');
 		},
 		// 添加到最近播放
 		addToRecentPlay(){
 			//const obj = {"title": this.music.title, "url": this.music.url, "singer": this.music.singer, "album": this.music.album, "video": this.music.video};
-			
+			if(!this.music.id){
+				return;
+			}
 			const locla_user = localStorage.user;
 			let user = null;
 			if(locla_user){
@@ -271,15 +288,20 @@ export default {
 				}
 			}
 			localStorage.user = JSON.stringify(user);
-			console.log('user', user);
+			// console.log('user', user);
 		},
-		showPlayer(music){
+		showPlayer(){
 			this.isHidden = false;
-			this.start();
 		},
 		hidePlayer(){
 			this.isHidden = true;
-			//this.stop();
+		},
+		// 正在播放的歌曲改变了
+		changeMusic(){
+			GlobalBus.$emit('changeMusic', this.music);
+		},
+		changeMiniPlayState(state){
+			GlobalBus.$emit('changeMiniPlayState', state);
 		}
 	},
 	components: {
@@ -300,15 +322,7 @@ export default {
 </script>
 
 <style lang="less">
-.notification{
-	.el-notification__title{
-		font-size: 0.7rem!important;
-	}
-	.el-notification__content p{
-		font-size: 0.34rem;
-        line-height: 0.4rem;
-	}
-}
+
 .play-container{
 	display: flex;
 	flex-direction: column;
@@ -316,8 +330,8 @@ export default {
 	height: 100%;
 	font-size: 0.5rem;
 	background-color: #fff;
-	position: absolute;
-	z-index: 3;
+	position: fixed;
+	z-index: 10;
 	top: 0;
 	left: 0;
 	.header{

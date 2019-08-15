@@ -23,15 +23,12 @@
 			<div class="more-operation" @click.stop><i class="el-icon-more rotate-90"></i></div>
 		</div>
 	</article>
-	<footer class="mini-player">
-		<BottomPlayer />
-	</footer>
 
 </div>
 </template>
 
 <script>
-import BottomPlayer from '../../components/player/BottomPlayer';
+import BottomPlayer from '../../components/BottomPlayer';
 import GlobalBus from '../../components/GlobalBus';
 export default {
 	name: 'Menu',
@@ -53,9 +50,9 @@ export default {
 	},
 	methods: {
 		playMusic(music){
-			
-			GlobalBus.$emit('showPlayer', music);
+			GlobalBus.$emit('playMusic', music);
 		},
+		
 		back(){
 			//this.$router.back();
 			this.hide();
@@ -72,12 +69,16 @@ export default {
 			this.$axios.get(urlLocal).then((res)=>{
 				//console.log(res);
 				this.playlist = res.playlist.tracks.map(e=>{
-					const obj = {name: '情非得已',id: 0, url: '/static/media/song.mp3', picUrl: e.al.picUrl, quality: 'HQ', author: '庾澄庆', mv: {url: ''}, album: '流星花园主题曲'};
-					for(let p in obj){
-						obj[p] = e[p] ? e[p] : obj[p];
-					}
-					obj.author = e.ar.map(singer=>singer.name).join(' ');
-					obj.album = e.al.name;
+					const obj = {
+						id: e.id,
+						name: e.name,
+						url: e.url,
+						picUrl: e.al.picUrl,
+						album: e.al.name,
+						mv: e.mv,
+						quality: 'SQ',
+						author: e.ar.map(singer=>singer.name).join(' ')
+					};
 					return obj;
 				});
 			}).catch(err=>{
@@ -87,11 +88,16 @@ export default {
 	},
 	mounted(){
 		//const url = 'http://localhost:3000/music/playlist/detail?id=24381616';
-		
 
 		GlobalBus.$on('getPlayListInfo', (listObj)=>{
 			if(listObj.title === '最近播放'){
-				const user = JSON.parse(localStorage.user);
+				const userStr = localStorage.user;
+				let user = null;
+				if(!userStr){
+					user = {name: 'Alan', recentPlay: []}
+				}else{
+					user = JSON.parse(userStr);
+				}
 				this.playlist = user.recentPlay;
 			}else{
 				this.getPlayList();
@@ -102,15 +108,6 @@ export default {
 		});
 	},
 	created() {
-		
-		// GlobalBus.$on('getPlayListInfo', (listObj)=>{
-		// 	if(listObj.title === '最近播放'){
-		// 		const user = JSON.parse(localStorage.user);
-		// 		this.playlist = user.recentPlay;
-		// 	}
-		// 	this.type = listObj.title;
-		// 	console.log('listObj', listObj, this.type, this.playlist);
-		// });
 		
 	},
 	components: {
@@ -127,7 +124,7 @@ export default {
 		font-size: 0.5rem;
 		flex-direction: column;
 		background-color: #fff;
-		position: absolute;
+		position: fixed;
 		top: 0;
 		left: 0;
 		z-index: 2;

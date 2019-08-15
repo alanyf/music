@@ -26,7 +26,7 @@
 					</div>
                 </div>
             </div>
-            <footer class="footer"></footer>
+            
         </div>
         <div class="mask" @click.stop="hidden"></div>
     </div>

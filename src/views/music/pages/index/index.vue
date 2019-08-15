@@ -23,7 +23,7 @@
 
 <script>
 import Account from '../account/account';
-import BottomPlayer from '../../components/player/BottomPlayer';
+import BottomPlayer from '../../components/BottomPlayer';
 export default {
 	name: 'Index',
 	data(){
@@ -39,7 +39,6 @@ export default {
 	},
 	mounted(){
 		const path = this.$route.path;
-		
 		console.log();
 	},
 	methods: {
@@ -64,7 +63,6 @@ export default {
 </script>
 
 <style lang="less">
-
 	.index-container{
 		display: flex;
 		flex-direction: column;
@@ -115,9 +113,9 @@ export default {
 			flex-shrink: 1;
 			margin-top: 1rem;
 		}
-		.footer{
-			position: fixed;
-			bottom: 0;
-		}
+		// .footer{
+		// 	position: fixed;
+		// 	bottom: 0;
+		// }
 	}
 </style>
