@@ -208,7 +208,7 @@ export default {
     display: flex;
     flex-basis: 1.2rem;
     flex-shrink: 1;
-    border-block-end: #a6bad3;
+    border-block-end: #ddd;
     border-block-end-style: solid;
     border-block-end-width: 0.005rem;
     .tools-row {
