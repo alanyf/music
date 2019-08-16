@@ -17,7 +17,7 @@
 		<router-view></router-view>
 	</article>
 	<footer class="footer"> <BottomPlayer></BottomPlayer></footer>
-	<Account :isShow="isShowSidebar" @hiddenSidebar="hiddenSidebar"/>
+	<Account :isShow="isShowSidebar" @hiddenSidebar="hiddenSidebar" ref="accountSidebar"/>
 </div>
 </template>
 
@@ -43,10 +43,12 @@ export default {
 	},
 	methods: {
 		showSidebar(){
-			this.isShowSidebar = true;
+			//this.isShowSidebar = true;
+			this.$refs.accountSidebar.show();
+			//this.$emit('showSidebar', this.isShowSidebar);
 		},
 		hiddenSidebar(){
-			this.isShowSidebar = false;
+			//this.isShowSidebar = false;
 		},
 		focus(tab, index){
 			return (this.$route.path===tab.to || (this.$route.path==='/music/index' && index === 1 ) ) ? 'focus' : '';

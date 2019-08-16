@@ -1,6 +1,6 @@
 <template>
-    <div class="account-container" :style="{left: positionLtft}">
-        <div class="account-content">
+    <div class="account-container" :style="{left: containerLeft}">
+        <div class="account-content" :style="{left: contentLeft}">
             <div class="account-main-content">
                 <header class="account-header">
                     <div class="head-account-img"><img :src="user.headImg"/></div>
@@ -28,12 +28,13 @@
             </div>
             
         </div>
-        <div class="mask" @click.stop="hidden"></div>
+        <div class="mask" @click.stop="hidden" :style="{opacity: activeFlag ? 0.5 : 0}"></div>
     </div>
 </template>
 
 <script>
 import Circular from '../../components/Circular'
+import { setTimeout } from 'timers';
 export default {
     name: 'Account',
     data(){
@@ -64,25 +65,39 @@ export default {
                 nickname: "Alan",
                 headImg: "/static/images/head-img-1.jpeg",
                 level: 7
-            }
+            },
+            activeFlag: false,
+            showFlag: false
         }
     },
     methods: {
         hidden(){
-            this.$emit('hiddenSidebar');
+            this.activeFlag = false;
+            const that = this;
+            setTimeout(()=>{
+                that.showFlag = false;
+            }, 500);
+        },
+        show(){
+            this.activeFlag = true;
+            this.showFlag = true;
         }
     },
     props: {
-        isShow: {
-            type: String
-        }
+        
+    },
+    created(){
+         
     },
     mounted(){
         
     },
     computed: {
-        positionLtft(){
-            return this.isShow ? 0 :'-10rem';
+        contentLeft(){
+            return this.activeFlag ? 0 :'-10rem';
+        },
+        containerLeft(){
+            return this.showFlag ? 0 :'-10rem';
         }
     },
     components: {
@@ -98,13 +113,17 @@ export default {
 		height: 100%;
 		position: fixed;
         left: 0;
-        bottom: 0;
-        transition: 0.35s all; 
+        bottom: 0; 
         .account-content{
             width: 80%;
             height: 100%;
             background-color: white;
             display: flex;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 2;
+            transition: 0.5s all;
             .account-main-content{
                 display: flex;
                 flex-direction: column;
@@ -227,10 +246,15 @@ export default {
             }
         }
         .mask{
-            width: 20%;
+            width: 100%;
             height: 100%;
             opacity: 0.5;
             background-color: black;
+            position: absolute;
+            top: 0;
+            right: 0;
+            z-index: 1;
+            transition: ease-in-out 0.5s;
         }
     }
 </style>

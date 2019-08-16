@@ -13,7 +13,7 @@
         </div>
         <div class="play-control">
             <div class="recent-music-menu">
-                <i class="el-icon-s-unfold"></i>
+                <i class="el-icon-s-unfold" @click.stop></i>
             </div>
         </div>
     </div>
