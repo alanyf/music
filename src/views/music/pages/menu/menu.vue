@@ -130,13 +130,13 @@ export default {
 		z-index: 2;
 		.header{
 			display: flex;
-			flex-basis: 1.5rem;
+			flex-basis: 1.8rem;
+			line-height: 1.8rem;
 			text-align: center;
 			align-items: center;
 			justify-content: center;
 			font-size: 0.6rem;
 			border-bottom: 1px solid rgb(240, 238, 238);
-			padding-bottom: 0.1rem;
 			.arrow{
 				flex-basis: 1.5rem;
 				line-height: 1.5rem;

@@ -336,16 +336,15 @@ export default {
 	left: 0;
 	.header{
 		display: flex;
-		flex-basis: 1rem;
-		flex-grow: 1;
-		flex-shrink: 1;
-		line-height: 2rem;
+		flex-basis: 1.8rem;
+		line-height: 1.8rem;
 		text-align: center;
 		align-items: center;
 		justify-content: center;
 		.arrow{
 			flex-basis: 1.5rem;
-			line-height: 2rem;
+			line-height: 1.5rem;
+			font-size: 0.6rem;
 		}
 		.music-title{
 			flex-basis: 7rem;

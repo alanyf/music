@@ -99,6 +99,7 @@ export default {
 		position: fixed;
         left: 0;
         bottom: 0;
+        transition: 0.35s all; 
         .account-content{
             width: 80%;
             height: 100%;
