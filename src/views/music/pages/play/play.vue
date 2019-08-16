@@ -3,7 +3,7 @@
 		<header class="header">
 			<div class="arrow" @click="hidePlayer"><i class="el-icon-back"></i></div>
 			<div class="music-title">{{ music.name }}</div>
-			<div class="share" ><i class="el-icon-share" @click="share"></i></div>
+			<div class="share" ><van-icon name="share" @click="share"/></div>
 		</header>
 		<section class="main-content" ref="mainContent" @click="showWord">
 			<div v-if="isShowWord" class="word-container">
@@ -18,11 +18,11 @@
 			</div>
 		</section>
 		<section class="operation">
-			<div class="collection"><i class="el-icon-star-off" @click="collection"></i></div>
-			<div class="download"><i class="el-icon-download" @click="download"></i></div>
-			<div class="show-word"><i class="el-icon-document" @click="showWord"></i></div>
-			<div class="comment"><i class="el-icon-chat-dot-round"></i></div>
-			<div class="more"><i class="el-icon-more-outline"></i></div>
+			<div class="collection"><van-icon name="like-o" @click="collection"/></div>
+			<div class="download"><van-icon name="diamond-o" @click="download"/></div>
+			<div class="show-word"><van-icon name="comment-o" @click="showWord"/></div>
+			<div class="comment"><van-icon name="chat-o"/></div>
+			<div class="more"><van-icon name="ellipsis"/></div>
 		</section>
 		<section class="play-progress-bar">
 	　		<audio ref='audio' id="audio" preload="auto" class="audio" :src="music.url"></audio>
@@ -33,16 +33,18 @@
 			<div class="time-total">{{timeTotal}}</div>
 		</section>
 		<section class="control">
-			<div class="play-model"><i class="el-icon-refresh-right"></i></div>
-			<div class="previou-music"><i class="el-icon-arrow-left"></i></div>
+			<div class="play-model"><van-icon name="replay"/></div>
+			<div class="previou-music"><van-icon name="arrow-left"/></div>
 			<div class="play-control">
-				<i v-if="playState" class="el-icon-video-pause" @click="clickStop"></i>
-				<i v-else class="el-icon-video-play" @click="clickPlay"></i>
+				<!-- <i v-if="playState" class="el-icon-video-pause" @click="clickStop"></i>
+				<i v-else class="el-icon-video-play" @click="clickPlay"></i> -->
+				<van-icon name="pause-circle-o" v-if="playState" @click="clickStop"/>
+				<van-icon name="play-circle-o" v-else @click="clickPlay"/>
 			</div>
 			<div class="next-music">
-				<i class="el-icon-arrow-right"></i>	
+				<van-icon name="arrow"/>
 			</div>
-			<div class="recent-music-menu"><i class="el-icon-s-unfold"></i></div>
+			<div class="recent-music-menu"><van-icon name="bars"/></div>
 		</section>
 	</div>
 </template>
@@ -50,6 +52,10 @@
 <script>
 import Autio from '../../components/Audio';
 import GlobalBus from '../../components/GlobalBus';
+import { Toast, Icon } from 'vant';
+import Vue from 'vue';
+
+Vue.use(Icon);
 //import { setTimeout } from 'timers';
 export default {
 	name: 'Index',
@@ -249,15 +255,15 @@ export default {
 		},
 		// 分享
 		share(){
-			this.tipMsg('分享成功');
+			Toast('分享成功');
 		},
 		// 收藏
 		collection(){
-			this.tipMsg('收藏成功');
+			Toast('收藏成功');
 		},
 		// 下载
 		download(){
-			this.tipMsg('下载成功');
+			Toast('下载成功');
 		},
 		// 添加到最近播放
 		addToRecentPlay(){

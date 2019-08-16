@@ -74,4 +74,8 @@ Vue.prototype.errorMsg = function(text){
 			line-height: 0.45rem;
 		}
 	}
+	.van-toast__text{
+		font-size: 0.4rem;
+		line-height: 0.6rem;
+	}
 </style>

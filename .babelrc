@@ -9,7 +9,12 @@
       ["transform-runtime", {
           "polyfill": true,
       }],
-      "transform-vue-jsx"
+      "transform-vue-jsx",
+      ["import", {
+        "libraryName": "vant",
+        "libraryDirectory": "es",
+        "style": true
+      }]
   ],
   "env": {
     "test": {
