@@ -8,13 +8,13 @@
             <div class="desc">{{music.author+' - '+music.album}}</div>
         </div>
         <div class="play-control">
-            <i v-if="playState" class="el-icon-video-pause" @click.stop="stop"></i>
-            <i v-else class="el-icon-video-play" @click.stop="start"></i>
+            <!-- <i v-if="playState" class="el-icon-video-pause" @click.stop="stop"></i>
+            <i v-else class="el-icon-video-play" @click.stop="start"></i> -->
+            <van-icon  v-if="playState" name="pause-circle-o" @click.stop="stop"/>
+            <van-icon v-else name="play-circle-o" @click.stop="start"/>
         </div>
         <div class="play-control">
-            <div class="recent-music-menu">
-                <i class="el-icon-s-unfold" @click.stop></i>
-            </div>
+            <van-icon name="bars" @click.stop/>
         </div>
     </div>
 </template>
@@ -135,7 +135,9 @@
             width: 30px;
             padding: 0 10px;
             flex-basis: 1.8rem;
-            
+            display: flex;
+            justify-content: center;
+            align-items: center;
             i{
                 font-size: 0.9rem;
                 color: #555;

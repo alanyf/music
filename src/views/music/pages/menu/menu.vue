@@ -5,7 +5,7 @@
 		<div class="music-title">{{type}}</div>
 		<div class="share" >
 			<i class="el-icon-search margin-right"></i>
-			<i class="el-icon-more rotate-90"></i>
+			<van-icon name="ellipsis" class="rotate-90"/>
 		</div>
 	</header>
 	<article class="list-container">
@@ -18,9 +18,9 @@
 				</div>
 			</div>
 			<div class="music-mv" @click.stop>
-				<i v-if="music.mv" class="el-icon-monitor"></i>
+				<van-icon name="video-o"  v-if="music.mv"/>
 			</div>
-			<div class="more-operation" @click.stop><i class="el-icon-more rotate-90"></i></div>
+			<div class="more-operation" @click.stop><van-icon name="ellipsis" class="rotate-90"/></div>
 		</div>
 	</article>
 
@@ -140,6 +140,7 @@ export default {
 			.arrow{
 				flex-basis: 1.5rem;
 				line-height: 1.5rem;
+				font-size: 0.7rem;
 			}
 			.music-title{
 				flex-basis: 6rem;
@@ -148,6 +149,9 @@ export default {
 				font-size: 0.5rem;
 			}
 			.share{
+				display: flex;
+				align-items: center;
+				justify-content: center;
 				flex-basis: 2.5rem;
 				.margin-right{
 					margin-right: 0.5rem;
@@ -167,6 +171,8 @@ export default {
 				padding: 0.2rem 0;
 				text-align: left;
 				border-bottom: 1px solid rgb(240, 238, 238);
+				display: flex;
+				align-items: center;
 				.music-info{
 					flex-basis: 8.5rem;
 					.music-title{

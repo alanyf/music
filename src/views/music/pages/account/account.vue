@@ -17,7 +17,7 @@
                 </div>
                 <div class="set-list">
                     <div class="list-row" v-for="item in setList" :key="item.title" >
-						<div class="head-img"><i :class="item.icon"/></div>
+						<div class="head-img"><van-icon :name="item.icon"/></div>
 						<div class="row-content">
 							<div class="list-title">{{item.title}}</div>
 							<!-- <div class="list-info">{{item.num}}首，已下载{{item.downloadNum}}首</div> -->
@@ -40,25 +40,25 @@ export default {
     data(){
         return {
             toolsList: [
-				{icon: 'el-icon-alarm-clock', title: '我的消息'},
-				{icon: 'el-icon-basketball', title: '我的好友'},
-				{icon: 'el-icon-heavy-rain', title: '个性换肤'},
-				{icon: 'el-icon-dish', title: '听歌识曲'}
+				{icon: 'chat-o', title: '我的消息'},
+				{icon: 'user-o', title: '我的好友'},
+				{icon: 'edit', title: '个性换肤'},
+				{icon: 'question-o', title: '听歌识曲'}
             ],
             setList: [
-                {title: '商城', icon: 'el-icon-shopping-bag-2'},
-                {title: '演出', icon: 'el-icon-mic'},
-                {title: '附近的人', icon: 'el-icon-location-outline'},
-                {title: '我的订单', icon: 'el-icon-s-fold'},
-                {title: '定时停止播放', icon: 'el-icon-time'},
-                {title: '扫一扫', icon: 'el-icon-camera'},
-                {title: '音乐闹钟', icon: 'el-icon-alarm-clock'},
-                {title: '音乐云盘', icon: 'el-icon-coin'},
-                {title: '在线听歌免流量', icon: 'el-icon-reading'},
-                {title: '游戏推荐', icon: 'el-icon-reading'},
-                {title: '优惠券', icon: 'el-icon-collection-tag'},
-                {title: '加入网易音乐人', icon: 'el-icon-chat-line-round'},
-                {title: '我要直播', icon: 'el-icon-microphone'},
+                {title: '商城', icon: 'shopping-cart-o'},
+                {title: '演出', icon: 'music-o'},
+                {title: '附近的人', icon: 'location'},
+                {title: '我的订单', icon: 'cart-o'},
+                {title: '定时停止播放', icon: 'clock-o'},
+                {title: '扫一扫', icon: '/static/images/icon/icon_scan.svg'},
+                {title: '音乐闹钟', icon: 'underway'},
+                {title: '音乐云盘', icon: 'points'},
+                {title: '在线听歌免流量', icon: 'service-o'},
+                {title: '游戏推荐', icon: 'star-o'},
+                {title: '优惠券', icon: 'label-o'},
+                {title: '加入网易音乐人', icon: 'manager-o'},
+                {title: '我要直播', icon: 'cashier-o'},
                 
             ],
             user: {
@@ -114,6 +114,7 @@ export default {
 		position: fixed;
         left: 0;
         bottom: 0; 
+        z-index: 4;
         .account-content{
             width: 80%;
             height: 100%;
@@ -208,11 +209,6 @@ export default {
                             display: flex;
                             align-items: center;
                             justify-content: center;
-                            img{
-                                width: 1rem;
-                                height: 1rem;
-                                border-radius: 5%;
-                            }
                         }
                         .row-content{
                             display: flex;

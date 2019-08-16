@@ -1,7 +1,7 @@
 <template>
 	<div class="circular-container">
 		<div class="circular-pic" >
-			<i :class="icon"></i>
+			<van-icon :name="icon"/>
 		</div>
 		<div class="circular-title">{{title}}</div>
 	</div>
@@ -38,9 +38,11 @@ export default {
 			line-height: 1.4rem;
 			text-align: center;
 			i{
+				display: block;
 				font-size: 1.1rem;
-				transition: none;
+				//transition: none;
 				color: red;
+				z-index: 0;
 			}
 			
 		}

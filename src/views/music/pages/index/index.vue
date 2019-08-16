@@ -2,7 +2,7 @@
 <div class="index-container">
 	<header class="header">
 		<div class="letf-sidebar-button">
-		<i class="el-icon-menu" @click.stop="showSidebar"></i>
+		<van-icon name="wap-nav" @click.stop="showSidebar"/>
 		</div>
 		<div class="link-tabs">
 			<div v-for="(tab, i) in tabsArr" :key="tab.to" :class="`link-tab ${focus(tab, i)}`">
@@ -10,7 +10,7 @@
 			</div>
 		</div>
 		<div class="search-button">
-			<router-link to="/music/search"><i class="el-icon-search"></i></router-link>
+			<router-link to="/music/search"><van-icon name="search"/></router-link>
 		</div>
 	</header>
 	<article class="main-content">
@@ -65,6 +65,7 @@ export default {
 </script>
 
 <style lang="less">
+
 	.index-container{
 		display: flex;
 		flex-direction: column;
@@ -72,6 +73,9 @@ export default {
 		height: 100%;
 		font-size: 0.5rem;
 		background-color: #fff;
+		.van-icon{
+			font-size: 0.6rem;
+		}
 		.header{
 			display: flex;
 			height: 1rem;
@@ -82,6 +86,7 @@ export default {
 			position: fixed;
 			background-color: #fff;
 			top: 0;
+			z-index: 2;
 			.letf-sidebar-button{
 				flex-basis: 1.5rem;
 			}

@@ -3,7 +3,10 @@
 		<header class="header">
 			<div class="arrow" @click="hidePlayer"><i class="el-icon-back"></i></div>
 			<div class="music-title">{{ music.name }}</div>
-			<div class="share" ><van-icon name="share" @click="share"/></div>
+			<div class="share" >
+				<!-- <van-icon name="share" @click="share"/> -->
+				<van-icon name="/static/images/icon/icon_upload.svg" @click="share"/>
+			</div>
 		</header>
 		<section class="main-content" ref="mainContent" @click="showWord">
 			<div v-if="isShowWord" class="word-container">
@@ -359,6 +362,7 @@ export default {
 		}
 		.share{
 			flex-basis: 1.5rem;
+			font-size: 0.7rem;
 		}
 	}
 	.main-content{

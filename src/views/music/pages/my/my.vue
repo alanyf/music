@@ -10,7 +10,7 @@
 				<!-- <router-link to="/music/menu"> -->
 					<div class="list-row" @click="gotoMusicList(item)">
 						<div class="icon">
-							<i :class="item.icon"></i>
+							<van-icon :name="item.icon"/>
 						</div>
 						<div class="list-name">{{item.title}}<div class="item-num">({{item.num}})</div></div>
 					</div>
@@ -21,11 +21,12 @@
 			<div class="list-item">
 				<div class="header-bar">
 					<div class="door-icon" @click="triggerMusicList(index)">
-						<i :class="`el-icon-arrow-down ${isShowMusicList?'':'rotate'}`" ></i>
+						<!-- <i :class="`el-icon-arrow-down ${isShowMusicList?'':'rotate'}`" ></i> -->
+						<van-icon name="arrow-down" :class="`${isShowMusicList?'':'rotate'}`" />
 					</div>
 					<div class="title">{{musicList.title}}<div class="item-num">({{musicList.list.length}})</div></div>
-					<div class="add-icon" @click.stop><i class="el-icon-plus"></i></div>
-					<div class="more-icon" @click.stop><i class="el-icon-more rotate-90"></i></div>
+					<div class="add-icon" @click.stop><van-icon name="plus"/></div>
+					<div class="more-icon" @click.stop><van-icon name="ellipsis" class="rotate-90 "/></div>
 				</div>
 				<div class="list-content" v-if="isShowMusicList">
 					
@@ -37,7 +38,7 @@
 										<div class="list-title">{{item.title}}</div>
 										<div class="list-info">{{item.num}}首，已下载{{item.downloadNum}}首</div>
 									</div>
-									<div class="more-icon" @click.stop><i class="el-icon-more rotate-90"></i></div>
+									<div class="more-icon" @click.stop><van-icon name="ellipsis" class="rotate-90"/></div>
 								</div>
 							<!-- </router-link> -->
 						</div>
@@ -55,19 +56,19 @@ export default {
 	data() {
 		return {
 			toolsList: [
-				{icon: 'el-icon-attract', title: '最新电音'},
-				{icon: 'el-icon-s-custom', title: '私人FM'},
-				{icon: 'el-icon-star-on', title: '私藏推荐'},
-				{icon: 'el-icon-dish', title: '古典推荐'},
-				{icon: 'el-icon-bicycle', title: '跑步FM'},
-				{icon: 'el-icon-service', title: '电台'},
+				{icon: '/static/images/icon/icon_flash.svg', title: '最新电音'},
+				{icon: 'contact', title: '私人FM'},
+				{icon: 'star-o', title: '私藏推荐'},
+				{icon: 'thumb-circle-o', title: '古典推荐'},
+				{icon: 'logistics', title: '跑步FM'},
+				{icon: 'service-o', title: '电台'},
 			],
 			myList: [
-				{icon: 'el-icon-umbrella', title: '本地音乐', num: 19,  to: '/music/localList'},
-				{icon: 'el-icon-paperclip', title: '最近播放', num: 102, to: '/music/localList'},
-				{icon: 'el-icon-attract', title: '下载管理', num: 6,   to: '/music/localList'},
-				{icon: 'el-icon-reading', title: '我的电台', num: 0,   to: '/music/localList'},
-				{icon: 'el-icon-suitcase', title: '我的收藏', num: 3,   to: '/music/localList'}
+				{icon: 'music-o', title: '本地音乐', num: 19,  to: '/music/localList'},
+				{icon: 'service-o', title: '最近播放', num: 102, to: '/music/localList'},
+				{icon: '/static/images/icon/icon_download.svg', title: '下载管理', num: 6,   to: '/music/localList'},
+				{icon: 'service-o', title: '我的电台', num: 0,   to: '/music/localList'},
+				{icon: 'star-o', title: '我的收藏', num: 3,   to: '/music/localList'}
 			],
 			musicList: {
 				title: '我的歌单', list: [
@@ -144,7 +145,7 @@ export default {
 				.list-name{
 					display: flex;
 					flex-basis: 8rem;
-					line-height: 1.4rem;
+					line-height: 1.5rem;
 					font-size: 0.44rem;
 					border-bottom: 1px solid #ddd;
 					.item-num{
@@ -257,7 +258,7 @@ export default {
 						display: flex;
 						align-items: center;
 						justify-content: center;
-						color: #666;
+						color: #999;
 						font-weight: lighter;
 						
 					}
