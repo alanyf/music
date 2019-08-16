@@ -1,11 +1,20 @@
 <template>
   <div class="my-container">
     <section class="carousels">
-      <el-carousel>
+      <!-- <el-carousel>
         <el-carousel-item v-for="item in 4" :key="item">
           <h3>{{ item }}</h3>
         </el-carousel-item>
-      </el-carousel>
+      </el-carousel> -->
+      <van-swipe :autoplay="3000">
+        <!-- <van-swipe-item>1</van-swipe-item>
+  <van-swipe-item>2</van-swipe-item>
+  <van-swipe-item>3</van-swipe-item>
+  <van-swipe-item>4</van-swipe-item> -->
+        <van-swipe-item v-for="item in carouselItems" :key="item.to">
+          <img v-lazy="item.picUrl" />
+        </van-swipe-item>
+      </van-swipe>
     </section>
     <section class="tools">
       <div class="tools-row">
@@ -16,17 +25,19 @@
       <div class="list-hearder">
         <div class="hearder-title">推荐歌单</div>
         <div class="hearder-button">
-          <el-button round>歌单广场</el-button>
+          <van-tag round plain color="#333">歌单广场</van-tag>
         </div>
       </div>
       <div class="list-content">
         <div class="list-row" v-for="item in playList" :key="item.id">
           <div class="row-image">
-            <img :src="item.picUrl" />
-            <p class="play-count">
-              <i class="el-icon-video-play"></i>
-              {{Math.floor(item.playCount / 10000) }}万
-            </p>
+            <div class="head-img">
+              <img :src="item.picUrl" />
+              <div class="play-count">
+                <van-icon name="play-circle-o"/>
+                <div class="play-count-num">{{Math.floor(item.playCount / 10000) }}万</div>
+              </div>
+            </div>
             <div class="row-title">{{item.name}}</div>
           </div>
         </div>
@@ -36,7 +47,7 @@
       <div class="list-hearder">
         <div class="hearder-title">新碟</div>
         <div class="hearder-button">
-          <el-button round>更多新碟</el-button>
+          <van-tag round plain color="#333">更多新碟</van-tag>
         </div>
       </div>
          <div class="list-content">
@@ -53,17 +64,28 @@
 </template>
 
 <script>
+import Vue from 'vue';
 import Circular from "../../components/Circular";
+import {Swipe, SwipeItem, Lazyload, Tag} from "vant";
+Vue.use(Swipe).use(SwipeItem).use(Tag);
+Vue.use(Lazyload);
 export default {
   name: "Find",
   data() {
     return {
+      carouselItems: [
+        {picUrl: '/static/images/carousels_1.jpg', to: ''},
+        {picUrl: '/static/images/carousels_2.jpg', to: ''},
+        {picUrl: '/static/images/carousels_3.jpg', to: ''},
+        {picUrl: '/static/images/carousels_4.jpg', to: ''},
+        {picUrl: '/static/images/carousels_5.jpg', to: ''},
+      ],
       toolsList: [
-        { icon: "el-icon-attract", title: "每日推荐" },
-        { icon: "el-icon-s-custom", title: "歌单" },
-        { icon: "el-icon-star-on", title: "排行榜" },
-        { icon: "el-icon-dish", title: "电台" },
-        { icon: "el-icon-bicycle", title: "直播" }
+        { icon: "notes-o", title: "每日推荐" },
+        { icon: "orders-o", title: "歌单" },
+        { icon: "bar-chart-o", title: "排行榜" },
+        { icon: "bulb-o", title: "电台" },
+        { icon: "cashier-o", title: "直播" }
       ],
       playList: [
         {
@@ -137,25 +159,50 @@ export default {
   width: 100%;
   height: 100%;
   flex-direction: column;
-  .carousels {
-    margin: 0.2rem 0.5rem;
-    z-index: -99;
-    .el-carousel {
-      border-radius: 0.2rem;
-      .el-carousel__item h3 {
-        color: #475669;
-        font-size: 18px;
-        opacity: 0.75;
-        line-height: 300px;
-        margin: 0;
+    .hearder-button {
+      flex-basis: 2rem;
+      .van-tag{
+        font-size: 0.3rem;
       }
-      .el-carousel__item:nth-child(2n) {
-        background-color: #99a9bf;
-      }
-      .el-carousel__item:nth-child(2n + 1) {
-        background-color: #d3dce6;
+      .van-tag::after{
+        border-color: #aaa;
       }
     }
+  .carousels {
+    flex-basis: 4rem;
+    margin: 0.2rem 0.5rem;
+    .van-swipe__track{
+      height: 4rem;
+    }
+    .van-swipe__indicator{
+      background-color: #444;
+    }
+    .van-swipe__indicator-active{
+      background-color: #111;
+    }
+    .van-swipe-item{
+      img{
+        width: 100%;
+        height: 100%;
+      }
+    }
+    //z-index: -99;
+    // .el-carousel {
+    //   border-radius: 0.2rem;
+    //   .el-carousel__item h3 {
+    //     color: #475669;
+    //     font-size: 18px;
+    //     opacity: 0.75;
+    //     line-height: 300px;
+    //     margin: 0;
+    //   }
+    //   .el-carousel__item:nth-child(2n) {
+    //     background-color: #99a9bf;
+    //   }
+    //   .el-carousel__item:nth-child(2n + 1) {
+    //     background-color: #d3dce6;
+    //   }
+    // }
   }
   .tools {
     display: flex;
@@ -183,9 +230,6 @@ export default {
         font-weight: 600;
         line-height: 0.8rem;
       }
-      .hearder-button {
-        flex-basis: 0.2rem;
-      }
     }
     .list-content {
       display: flex;
@@ -196,20 +240,47 @@ export default {
         display: flex;
         flex-direction: column;
         justify-content: space-between;
+        margin-bottom: 0.3rem;
         .row-image {
           display: flex;
           flex-direction: column;
           justify-content: space-between;
           align-items: center;
-          .img {
-            height: 100%;
-            width: 100%;
-            border-radius: 5%;
+          .head-img{
+            width: 2.5rem;
+            height: 2.5rem;
+            position: relative;
+            .play-count{
+              display: flex;
+              align-items: center;
+              color: #ddd;
+              font-size: 0.35rem;
+              height: 0.4rem;
+              line-height: 0.4rem;
+              z-index: 2;
+              position: absolute;
+              right: 0;
+              padding: 0.1rem;
+              font-weight: bolder;
+              i{
+                font-size: 0.25rem;
+              }
+            }
+            img {
+              position: absolute;
+              top: 0;
+              left: 0;
+              height: 100%;
+              width: 100%;
+              border-radius: 5%;
+              z-index: 0;
+            }
           }
           .row-title {
             flex-wrap: wrap;
             flex-basis: 40%;
             font-size: 0.3rem;
+            width: 2.5rem;
             height: 0.5rem;
             color: #999;
             overflow-wrap: break-word;
@@ -232,9 +303,6 @@ export default {
         font-size: 0.5rem;
         font-weight: 600;
         line-height: 0.8rem;
-      }
-      .hearder-button {
-        flex-basis: 0.2rem;
       }
     }
      .list-content {
