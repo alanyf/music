@@ -9,7 +9,8 @@
 		</div>
 	</header>
 	<article class="list-container">
-		<div class="list-row" v-for="music in playlist" :key="music.url" @click="playMusic(music)">
+		<div class="list-row" v-for="(music, i) in playlist" :key="music.url" @click="playMusic(music, i)">
+			<van-icon name="volume" v-if="musicIsListeningIndex===i" class="isListening"/>
 			<div class="music-info">
 				<div class="music-title">{{music.name}}</div>
 				<div class="detail-info">
@@ -45,12 +46,14 @@ export default {
 			playlist: [
 				// {name: '情非得已', url: '/static/media/song.mp3', quality: 'HQ', author: '庾澄庆', album: '流星花园主题曲'}
 			],
-			isHidden: true
+			isHidden: true,
+			musicIsListeningIndex: -1
 		}
 	},
 	methods: {
-		playMusic(music){
-			GlobalBus.$emit('playMusic', music);
+		playMusic(music, index){
+			GlobalBus.$emit('playMusic', index, this.playlist, this.type); 	// 播放音乐
+			GlobalBus.$emit('listInListening', this.type);			// 在听哪个歌单
 		},
 		
 		back(){
@@ -59,6 +62,7 @@ export default {
 		},
 		show(){
 			this.isHidden = false;
+			this.readRecentListen();
 		},
 		hide(){
 			this.isHidden = true;
@@ -81,14 +85,37 @@ export default {
 					};
 					return obj;
 				});
+				this.readRecentListen();
 			}).catch(err=>{
 				console.log(err);
 			});
-		}
+		},
+		readRecentListen(){
+			const locla_user = localStorage.user;
+			if(locla_user){
+				const user = JSON.parse(localStorage.user);
+				if(user.musicListNameIsListening !== this.type){
+					this.musicIsListeningIndex = -1;
+					return;
+				}
+				const recentMusic = user.recentPlay[0];
+				for(let i=0;i<this.playlist.length;i++){
+					if(this.playlist[i].id === recentMusic.id){
+						this.musicIsListeningIndex = i;
+						return;
+					}
+				}
+			}else{
+				return;
+			}
+		},
 	},
 	mounted(){
 		//const url = 'http://localhost:3000/music/playlist/detail?id=24381616';
 
+	},
+	created() {
+		const that = this;
 		GlobalBus.$on('getPlayListInfo', (listObj)=>{
 			if(listObj.title === '最近播放'){
 				const userStr = localStorage.user;
@@ -98,17 +125,20 @@ export default {
 				}else{
 					user = JSON.parse(userStr);
 				}
-				this.playlist = user.recentPlay;
+				that.playlist = user.recentPlay;
 			}else{
-				this.getPlayList();
+				that.getPlayList();
 			}
-			this.type = listObj.title;
-			console.log('listObj', listObj, this.type, this.playlist);
-			this.show();
+			that.type = listObj.title;
+			console.log('listObj', listObj, that.type, that.playlist);
+			that.show();
+			that.readRecentListen();
 		});
-	},
-	created() {
-		
+		GlobalBus.$on('musicIsListening', (musicId, musicIndex)=>{
+			if(that.playlist[musicIndex] && that.playlist[musicIndex].id === musicId){
+				that.musicIsListeningIndex = musicIndex;
+			}
+		});
 	},
 	components: {
 		BottomPlayer
@@ -216,6 +246,10 @@ export default {
 				.more-operation{
 					flex-basis: 0.5rem;
 					color: #888;
+				}
+				.isListening{
+					color: red;
+					margin-right: 0.2rem;
 				}	
 			}
 		}

@@ -12,7 +12,11 @@
 						<div class="icon">
 							<van-icon :name="item.icon"/>
 						</div>
-						<div class="list-name">{{item.title}}<div class="item-num">({{item.num}})</div></div>
+						<div class="list-name">
+							{{item.title}}
+							<div class="item-num">({{item.num}})</div>
+							<van-icon v-if="listInListening===item.title" name="volume" class="isListening"/>
+						</div>
 					</div>
 				<!-- </router-link> -->
 			</div>
@@ -38,7 +42,10 @@
 										<div class="list-title">{{item.title}}</div>
 										<div class="list-info">{{item.num}}首，已下载{{item.downloadNum}}首</div>
 									</div>
-									<div class="more-icon" @click.stop><van-icon name="ellipsis" class="rotate-90"/></div>
+									<div class="more-icon" @click.stop>
+										<van-icon v-if="listInListening===item.title" name="volume" class="isListening"/>
+										<van-icon v-else name="ellipsis" class="rotate-90"/>
+									</div>
 								</div>
 							<!-- </router-link> -->
 						</div>
@@ -82,7 +89,8 @@ export default {
 					{picUrl: '/static/images/head-img-8.jpeg', title: '钢琴曲', num: 58, downloadNum: 4},
 				]
 			},
-			isShowMusicList: true
+			isShowMusicList: true,
+			listInListening: ''
 		}
 	},
 	methods: {
@@ -97,6 +105,21 @@ export default {
 	components: {
 		Circular,
 		GlobalBus
+	},
+	created(){
+		GlobalBus.$on('listInListening', (type)=>{
+			console.log('在听歌单:', type);
+			this.listInListening = type;
+		});
+	},
+	mounted(){
+		const locla_user = localStorage.user;
+		if(locla_user){
+			const user = JSON.parse(localStorage.user);
+			this.listInListening = user.musicListNameIsListening;
+		}else{
+			return;
+		}
 	}
 }
 </script>
@@ -148,13 +171,13 @@ export default {
 					line-height: 1.5rem;
 					font-size: 0.44rem;
 					border-bottom: 1px solid #ddd;
+					align-items: center;
 					.item-num{
 						color: #aaa;
 						font-size: 0.3rem;
 						line-height: 1.4rem;
 						margin-left: 0.1rem;
 					}
-					
 				}
 				&:last-child{
 					.list-name{
@@ -267,7 +290,12 @@ export default {
 			.hidden{
 				height: 0;
 			}
-        }
+		}
+		.isListening{
+			color: red;
+			margin-left: auto;
+			margin-right: 0.2rem;
+		}
 	}
 	.rotate-90{
 		transform:rotate(-90deg);
