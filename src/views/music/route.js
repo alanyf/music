@@ -4,7 +4,7 @@ import Menu from './pages/menu/menu';
 import My from './pages/my/my';
 import Find from './pages/find/find';
 import Search from './pages/search/search';
-
+import Comment from './pages/comment/comment';
 import Example from './components/Example';
 
 let routes = [
@@ -39,6 +39,11 @@ let routes = [
         path: '/music/search',
         name: '搜索',
         component: Search
+    },
+    {
+        path: '/music/comment/:id',
+        name: '评论',
+        component: Comment
     }
 
 ];
