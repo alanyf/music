@@ -24,7 +24,9 @@
 			<div class="collection"><van-icon name="like-o" @click="collection"/></div>
 			<div class="download"><van-icon name="diamond-o" @click="download"/></div>
 			<div class="show-word"><van-icon name="comment-o" @click="showWord"/></div>
-			<div class="comment"><van-icon name="chat-o"/></div>
+			<div class="comment">
+				<router-link :to="`/music/comment/${music.id}`"><van-icon name="chat-o" @click="showComment"/></router-link>
+			</div>
 			<div class="more"><van-icon name="ellipsis"/></div>
 		</section>
 		<section class="play-progress-bar">
@@ -422,7 +424,11 @@ export default {
 		//生成从minNum到maxNum的随机数
 		randomNum(minNum, maxNum){
 			return parseInt(Math.random()*(maxNum-minNum+1)+minNum,10); 
-		} 
+		},
+		// 显示评论页
+		showComment(){
+			GlobalBus.$emit();
+		}
 	},
 	components: {
 		Autio

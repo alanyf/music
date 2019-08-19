@@ -63,7 +63,11 @@ export default {
   height: 100%;
   flex-direction: column;
   margin: 0.2rem,0.5rem;
+<<<<<<< HEAD
   background-color: white;
+=======
+  overflow: scroll;
+>>>>>>> refs/remotes/origin/alan
   .search-box-container {
     z-index: 99;
     display: flex;

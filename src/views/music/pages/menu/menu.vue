@@ -139,6 +139,7 @@ export default {
 				that.musicIsListeningIndex = musicIndex;
 			}
 		});
+		
 	},
 	components: {
 		BottomPlayer

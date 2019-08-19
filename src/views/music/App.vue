@@ -3,7 +3,6 @@
 		<!-- <RouteLink/> -->
 		<router-view/>
 		<Menu/>
-		<BottomPlayer/>
 		<Play/>
 	</div>
 </template>
@@ -12,7 +11,6 @@
 import RouteLink from './components/RouteLink';
 import Play from './pages/play/play';
 import Menu from './pages/menu/menu';
-import BottomPlayer from './components/BottomPlayer';
 
 export default {
 	name: 'App',
@@ -22,8 +20,7 @@ export default {
 	components: {
 		RouteLink,
 		Play,
-		Menu,
-		BottomPlayer
+		Menu
 	}
 }
 
