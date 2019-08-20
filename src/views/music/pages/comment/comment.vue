@@ -35,14 +35,14 @@
 					</div>
 					<div class="comment-text">
 						{{comment.content}}
-						<div class="reply-item" v-for="reply in isShowAllReply[i]?comment.reply:comment.reply.slice(0,0)" :key="reply.id">
+						<div class="reply-item" v-for="reply in isShowAllReply[i]?comment.reply:comment.reply.slice(0,2)" :key="reply.id">
 							<div class="reply-text">
 								<span class="reply-nickname">{{reply.user.nickname}}：</span>
 								{{reply.content}}
 							</div>
 						</div>
 						<div class="comment-reply" @click="showAllReply(i)">
-							{{comment.reply.length}}条回复
+							共{{comment.reply.length}}条回复
 						</div>
 					</div>
 				</div>
@@ -83,6 +83,7 @@ export default {
 				}
 			});
 			that.hotComments = res.hotComments.map(e => {
+				e.beReplied = [].concat(e.beReplied, e.beReplied, e.beReplied, e.beReplied);
 				return {
 					id: e.commentId,
 					content: e.content,
@@ -125,7 +126,8 @@ export default {
 			Toast('点赞成功');
 		},
 		showAllReply(index){
-			this.isShowAllReply[index] = !this.isShowAllReply[index];
+			// this.isShowAllReply[index] = !this.isShowAllReply[index];
+			this.$set(this.isShowAllReply, index , !this.isShowAllReply[index]);
 		},
 		// 格式化
 		formatTime(date, formatStr){
@@ -254,6 +256,9 @@ export default {
 						flex-direction: column;
 						text-align: left;
 						vertical-align: top;
+						overflow: hidden;
+						text-overflow:ellipsis; //溢出用省略号显示
+						white-space:nowrap; //溢出不换行
 						.list-title{
 							flex-basis: 60%;
 							display: flex;

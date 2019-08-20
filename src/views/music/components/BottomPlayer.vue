@@ -120,18 +120,19 @@
             justify-content: center;
             flex:1;
             text-align: left;
+            overflow: hidden;
+            text-overflow:ellipsis; //溢出用省略号显示
+            white-space:nowrap; //溢出不换行
             .name {
                 height: 0.5rem;
                 line-height: 0.5rem;
                 font-size:  0.4rem;
-                overflow: hidden;
             }
             .desc{
                 height: 0.35rem;
                 line-height: 0.35rem;
                 font-size:  0.3rem;
                 color: #666;
-                overflow: hidden;
             }
         }
         .play-control{

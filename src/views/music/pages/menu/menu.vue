@@ -9,7 +9,23 @@
 		</div>
 	</header>
 	<article class="list-container">
-		<div class="list-row" v-for="(music, i) in playlist" :key="music.url" @click="playMusic(music, i)">
+		<van-list finished-text="我也是有底线的" :finished="true">
+  			<van-cell v-for="(music, i) in playlist" :key="music.url" class="list-row" @click="playMusic(music, i)">
+				<van-icon name="volume" v-if="musicIsListeningIndex===i" class="isListening"/>
+				<div class="music-info">
+					<div class="music-title">{{music.name}}</div>
+					<div class="detail-info">
+						<div class="music-quality"><div class="icon">{{music.quality}}</div></div>
+						<div class="author-album">{{music.author}} - {{music.album}}</div>
+					</div>
+				</div>
+				<div class="music-mv" @click.stop>
+					<van-icon name="video-o"  v-if="music.mv"/>
+				</div>
+				<div class="more-operation" @click.stop><van-icon name="ellipsis" class="rotate-90"/></div>
+  			</van-cell>
+		</van-list>
+		<!-- <div class="list-row" v-for="(music, i) in playlist" :key="music.url" @click="playMusic(music, i)">
 			<van-icon name="volume" v-if="musicIsListeningIndex===i" class="isListening"/>
 			<div class="music-info">
 				<div class="music-title">{{music.name}}</div>
@@ -22,7 +38,7 @@
 				<van-icon name="video-o"  v-if="music.mv"/>
 			</div>
 			<div class="more-operation" @click.stop><van-icon name="ellipsis" class="rotate-90"/></div>
-		</div>
+		</div> -->
 	</article>
 
 </div>
@@ -31,6 +47,9 @@
 <script>
 import BottomPlayer from '../../components/BottomPlayer';
 import GlobalBus from '../../components/GlobalBus';
+import Vue from 'vue';
+import { List, NoticeBar } from 'vant';
+Vue.use(List).use(NoticeBar);
 export default {
 	name: 'Menu',
 	props: {
@@ -194,8 +213,7 @@ export default {
 			height: 100%;
 			flex-flow: 1;
 			overflow: scroll;
-			padding: 0 0.5rem;
-			//padding: 0 0.25rem;
+			padding: 0 0.5rem 2rem 0.5rem;
 			.list-row{
 				display: flex;
 				height: 1.5rem;
@@ -208,9 +226,12 @@ export default {
 					flex-basis: 8.5rem;
 					.music-title{
 						font-size: 0.45rem;
+						width: 6.5rem;
 						height: 0.6rem;
 						line-height: 0.6rem;
 						overflow: hidden;
+						text-overflow:ellipsis; //溢出用省略号显示
+						white-space:nowrap; //溢出不换行
 					}
 					.detail-info{
 						font-size: 0.3rem;
@@ -234,9 +255,12 @@ export default {
 							}
 						}
 						.author-album{
-							flex-basis: 6rem;
+							flex-basis: 5rem;
+							width: 5.5rem;
 							flex-grow: 1;
 							overflow: hidden;
+							text-overflow:ellipsis; //溢出用省略号显示
+							white-space:nowrap; //溢出不换行
 						}
 					}
 				}
@@ -252,6 +276,11 @@ export default {
 					color: red;
 					margin-right: 0.2rem;
 				}	
+			}
+			.van-list__finished-text{
+				font-size: 0.35rem;
+				height: 0.6rem;
+				line-height: 0.6rem;
 			}
 		}
 		.mini-player{

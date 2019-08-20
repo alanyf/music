@@ -2,7 +2,14 @@
 	<div :class="`play-container ${isHidden?'z-index-hidden':''}`">
 		<header class="header">
 			<div class="arrow" @click="hidePlayer"><i class="el-icon-back"></i></div>
-			<div class="music-title">{{ music.name }}</div>
+			<div class="music-title">
+				{{music.name}}
+				<!-- <van-notice-bar color="#2c3e50" background="#fff" :text="music.name" v-if="getStringLength" name="1">
+				</van-notice-bar>
+				<van-notice-bar color="#2c3e50" background="#fff"  v-else :scrollable="false" name="2">
+					{{music.name}}
+				</van-notice-bar> -->
+			</div>
 			<div class="share" >
 				<!-- <van-icon name="share" @click="share"/> -->
 				<van-icon name="/static/images/icon/icon_upload.svg" @click="share"/>
@@ -59,11 +66,11 @@
 <script>
 import Autio from '../../components/Audio';
 import GlobalBus from '../../components/GlobalBus';
-import { Toast, Icon } from 'vant';
+import { Toast, Icon, NoticeBar } from 'vant';
 import Vue from 'vue';
 import { defaultCoreCipherList } from 'constants';
 
-Vue.use(Icon);
+Vue.use(Toast).use(Icon).use(NoticeBar);
 //import { setTimeout } from 'timers';
 export default {
 	name: 'Index',
@@ -429,6 +436,7 @@ export default {
 		showComment(){
 			GlobalBus.$emit();
 		}
+		
 	},
 	components: {
 		Autio
@@ -438,7 +446,28 @@ export default {
 		controlPosition(){
 			const output =  { marginTop:  parseInt(this.contentHeight/2 - (this.wordFocusIndex * 0.8)*document.documentElement.clientWidth/10) + 'px'};
 			return output;
-		}
+		},
+		getStringLength() {
+			const str = this.music.name;
+			if(!str){
+				return;
+			}
+            var totalLength = 0;
+            var list = str.split("");
+            for(var i = 0; i < list.length; i++) {
+				var s = list[i];
+				if (s.match(/[\u0000-\u00ff]/g)) { //半角
+					totalLength += 1; 
+				} else if (s.match(/[\u4e00-\u9fa5]/g)) { //中文  
+					totalLength += 2; 
+				} else if (s.match(/[\uff00-\uffff]/g)) { //全角 
+					totalLength +=2;
+				}
+			}   
+			const bool = totalLength>35?true:false;
+			console.log(totalLength, bool);
+            return bool;
+        }
 		
     }
 /*
@@ -474,10 +503,24 @@ export default {
 		}
 		.music-title{
 			height: 1.5rem;
+			line-height: 1.5rem;
 			flex-basis: 7rem;
 			text-align: left;
 			vertical-align: middle;
 			overflow: hidden;
+			text-overflow:ellipsis; //溢出用省略号显示
+			white-space:nowrap; //溢出不换行
+			.van-notice-bar{
+				font-size: 0.5rem;
+				height: 1.5rem;
+				.van-notice-bar__wrap{
+					height: 0.6rem;
+					line-height: 0.6rem;
+					.van-notice-bar__content{
+						
+					}
+				}
+			}
 		}
 		.share{
 			flex-basis: 1.5rem;
