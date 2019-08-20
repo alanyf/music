@@ -17,7 +17,7 @@
         </div>
       </div>
       <div class="tags">
-        <el-tag  v-for="tag in tags" :key="tag.name" effect="dark" type="info">{{tag.name}}</el-tag>
+        <van-tag v-for="tag in tags" :key="tag.name"  round size="large" text-color="#202223" color='#e6e8ea' :class="tagrow">{{tag.name}}</van-tag>
       </div>
     </section>
     <section class="hot-list">
@@ -30,6 +30,7 @@
 </template>
 
 <script>
+import {Tag} from 'vant';
 export default {
   name: "Search",
   props: {
@@ -62,7 +63,7 @@ export default {
   height: 100%;
   flex-direction: column;
   margin: 0.2rem,0.5rem;
-  overflow: scroll;
+  background-color: white;
   .search-box-container {
     z-index: 99;
     display: flex;
@@ -119,8 +120,15 @@ export default {
     }
     .tags{
       display: flex;
-      flex-basis: 1rem;
-      overflow: scroll;
+      flex-basis: 0.5rem;
+      overflow:scroll;
+      span{
+        margin-left: 0.1rem;
+        margin-right: 0.1rem;
+        font-weight: 500;
+        font-size: 0.3rem;
+        white-space:nowrap;
+      }
     }
   }
 
