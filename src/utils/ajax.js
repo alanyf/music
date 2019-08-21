@@ -1,6 +1,8 @@
 import Vue from 'vue';
 import axios from 'axios';
 
+import {protocal, host, localhost, useMock, website} from './config.js';
+
 const CancelToken = axios.CancelToken;
 
 if (!Vue.prototype.$ajax) {
@@ -177,7 +179,8 @@ if (!Vue.prototype.$ajax) {
                     moreConfig.data = config;
                 }
                 moreConfig.method = methodsMap[method] || 'post';
-                moreConfig.url = url;
+                moreConfig.url = url.indexOf(protocal) !== -1 ? url : (useMock ? url.split(website).join(localhost) : url.split(website).join(host));
+                // moreConfig.url = url;
                 moreConfig.headers = {'X-Requested-With': 'XMLHttpRequest'};
                 moreConfig.cancelToken = source.token;
                 defer = request(moreConfig);
@@ -191,7 +194,8 @@ if (!Vue.prototype.$ajax) {
             }
 
             config.method = method;
-            config.url = url;
+            // config.url = url;
+            config.url = url.indexOf(protocal) !== -1 ? url : (useMock ? localhost + url : url.split(website).join(host));
             config.data = data;
             config.headers = {'X-Requested-With': 'XMLHttpRequest'};
             config.cancelToken = source.token;

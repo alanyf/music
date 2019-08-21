@@ -89,7 +89,7 @@ export default {
 		getPlayList(){
 			const host = 'http://localhost:3000';
 			const urlLocal = host+'/playlist/detail?id=243816';
-			this.$axios.get(urlLocal).then((res)=>{
+			this.$axios.get('/music/playlist/detail?id=243816').then((res)=>{
 				//console.log(res);
 				this.playlist = res.playlist.tracks.map(e=>{
 					const obj = {

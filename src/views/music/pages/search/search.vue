@@ -64,6 +64,7 @@ export default {
   flex-direction: column;
   margin: 0.2rem,0.5rem;
   background-color: white;
+  overflow: scroll;
   .search-box-container {
     z-index: 99;
     display: flex;

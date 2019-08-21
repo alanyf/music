@@ -163,7 +163,7 @@ export default {
 		// 获取歌词
 		getSongWord(id){
 			const urlLocal = '/music/lyric?id='+id;
-			this.$http.get(urlLocal).then((res)=>{
+			this.$ajax.get(urlLocal).then((res)=>{
 				//console.log('歌词：', res);
 				const wordSplit = res.lrc.lyric.split('\n');
 				wordSplit.pop();
@@ -251,7 +251,7 @@ export default {
 		// 获取并播放音乐
 		playMusic(music){
 			const that = this;
-			that.$http.get('/music/song/url?id='+music.id).then((res)=>{
+			that.$ajax.get('/music/song/url?id='+music.id).then((res)=>{
 				const song = res.data[0];
 				if(song.url){
 					that.music = music;
