@@ -19,6 +19,7 @@ MyPlugin.prototype.apply = function(compiler) {
     compilation.hooks.htmlWebpackPluginAfterHtmlProcessing.tapAsync('onvertFilePathAfterProcess', (htmlPluginData, cb) => {
      // Do stuff
      // console.log(htmlPluginData.assets)
+     htmlPluginData.html = htmlPluginData.html.split('__curentEnv_').join(process.env.NODE_ENV);// nodejs编译时注入环境
      cb(null, htmlPluginData);
     })
 

@@ -1,5 +1,6 @@
 import config from '../../config';
-const isDev = process.env.NODE_ENV === 'development';
+const isDev = window.CURENT_ENV === 'development';
+console.log('current environment:', window.CURENT_ENV);
 module.exports = {
     protocal: 'http',
     host: 'http://localhost:3000/',
