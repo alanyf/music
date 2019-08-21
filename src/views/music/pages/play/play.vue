@@ -1,7 +1,7 @@
 <template>
 	<div :class="`play-container ${isHidden?'z-index-hidden':''}`">
 		<header class="header">
-			<div class="arrow" @click="hidePlayer"><i class="el-icon-back"></i></div>
+			<div class="arrow" @click="hidePlayer"><van-icon name="arrow-left"/></div>
 			<div class="music-title">
 				{{music.name}}
 				<!-- <van-notice-bar color="#2c3e50" background="#fff" :text="music.name" v-if="getStringLength" name="1">
@@ -11,7 +11,6 @@
 				</van-notice-bar> -->
 			</div>
 			<div class="share" >
-				<!-- <van-icon name="share" @click="share"/> -->
 				<van-icon name="/static/images/icon/icon_upload.svg" @click="share"/>
 			</div>
 		</header>
@@ -40,7 +39,7 @@
 	　		<audio ref='audio' id="audio" preload="auto" class="audio" :src="music.url"></audio>
 			<div class="time-now">{{timeNow}}</div>
 			<div class="progress-bar">
-				<el-slider v-model="playProcess" @change="processChange" :show-tooltip="false" :max="processLength"></el-slider>
+				<van-slider v-model="playProcess" @change="processChange" :max="processLength" active-color="#666" bar-height="0.1rem"/>
 			</div>
 			<div class="time-total">{{timeTotal}}</div>
 		</section>
@@ -52,8 +51,6 @@
 			</div>
 			<div class="previou-music"><van-icon name="arrow-left" @click="previous"/></div>
 			<div class="play-control">
-				<!-- <i v-if="playState" class="el-icon-video-pause" @click="clickStop"></i>
-				<i v-else class="el-icon-video-play" @click="clickPlay"></i> -->
 				<van-icon name="pause-circle-o" v-if="playState" @click="clickStop"/>
 				<van-icon name="play-circle-o" v-else @click="clickPlay"/>
 			</div>
@@ -66,11 +63,11 @@
 <script>
 import Autio from '../../components/Audio';
 import GlobalBus from '../../components/GlobalBus';
-import { Toast, Icon, NoticeBar } from 'vant';
+import { Toast, Icon, NoticeBar, Slider } from 'vant';
 import Vue from 'vue';
 import { defaultCoreCipherList } from 'constants';
 
-Vue.use(Toast).use(Icon).use(NoticeBar);
+Vue.use(Toast).use(Icon).use(NoticeBar).use(Slider);
 //import { setTimeout } from 'timers';
 export default {
 	name: 'Index',
@@ -500,6 +497,9 @@ export default {
 			flex-basis: 1.5rem;
 			line-height: 1.5rem;
 			font-size: 0.6rem;
+			display: flex;
+			align-items: center;
+			justify-content: center;
 		}
 		.music-title{
 			height: 1.5rem;
@@ -604,12 +604,9 @@ export default {
 			width: 75%;
 			background-color: #fff;
 			margin: 0 0.1rem;
-			.el-slider{
-				background-color: #fff;
+			.van-slider__button-wrapper{
+				opacity: 0!important;
 			}
-		}
-		.el-slider__button{
-			opacity: 0!important;
 		}
 
 	}

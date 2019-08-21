@@ -8,9 +8,7 @@
             <div class="desc">{{music.author+' - '+music.album}}</div>
         </div>
         <div class="play-control">
-            <!-- <i v-if="playState" class="el-icon-video-pause" @click.stop="stop"></i>
-            <i v-else class="el-icon-video-play" @click.stop="start"></i> -->
-            <van-icon  v-if="playState" name="pause-circle-o" @click.stop="stop"/>
+           <van-icon  v-if="playState" name="pause-circle-o" @click.stop="stop"/>
             <van-icon v-else name="play-circle-o" @click.stop="start"/>
         </div>
         <div class="play-control">

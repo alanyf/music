@@ -53,15 +53,6 @@ Vue.prototype.errorMsg = function(text){
 		height: 100%;
 		background-color: #fff;
 	}
-	.tipMsg{
-		.el-tipMsg__title{
-			font-size: 0.7rem!important;
-		}
-		.el-tipMsg__content p{
-			font-size: 0.34rem;
-			line-height: 0.4rem;
-		}
-	}
 	.message-tip{
 		i{
 			font-size: 0.35rem;

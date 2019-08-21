@@ -1,7 +1,7 @@
 <template>
 	<div class="comment-container">
 		<header class="header">
-			<div class="arrow" @click="back"><i class="el-icon-back"></i></div>
+			<div class="arrow" @click="back"><van-icon name="arrow-left"/></div>
 			<div class="music-title">评论</div>
 			<div class="share" >
 				<van-icon name="/static/images/icon/icon_upload.svg" @click="share"/>
@@ -70,7 +70,7 @@ export default {
 		this.musicId = this.$route.params.id;
 		const that = this;
 		
-		this.$http.get('/music/comment/music?id='+this.musicId).then((res)=>{
+		this.$ajax.get('/music/comment/music?id='+this.musicId).then((res)=>{
 			console.log(res);
 			that.comments = res.comments.map(e => {
 				return {
@@ -96,7 +96,7 @@ export default {
 		}).catch((err)=>{
 			console.log(err);
 		});
-		this.$http.get('/music/song/detail?ids='+this.musicId).then((res)=>{
+		this.$ajax.get('/music/song/detail?ids='+this.musicId).then((res)=>{
 				console.log(res);
 				const song = res.songs[0];
 				const music = {

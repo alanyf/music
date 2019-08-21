@@ -1,11 +1,11 @@
 <template>
 <div :class="`menu-container ${isHidden?'z-index-hidden':''}`">
 	<header class="header">
-		<div class="arrow" @click="back"><i class="el-icon-back"></i></div>
+		<div class="arrow" @click="back"><van-icon name="arrow-left"/></div>
 		<div class="music-title">{{type}}</div>
 		<div class="share" >
-			<i class="el-icon-search margin-right"></i>
-			<van-icon name="ellipsis" class="rotate-90"/>
+			<van-icon name="search"/>
+			<van-icon name="ellipsis" class="rotate-90 margin-right"/>
 		</div>
 	</header>
 	<article class="list-container">
@@ -191,6 +191,9 @@ export default {
 				flex-basis: 1.5rem;
 				line-height: 1.5rem;
 				font-size: 0.7rem;
+				display: flex;
+				align-items: center;
+				justify-content: center;
 			}
 			.music-title{
 				flex-basis: 6rem;
@@ -202,9 +205,10 @@ export default {
 				display: flex;
 				align-items: center;
 				justify-content: center;
-				flex-basis: 2.5rem;
-				.margin-right{
-					margin-right: 0.5rem;
+				flex-basis: 2rem;
+				i{
+					flex-grow: 1;
+
 				}
 			}
 		}
