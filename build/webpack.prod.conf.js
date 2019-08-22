@@ -161,7 +161,7 @@ var webpackConfig = merge(baseWebpackConfig, {
         parallel: true,
         uglifyOptions: {
           compress: {
-            warnings: false
+            //warnings: false
           },
           ecma: 6,
           mangle: true

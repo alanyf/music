@@ -38,12 +38,12 @@ npm run build --report
 For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
 
 ## 优化计划
-> 1. 丰富本地mock数据，使项目在没有网易云api接口的情况下依然正常运行，最好可以自动判断运行环境，本地开发使用接口，线上使用mock；  
+> 1. `(ok)`丰富本地mock数据，使项目在没有网易云api接口的情况下依然正常运行，最好可以自动判断运行环境，本地开发使用接口，线上使用mock；  
 > 2. play歌曲播放页架构优化，现在架构较为混乱，代码耦合性较高；  
 > 3. 当前还未使用vuex，计划使用vuex优化组件建通信和状态管理；  
-> 4. 评论页面、搜索页面；  
+> 4. `(ok)`评论页面、搜索页面；  
 > 5. 历史记录优化，由于现在歌曲播放页和列表页使用的方案是fixed布局，还不能与历史记录返回上一步相结合；  
-> 6. ui框架逐步用移动端ui框架vant替换element-ui；  
+> 6. `(ok)`ui框架逐步用移动端ui框架vant替换element-ui；  
 > 7. 生产环节打包，放置于github.io上访问测试；  
 > 8. webpack打包时自动搬运静态文件到static目录下；  
 > 9. 图片和长列表懒加载、骨架屏占位、1px边框问题、横屏问题、设备判断及兼容、css实现在overflow时超出部分显示省略号...  

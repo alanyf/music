@@ -1,18 +1,18 @@
 <template>
   <div class="search-container">
     <section class="search-box-container">
-      <i class="back el-icon-back" @click="back"></i>
+      <van-icon name="arrow-left" @click="back"/>
       <div class="search-box">
         <input :placeholder="placeholder" v-model="query" type="text" class="box" />
         <i v-show="query" class="delete el-icon-close" @click="clear"></i>
       </div>
-      <i class="user el-icon-user"></i>
+      <van-icon name="manager-o"/>
     </section>
     <section class="search-history">
       <div class="title">
         <div class="hearder-title">历史记录</div>
         <div class="hearder-button">
-          <i class="delete el-icon-delete"></i>
+            <van-icon name="delete"/>
         </div>
       </div>
       <div class="tags">

@@ -19,6 +19,10 @@ MyPlugin.prototype.apply = function(compiler) {
     compilation.hooks.htmlWebpackPluginAfterHtmlProcessing.tapAsync('onvertFilePathAfterProcess', (htmlPluginData, cb) => {
      // Do stuff
      // console.log(htmlPluginData.assets)
+     if(htmlPluginData.html.indexOf('__curentEnv_') === -1){
+        throw new Error('环境占位符查找失败 ，检查index.html文件中的环境占位符是否设置成功！');
+     }
+     htmlPluginData.html = htmlPluginData.html.split('__curentEnv_').join(process.env.NODE_ENV);// nodejs编译时注入环境
      cb(null, htmlPluginData);
     })
 

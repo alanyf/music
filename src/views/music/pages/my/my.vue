@@ -7,7 +7,6 @@
 		</section>
 		<section class="my-lists">
 			<div v-for="item in myList" :key="item.listName">
-				<!-- <router-link to="/music/menu"> -->
 					<div class="list-row" @click="gotoMusicList(item)">
 						<div class="icon">
 							<van-icon :name="item.icon"/>
@@ -18,24 +17,20 @@
 							<van-icon v-if="listInListening===item.title" name="volume" class="isListening"/>
 						</div>
 					</div>
-				<!-- </router-link> -->
 			</div>
 		</section>
 		<secxtion class="music-list">
-			<div class="list-item">
+			<div class="list-item" v-for="(musicListItem, i) in musicList" :key="musicListItem.title">
 				<div class="header-bar">
-					<div class="door-icon" @click="triggerMusicList(index)">
-						<!-- <i :class="`el-icon-arrow-down ${isShowMusicList?'':'rotate'}`" ></i> -->
-						<van-icon name="arrow-down" :class="`${isShowMusicList?'':'rotate'}`" />
+					<div class="door-icon" @click="triggerMusicList(i)">
+						<van-icon name="arrow-down" :class="`${isShowMusicList[i]?'':'rotate'}`" />
 					</div>
-					<div class="title">{{musicList.title}}<div class="item-num">({{musicList.list.length}})</div></div>
+					<div class="title">{{musicListItem.title}}<div class="item-num">({{musicListItem.list.length}})</div></div>
 					<div class="add-icon" @click.stop><van-icon name="plus"/></div>
 					<div class="more-icon" @click.stop><van-icon name="ellipsis" class="rotate-90 "/></div>
 				</div>
-				<div class="list-content" v-if="isShowMusicList">
-					
-						<div v-for="item in musicList.list" :key="item.title" >
-							<!-- <router-link to="/music/menu"> -->
+				<div class="list-content" v-if="isShowMusicList[i]">
+						<div v-for="item in musicListItem.list" :key="item.title" >
 								<div class="list-row">
 									<div class="head-img"><img :src="item.picUrl"/></div>
 									<div class="row-content">
@@ -47,7 +42,6 @@
 										<van-icon v-else name="ellipsis" class="rotate-90"/>
 									</div>
 								</div>
-							<!-- </router-link> -->
 						</div>
 				</div>
 			</div>
@@ -77,25 +71,36 @@ export default {
 				{icon: 'service-o', title: '我的电台', num: 0,   to: '/music/localList'},
 				{icon: 'star-o', title: '我的收藏', num: 3,   to: '/music/localList'}
 			],
-			musicList: {
-				title: '我的歌单', list: [
-					{picUrl: '/static/images/head-img-1.jpeg', title: '民谣', num: 210, downloadNum: 5},
-					{picUrl: '/static/images/head-img-2.jpeg', title: '抒情', num: 378, downloadNum: 24},
-					{picUrl: '/static/images/head-img-3.jpeg', title: '欧美', num: 32, downloadNum: 35},
-					{picUrl: '/static/images/head-img-4.jpeg', title: '流行', num: 45, downloadNum: 6},
-					{picUrl: '/static/images/head-img-5.jpeg', title: '布鲁斯', num: 98, downloadNum: 4},
-					{picUrl: '/static/images/head-img-6.jpeg', title: 'R&B', num: 24, downloadNum: 6},
-					{picUrl: '/static/images/head-img-7.jpeg', title: '古典', num: 34, downloadNum: 23},
-					{picUrl: '/static/images/head-img-8.jpeg', title: '钢琴曲', num: 58, downloadNum: 4},
-				]
-			},
-			isShowMusicList: true,
+			musicList: [
+				{
+					title: '我的歌单', list: [
+						{picUrl: '/static/images/head-img-1.jpeg', title: '民谣', num: 210, downloadNum: 5},
+						{picUrl: '/static/images/head-img-2.jpeg', title: '抒情', num: 378, downloadNum: 24},
+						{picUrl: '/static/images/head-img-3.jpeg', title: '欧美', num: 32, downloadNum: 35},
+						{picUrl: '/static/images/head-img-4.jpeg', title: '流行', num: 45, downloadNum: 6},
+						{picUrl: '/static/images/head-img-5.jpeg', title: '阿拉贝拉', num: 98, downloadNum: 4},
+						{picUrl: '/static/images/head-img-6.jpeg', title: '佛拉门戈', num: 24, downloadNum: 6},
+						{picUrl: '/static/images/head-img-7.jpeg', title: '中国风', num: 34, downloadNum: 23},
+						{picUrl: '/static/images/head-img-8.jpeg', title: '吉他曲', num: 58, downloadNum: 4},
+					]
+				},
+				{
+					title: '收藏的歌单', list: [
+						{picUrl: '/static/images/head-img-5.jpeg', title: '布鲁斯', num: 98, downloadNum: 4},
+						{picUrl: '/static/images/head-img-6.jpeg', title: 'R&B', num: 24, downloadNum: 6},
+						{picUrl: '/static/images/head-img-7.jpeg', title: '古典', num: 34, downloadNum: 23},
+						{picUrl: '/static/images/head-img-8.jpeg', title: '钢琴曲', num: 58, downloadNum: 4},
+					]
+				},
+
+			],
+			isShowMusicList: [],
 			listInListening: ''
 		}
 	},
 	methods: {
-		triggerMusicList(){
-			this.isShowMusicList = !this.isShowMusicList;
+		triggerMusicList(index){
+			this.$set(this.isShowMusicList, index, !this.isShowMusicList[index]);
 		},
 		gotoMusicList(listObj){
 			console.log(listObj);
@@ -190,6 +195,7 @@ export default {
 			display: flex;
 			flex-basis: 6rem;
 			flex-direction: column;
+			padding-bottom: 2rem;
 			.header-bar{
 				display: flex;
 				flex-basis: 1rem;

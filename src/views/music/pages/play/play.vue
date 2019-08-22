@@ -1,10 +1,16 @@
 <template>
 	<div :class="`play-container ${isHidden?'z-index-hidden':''}`">
 		<header class="header">
-			<div class="arrow" @click="hidePlayer"><i class="el-icon-back"></i></div>
-			<div class="music-title">{{ music.name }}</div>
+			<div class="arrow" @click="hidePlayer"><van-icon name="arrow-left"/></div>
+			<div class="music-title">
+				{{music.name}}
+				<!-- <van-notice-bar color="#2c3e50" background="#fff" :text="music.name" v-if="getStringLength" name="1">
+				</van-notice-bar>
+				<van-notice-bar color="#2c3e50" background="#fff"  v-else :scrollable="false" name="2">
+					{{music.name}}
+				</van-notice-bar> -->
+			</div>
 			<div class="share" >
-				<!-- <van-icon name="share" @click="share"/> -->
 				<van-icon name="/static/images/icon/icon_upload.svg" @click="share"/>
 			</div>
 		</header>
@@ -33,7 +39,7 @@
 	　		<audio ref='audio' id="audio" preload="auto" class="audio" :src="music.url"></audio>
 			<div class="time-now">{{timeNow}}</div>
 			<div class="progress-bar">
-				<el-slider v-model="playProcess" @change="processChange" :show-tooltip="false" :max="processLength"></el-slider>
+				<van-slider v-model="playProcess" @change="processChange" :max="processLength" active-color="#666" bar-height="0.1rem"/>
 			</div>
 			<div class="time-total">{{timeTotal}}</div>
 		</section>
@@ -45,8 +51,6 @@
 			</div>
 			<div class="previou-music"><van-icon name="arrow-left" @click="previous"/></div>
 			<div class="play-control">
-				<!-- <i v-if="playState" class="el-icon-video-pause" @click="clickStop"></i>
-				<i v-else class="el-icon-video-play" @click="clickPlay"></i> -->
 				<van-icon name="pause-circle-o" v-if="playState" @click="clickStop"/>
 				<van-icon name="play-circle-o" v-else @click="clickPlay"/>
 			</div>
@@ -59,11 +63,11 @@
 <script>
 import Autio from '../../components/Audio';
 import GlobalBus from '../../components/GlobalBus';
-import { Toast, Icon } from 'vant';
+import { Toast, Icon, NoticeBar, Slider } from 'vant';
 import Vue from 'vue';
 import { defaultCoreCipherList } from 'constants';
 
-Vue.use(Icon);
+Vue.use(Toast).use(Icon).use(NoticeBar).use(Slider);
 //import { setTimeout } from 'timers';
 export default {
 	name: 'Index',
@@ -156,7 +160,7 @@ export default {
 		// 获取歌词
 		getSongWord(id){
 			const urlLocal = '/music/lyric?id='+id;
-			this.$http.get(urlLocal).then((res)=>{
+			this.$ajax.get(urlLocal).then((res)=>{
 				//console.log('歌词：', res);
 				const wordSplit = res.lrc.lyric.split('\n');
 				wordSplit.pop();
@@ -244,7 +248,7 @@ export default {
 		// 获取并播放音乐
 		playMusic(music){
 			const that = this;
-			that.$http.get('/music/song/url?id='+music.id).then((res)=>{
+			that.$ajax.get('/music/song/url?id='+music.id).then((res)=>{
 				const song = res.data[0];
 				if(song.url){
 					that.music = music;
@@ -429,6 +433,7 @@ export default {
 		showComment(){
 			GlobalBus.$emit();
 		}
+		
 	},
 	components: {
 		Autio
@@ -438,7 +443,28 @@ export default {
 		controlPosition(){
 			const output =  { marginTop:  parseInt(this.contentHeight/2 - (this.wordFocusIndex * 0.8)*document.documentElement.clientWidth/10) + 'px'};
 			return output;
-		}
+		},
+		getStringLength() {
+			const str = this.music.name;
+			if(!str){
+				return;
+			}
+            var totalLength = 0;
+            var list = str.split("");
+            for(var i = 0; i < list.length; i++) {
+				var s = list[i];
+				if (s.match(/[\u0000-\u00ff]/g)) { //半角
+					totalLength += 1; 
+				} else if (s.match(/[\u4e00-\u9fa5]/g)) { //中文  
+					totalLength += 2; 
+				} else if (s.match(/[\uff00-\uffff]/g)) { //全角 
+					totalLength +=2;
+				}
+			}   
+			const bool = totalLength>35?true:false;
+			console.log(totalLength, bool);
+            return bool;
+        }
 		
     }
 /*
@@ -471,13 +497,30 @@ export default {
 			flex-basis: 1.5rem;
 			line-height: 1.5rem;
 			font-size: 0.6rem;
+			display: flex;
+			align-items: center;
+			justify-content: center;
 		}
 		.music-title{
 			height: 1.5rem;
+			line-height: 1.5rem;
 			flex-basis: 7rem;
 			text-align: left;
 			vertical-align: middle;
 			overflow: hidden;
+			text-overflow:ellipsis; //溢出用省略号显示
+			white-space:nowrap; //溢出不换行
+			.van-notice-bar{
+				font-size: 0.5rem;
+				height: 1.5rem;
+				.van-notice-bar__wrap{
+					height: 0.6rem;
+					line-height: 0.6rem;
+					.van-notice-bar__content{
+						
+					}
+				}
+			}
 		}
 		.share{
 			flex-basis: 1.5rem;
@@ -561,12 +604,9 @@ export default {
 			width: 75%;
 			background-color: #fff;
 			margin: 0 0.1rem;
-			.el-slider{
-				background-color: #fff;
+			.van-slider__button-wrapper{
+				opacity: 0!important;
 			}
-		}
-		.el-slider__button{
-			opacity: 0!important;
 		}
 
 	}
