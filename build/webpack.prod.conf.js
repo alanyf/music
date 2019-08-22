@@ -5,6 +5,7 @@ var config = require('../config')
 var merge = require('webpack-merge')
 var baseWebpackConfig = require('./webpack.base.conf')
 //  var CopyWebpackPlugin = require('copy-webpack-plugin')
+var MyPlugin = require('./htmlPlugin');
 var HtmlWebpackPlugin = require('html-webpack-plugin')
 var MiniCssExtractPlugin = require("mini-css-extract-plugin");
 var OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
@@ -218,6 +219,7 @@ for(var page in pages) {
   }
   // 需要生成几个html文件，就配置几个HtmlWebpackPlugin对象
   webpackConfig.plugins.push(new HtmlWebpackPlugin(conf))
+  webpackConfig.plugins.push(new MyPlugin({env: 'prod'}))
 }
 
 module.exports = webpackConfig

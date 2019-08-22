@@ -27,8 +27,7 @@ module.exports = {
     alias: {
       //'vue$': 'vue/dist/vue.js',
       '@': resolve('src'),
-      'src': resolve('src'),
-      "@images": path.resolve("dist/music/images"),
+      'src': resolve('src')
     }
   },
   module: {
