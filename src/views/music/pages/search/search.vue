@@ -24,7 +24,7 @@
           text-color="#202223"
           color="#e6e8ea"
           :class="tagrow"
-        >{{tag.name}}</van-tag>
+        >{{tag.searchword}}</van-tag>
       </div>
     </section>
     <section class="hot-list">
@@ -65,29 +65,7 @@ export default {
   data() {
     return {
       query: "",
-      tags: [
-        { searchword: "Kendrick Lamar" },
-        { searchword: "周杰伦" },
-        { searchword: "林俊杰" },
-        { searchword: "追风筝的孩子" },
-        { searchword: "后来的我们" },
-        { searchword: "公路之歌" },
-        { searchword: "爱情三十六计" },
-        { searchword: "Kendrick Lamar" },
-        { searchword: "周杰伦" },
-        { searchword: "林俊杰" },
-        { searchword: "追风筝的孩子" },
-        { searchword: "后来的我们" },
-        { searchword: "公路之歌" },
-        { searchword: "爱情三十六计" },
-        { searchword: "Kendrick Lamar" },
-        { searchword: "周杰伦" },
-        { searchword: "林俊杰" },
-        { searchword: "追风筝的孩子" },
-        { searchword: "后来的我们" },
-        { searchword: "公路之歌" },
-        { searchword: "爱情三十六计" }
-      ],
+      tags: [],
       hotlist: []
     };
   },
@@ -100,18 +78,16 @@ export default {
       let user = null;
       if (local_user) {
         user = JSON.parse(localStorage.user);
-        const _list = user.recentSearch;
-        if (_list.searchword !== this.tags.searchword) {
-          _list.unshift(this.tags);
-          if (_list.length > 20) {
-            _list.pop();
-          }
-          user.tags=_list;
-        }
-        else{
-
-        }
+         if(!user.recentSearch)user.recentSearch=this.tags;
+          this.tags = user.recentSearch;
       }
+      else{
+				user = {
+					name: 'Alan',
+					recentSearch: this.tags,
+				}
+			};
+			localStorage.user = JSON.stringify(user);
       that.$http.get(urlLocal).then(res => {
         this.hotlist = res.data;
         console.log(this.hotlist);
