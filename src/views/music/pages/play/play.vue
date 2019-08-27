@@ -31,7 +31,7 @@
 			<div class="download"><van-icon name="diamond-o" @click="download"/></div>
 			<div class="show-word"><van-icon name="comment-o" @click="showWord"/></div>
 			<div class="comment">
-				<router-link :to="`/music/comment/${music.id}`"><van-icon name="chat-o" @click="showComment"/></router-link>
+				<router-link :to="`/music/comment/${music.id}`"><van-icon name="chat-o"/></router-link>
 			</div>
 			<div class="more"><van-icon name="ellipsis"/></div>
 		</section>
@@ -159,9 +159,8 @@ export default {
 		},
 		// 获取歌词
 		getSongWord(id){
-			const urlLocal = '/music/lyric?id='+id;
+			const urlLocal = '/music/lyric?id=' + id;
 			this.$ajax.get(urlLocal).then((res)=>{
-				//console.log('歌词：', res);
 				const wordSplit = res.lrc.lyric.split('\n');
 				wordSplit.pop();
 				this.wordArr = wordSplit.map(e=>{
@@ -173,7 +172,6 @@ export default {
 					}
 					return obj;
 				});
-				//console.log(this.wordArr);
 			}).catch(err=>{
 				console.log(err);
 			});
@@ -428,48 +426,19 @@ export default {
 		//生成从minNum到maxNum的随机数
 		randomNum(minNum, maxNum){
 			return parseInt(Math.random()*(maxNum-minNum+1)+minNum,10); 
-		},
-		// 显示评论页
-		showComment(){
-			GlobalBus.$emit();
 		}
 		
 	},
 	components: {
-		Autio
+		
 	},
 	computed: {
 		// 计算歌词播放进度
 		controlPosition(){
 			const output =  { marginTop:  parseInt(this.contentHeight/2 - (this.wordFocusIndex * 0.8)*document.documentElement.clientWidth/10) + 'px'};
 			return output;
-		},
-		getStringLength() {
-			const str = this.music.name;
-			if(!str){
-				return;
-			}
-            var totalLength = 0;
-            var list = str.split("");
-            for(var i = 0; i < list.length; i++) {
-				var s = list[i];
-				if (s.match(/[\u0000-\u00ff]/g)) { //半角
-					totalLength += 1; 
-				} else if (s.match(/[\u4e00-\u9fa5]/g)) { //中文  
-					totalLength += 2; 
-				} else if (s.match(/[\uff00-\uffff]/g)) { //全角 
-					totalLength +=2;
-				}
-			}   
-			const bool = totalLength>35?true:false;
-			console.log(totalLength, bool);
-            return bool;
-        }
-		
+		}
     }
-/*
-什么原因\n我竟然又会遇见你\n我真的真的不愿意\n就这样陷入爱的陷阱哦\n只怕我自己会爱上你\n不敢让自己靠的太近\n怕我没什么能够给你\n爱你也需要很大的勇气\n只怕我自己会爱上你\n也许有天会情不自禁\n想念只让自己苦了自己\n爱上你是我情非得已\n爱上你是我情非得已
-*/
 }
 </script>
 
