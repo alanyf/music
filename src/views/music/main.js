@@ -2,13 +2,11 @@ import './runBeforeRequire';
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import configRouter from './route';
-import ElementUI from 'element-ui';
-import 'element-ui/lib/theme-chalk/index.css';
 import App from './App.vue';
 import '@/utils/ajax';
 import '@/utils/url';
+import store from './store/index';
 
-Vue.use(ElementUI);
 Vue.use(VueRouter);
 
 let routeConfig = {
@@ -30,5 +28,6 @@ new Vue({
     render(h) {
         return h(App);
     },
+    store,
     router
 }).$mount('#app');

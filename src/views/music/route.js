@@ -23,27 +23,27 @@ let routes = [
     },
     {
         path: '/music/play',
-        name: '播放',
+        name: 'play',
         component: Play
     },
     {
         path: '/music/menu',
-        name: '菜单',
+        name: 'menu',
         component: Menu
     },
     {
         path: '/music/my',
-        name: '我的',
+        name: 'my',
         component: My
     },
     {
         path: '/music/search',
-        name: '搜索',
+        name: 'search',
         component: Search
     },
     {
         path: '/music/comment/:id',
-        name: '评论',
+        name: 'comment',
         component: Comment
     }
 

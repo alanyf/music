@@ -1,8 +1,8 @@
 <template>
-<div :class="`menu-container ${isHidden?'z-index-hidden':''}`">
+<div class="menu-container">
 	<header class="header">
 		<div class="arrow" @click="back"><van-icon name="arrow-left"/></div>
-		<div class="music-title">{{type}}</div>
+		<div class="music-title">{{title}}</div>
 		<div class="share" >
 			<van-icon name="search"/>
 			<van-icon name="ellipsis" class="rotate-90 margin-right"/>
@@ -11,7 +11,7 @@
 	<article class="list-container">
 		<van-list finished-text="我也是有底线的" :finished="true">
   			<van-cell v-for="(music, i) in playlist" :key="music.url" class="list-row" @click="playMusic(music, i)">
-				<van-icon name="volume" v-if="musicIsListeningIndex===i" class="isListening"/>
+				<van-icon name="volume" v-if="currentMusicIndex===i" class="isListening"/>
 				<div class="music-info">
 					<div class="music-title">{{music.name}}</div>
 					<div class="detail-info">
@@ -25,22 +25,8 @@
 				<div class="more-operation" @click.stop><van-icon name="ellipsis" class="rotate-90"/></div>
   			</van-cell>
 		</van-list>
-		<!-- <div class="list-row" v-for="(music, i) in playlist" :key="music.url" @click="playMusic(music, i)">
-			<van-icon name="volume" v-if="musicIsListeningIndex===i" class="isListening"/>
-			<div class="music-info">
-				<div class="music-title">{{music.name}}</div>
-				<div class="detail-info">
-					<div class="music-quality"><div class="icon">{{music.quality}}</div></div>
-					<div class="author-album">{{music.author}} - {{music.album}}</div>
-				</div>
-			</div>
-			<div class="music-mv" @click.stop>
-				<van-icon name="video-o"  v-if="music.mv"/>
-			</div>
-			<div class="more-operation" @click.stop><van-icon name="ellipsis" class="rotate-90"/></div>
-		</div> -->
 	</article>
-
+	<BottomPlayer/>
 </div>
 </template>
 
@@ -48,48 +34,48 @@
 import BottomPlayer from '../../components/BottomPlayer';
 import GlobalBus from '../../components/GlobalBus';
 import Vue from 'vue';
+import {mapState} from 'vuex'
 import { List, NoticeBar } from 'vant';
 Vue.use(List).use(NoticeBar);
 export default {
 	name: 'Menu',
-	props: {
-		title: {
-			type: String,
-			required: true
-		}
-	},
 	data(){
 		return {
-			tabSelected: 0,
-			type: '歌曲列表',
 			playlist: [
 				// {name: '情非得已', url: '/static/media/song.mp3', quality: 'HQ', author: '庾澄庆', album: '流星花园主题曲'}
 			],
-			isHidden: true,
 			musicIsListeningIndex: -1
 		}
 	},
 	methods: {
 		playMusic(music, index){
-			GlobalBus.$emit('playMusic', index, this.playlist, this.type); 	// 播放音乐
-			GlobalBus.$emit('listInListening', this.type);			// 在听哪个歌单
+			// 改变正在播放的音乐
+			if(this.music.id !== music.id){
+				this.$store.commit('changeMusic', music);
+				this.$store.commit('changePlayState', true);
+				GlobalBus.$emit('playMusic', music);
+				this.$store.commit('changeCurrentMusicIndex', index);
+			}
+			// 改变正在播放的音乐列表
+			if(!this.isSameList){
+				this.$store.commit('changeCurrentPlayList', this.playlist);
+				this.saveCurrentPlayList(this.currentPlayList);
+			}
+			// 现在在听的音乐在播放列表中的索引
+			this.musicIsListeningIndex = index;
 		},
 		
 		back(){
-			//this.$router.back();
-			this.hide();
+			this.$router.back();
 		},
-		show(){
-			this.isHidden = false;
-			this.readRecentListen();
-		},
-		hide(){
-			this.isHidden = true;
-		},
+
 		getPlayList(){
+			console.log(this.$route.query.id, this.$route.query);
 			const host = 'http://localhost:3000';
 			const urlLocal = host+'/playlist/detail?id=243816';
-			this.$axios.get('/music/playlist/detail?id=243816').then((res)=>{
+			const id = this.$route.query.id||243816;
+			const url = '/music/playlist/detail?id=' + id;
+			this.$axios.get(url).then((res)=>{
 				//console.log(res);
 				this.playlist = res.playlist.tracks.map(e=>{
 					const obj = {
@@ -104,64 +90,71 @@ export default {
 					};
 					return obj;
 				});
-				this.readRecentListen();
+				this.getRecentMusic();
 			}).catch(err=>{
 				console.log(err);
 			});
 		},
-		readRecentListen(){
-			const locla_user = localStorage.user;
-			if(locla_user){
-				const user = JSON.parse(localStorage.user);
-				if(user.musicListNameIsListening !== this.type){
-					this.musicIsListeningIndex = -1;
-					return;
-				}
-				const recentMusic = user.recentPlay[0];
+		getRecentMusic(){
+			if(this.isSameList){
 				for(let i=0;i<this.playlist.length;i++){
-					if(this.playlist[i].id === recentMusic.id){
-						this.musicIsListeningIndex = i;
-						return;
+					if(this.playlist[i].id === this.music.id){
+						// this.musicIsListeningIndex = i;
+						this.$store.commit('changeCurrentMusicIndex', i);
+						break;
 					}
 				}
-			}else{
-				return;
 			}
+			console.log(this.musicIsListeningIndex, this.music.id, this.isSameList);
 		},
+		saveCurrentPlayList(playList){
+			const locla_user = localStorage.user;
+			if(locla_user){
+				const user = JSON.parse(locla_user);
+				user.currentPlayList = playList;
+				localStorage.user = JSON.stringify(user);
+			}
+		}
 	},
 	mounted(){
-		//const url = 'http://localhost:3000/music/playlist/detail?id=24381616';
-
+		this.id = this.$route.query.id;
+		this.type = this.$route.query.type;
+		this.title = this.$route.query.title;
+		if(this.type === 'recent'){
+			const userStr = localStorage.user;
+			let user = null;
+			if(!userStr){
+				user = {name: 'Alan', recentPlay: []}
+			}else{
+				user = JSON.parse(userStr);
+			}
+			this.playlist = user.recentPlay;
+		}else{
+			this.getPlayList();
+		}
+		this.getRecentMusic();
 	},
 	created() {
-		const that = this;
-		GlobalBus.$on('getPlayListInfo', (listObj)=>{
-			if(listObj.title === '最近播放'){
-				const userStr = localStorage.user;
-				let user = null;
-				if(!userStr){
-					user = {name: 'Alan', recentPlay: []}
-				}else{
-					user = JSON.parse(userStr);
-				}
-				that.playlist = user.recentPlay;
-			}else{
-				that.getPlayList();
-			}
-			that.type = listObj.title;
-			console.log('listObj', listObj, that.type, that.playlist);
-			that.show();
-			that.readRecentListen();
-		});
-		GlobalBus.$on('musicIsListening', (musicId, musicIndex)=>{
-			if(that.playlist[musicIndex] && that.playlist[musicIndex].id === musicId){
-				that.musicIsListeningIndex = musicIndex;
-			}
-		});
-		
+
 	},
 	components: {
 		BottomPlayer
+	},
+	computed: {
+		...mapState(['currentPlayList']),
+		...mapState(['music']),
+		...mapState(['currentMusicIndex']),
+		// 正在播放的列表与现在即将播放的列表是否为同一个
+		isSameList(){
+			let sameListFlag = true;
+			for(let i=0;i<this.playlist.length;i++){
+				if(!this.currentPlayList ||(this.currentPlayList[i] && this.playlist[i].id !== this.currentPlayList[i].id)){
+					sameListFlag = false;
+					break;
+				}
+			}
+			return sameListFlag;
+		},
 	}
 }
 </script>
@@ -174,14 +167,14 @@ export default {
 		font-size: 0.5rem;
 		flex-direction: column;
 		background-color: #fff;
-		position: fixed;
-		top: 0;
-		left: 0;
-		z-index: 2;
+		// position: fixed;
+		// top: 0;
+		// left: 0;
+		// z-index: 2;
 		.header{
 			display: flex;
-			flex-basis: 1.8rem;
-			line-height: 1.8rem;
+			flex-basis: 1.5rem;
+			line-height: 1.5rem;
 			text-align: center;
 			align-items: center;
 			justify-content: center;
@@ -190,13 +183,14 @@ export default {
 			.arrow{
 				flex-basis: 1.5rem;
 				line-height: 1.5rem;
-				font-size: 0.7rem;
+				font-size: 0.6rem;
 				display: flex;
 				align-items: center;
 				justify-content: center;
 			}
 			.music-title{
 				flex-basis: 6rem;
+				flex-grow: 1;
 				text-align: left;
 				vertical-align: middle;
 				font-size: 0.5rem;
@@ -221,7 +215,7 @@ export default {
 			.list-row{
 				display: flex;
 				height: 1.5rem;
-				padding: 0.2rem 0;
+				padding: 0.1rem 0;
 				text-align: left;
 				border-bottom: 1px solid rgb(240, 238, 238);
 				display: flex;

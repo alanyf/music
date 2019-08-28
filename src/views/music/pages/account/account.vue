@@ -34,7 +34,7 @@
 
 <script>
 import Circular from '../../components/Circular'
-import { setTimeout } from 'timers';
+import {mapState} from 'vuex'
 export default {
     name: 'Account',
     data(){
@@ -67,7 +67,7 @@ export default {
                 level: 7
             },
             activeFlag: false,
-            showFlag: false
+            // showFlag: false
         }
     },
     methods: {
@@ -76,11 +76,12 @@ export default {
             const that = this;
             setTimeout(()=>{
                 that.showFlag = false;
+                that.$store.commit('changeIsShowSidebar', false);
             }, 500);
         },
         show(){
             this.activeFlag = true;
-            this.showFlag = true;
+            this.$store.commit('changeIsShowSidebar', true);
         }
     },
     props: {
@@ -97,8 +98,9 @@ export default {
             return this.activeFlag ? 0 :'-10rem';
         },
         containerLeft(){
-            return this.showFlag ? 0 :'-10rem';
-        }
+            return this.isShowSidebar ? 0 :'-10rem';
+        },
+        ...mapState(['isShowSidebar']),
     },
     components: {
         Circular
