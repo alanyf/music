@@ -31,6 +31,7 @@
 			<div class="more"><van-icon name="ellipsis"/></div>
 		</section>
 		<section class="play-progress-bar">
+			<AudioPlayer/>
 	<!-- 　		<audio ref='audio' id="audio" preload="auto" class="audio" :src="music.url"></audio> -->
 			<div class="time-now">{{timeNow}}</div>
 			<div class="progress-bar">
@@ -63,6 +64,7 @@ import Vue from 'vue';
 import {mapState} from 'vuex'
 import { defaultCoreCipherList } from 'constants';
 import { setTimeout } from 'timers';
+import AudioPlayer from '../../components/AudioPlayer';
 
 Vue.use(Toast).use(Icon).use(NoticeBar).use(Slider);
 //import { setTimeout } from 'timers';
@@ -84,7 +86,7 @@ export default {
 			// 	// 
 			// },
 			// currentPlayList: [],		// 播放列表
-			musicIndex: 0,				// 播放音乐在播放列表中的索引
+			// currentMusicIndex: 0,				// 播放音乐在播放列表中的索引
 			musicListName: '',			// 播放列表的名称
 			wordArr: [],				// 歌词数组
 			isShowWord: false, 			// 是否显示歌词
@@ -105,7 +107,13 @@ export default {
 		}
 	},
 	created() {
-
+		const that = this;
+		GlobalBus.$on('showMainPlayer', (music)=>{
+			that.showPlayer();
+		});
+		GlobalBus.$on('playMusic', (music, index)=>{
+			this.playMusic(music);
+		});
 	},
 	mounted(){ 
 		this.init();
@@ -121,9 +129,19 @@ export default {
 	      	}
 			this.timeNow = this.secondToMinute(audio.currentTime);
 			this.contentHeight = this.$refs.mainContent.clientHeight;
-			setTimeout(()=>{
-				this.playState && this.start();
-			}, 500);
+			// 读取历史记录中的播放列表和歌曲
+			const userStr = localStorage.user;
+			if(userStr){
+				const user = JSON.parse(userStr);
+				// 初始化当前播放列表
+				if(!this.currentPlayList||(this.currentPlayList&&this.currentPlayList.length===0)){
+					this.$store.commit('changeCurrentPlayList', user.currentPlayList);
+				}
+				// 初始化当前播放音乐
+				if(user.recentPlay && !this.music){
+					this.$store.commit('changeMusic', user.recentPlay[0]);
+				}
+			}
 		},
 		// 获取歌词
 		getSongWord(id){
@@ -149,7 +167,6 @@ export default {
 			!this.playState&&this.$store.commit('changePlayState', true);
 			this.audio.playAsync(); // 重写了新方法，异步播放音乐，防止播放失败
 			this.rotate();
-			this.addToRecentPlay();
 		},
 		// 重新开始播放
 		reStart(){
@@ -170,8 +187,9 @@ export default {
 				const n = this.randomNum(0, this.currentPlayList.length-1);
 				music = this.currentPlayList[n];
 			}else{
-				this.musicIndex = this.musicIndex <= 0 ? this.currentPlayList.length - 1 : this.musicIndex - 1;
-				music = this.currentPlayList[this.musicIndex];
+				const index = this.currentMusicIndex <= 0 ? this.currentPlayList.length - 1 : this.currentMusicIndex - 1;
+				this.$store.commit('changeCurrentMusicIndex', index);
+				music = this.currentPlayList[this.currentMusicIndex];
 			}
 			this.playMusic(music);
 		},
@@ -182,8 +200,9 @@ export default {
 				const n = this.randomNum(0, this.currentPlayList.length-1);
 				music = this.currentPlayList[n];
 			}else{
-				this.musicIndex = this.musicIndex >= this.currentPlayList.length - 1 ? 0 : this.musicIndex + 1;
-				music = this.currentPlayList[this.musicIndex];
+				const index = this.currentMusicIndex >= this.currentPlayList.length - 1 ? 0 : this.currentMusicIndex + 1;
+				this.$store.commit('changeCurrentMusicIndex', index);
+				music = this.currentPlayList[this.currentMusicIndex];
 			}
 			this.playMusic(music);
 		},
@@ -320,7 +339,6 @@ export default {
 			let user = null;
 			if(locla_user){
 				user = JSON.parse(localStorage.user);
-				
 				const _list = user.recentPlay;
 				if(_list[0].name !== this.music.name){
 					_list.unshift(this.music);
@@ -349,7 +367,8 @@ export default {
 			this.isHidden = false;
 		},
 		back(){
-			this.$router.back();
+			this.isHidden = true;
+			// this.$router.back();
 		},
 		// 正在播放的歌曲改变了
 		changeMusic(music){
@@ -362,7 +381,7 @@ export default {
 		
 	},
 	components: {
-		
+		AudioPlayer
 	},
 	computed: {
 		// 计算歌词播放进度
@@ -374,10 +393,14 @@ export default {
 		...mapState(['audio']),
 		...mapState(['music']),
 		...mapState(['currentPlayList']),
+		...mapState(['currentMusicIndex']),
 	},
 	watch: {
 		playState(){
-			this.playState ? this.start() : this.stop();
+			this.playState ? this.reStart() : this.stop();
+		},
+		music(){
+			//this.playMusic(this.music);
 		}
 	}
 }
@@ -392,10 +415,10 @@ export default {
 	height: 100%;
 	font-size: 0.5rem;
 	background-color: #fff;
-	// position: fixed;
-	// z-index: 10;
-	// top: 0;
-	// left: 0;
+	position: fixed;
+	z-index: 10;
+	top: 0;
+	left: 0;
 	.header{
 		display: flex;
 		flex-basis: 1.8rem;

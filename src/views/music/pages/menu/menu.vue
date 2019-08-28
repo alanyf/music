@@ -11,7 +11,7 @@
 	<article class="list-container">
 		<van-list finished-text="我也是有底线的" :finished="true">
   			<van-cell v-for="(music, i) in playlist" :key="music.url" class="list-row" @click="playMusic(music, i)">
-				<van-icon name="volume" v-if="musicIsListeningIndex===i" class="isListening"/>
+				<van-icon name="volume" v-if="currentMusicIndex===i" class="isListening"/>
 				<div class="music-info">
 					<div class="music-title">{{music.name}}</div>
 					<div class="detail-info">
@@ -53,6 +53,8 @@ export default {
 			if(this.music.id !== music.id){
 				this.$store.commit('changeMusic', music);
 				this.$store.commit('changePlayState', true);
+				GlobalBus.$emit('playMusic', music);
+				this.$store.commit('changeCurrentMusicIndex', index);
 			}
 			// 改变正在播放的音乐列表
 			if(!this.isSameList){
@@ -97,7 +99,8 @@ export default {
 			if(this.isSameList){
 				for(let i=0;i<this.playlist.length;i++){
 					if(this.playlist[i].id === this.music.id){
-						this.musicIsListeningIndex = i;
+						// this.musicIsListeningIndex = i;
+						this.$store.commit('changeCurrentMusicIndex', i);
 						break;
 					}
 				}
@@ -140,6 +143,7 @@ export default {
 	computed: {
 		...mapState(['currentPlayList']),
 		...mapState(['music']),
+		...mapState(['currentMusicIndex']),
 		// 正在播放的列表与现在即将播放的列表是否为同一个
 		isSameList(){
 			let sameListFlag = true;

@@ -7,15 +7,11 @@ export default new Vuex.Store({
         numbers: [0, 1, 2, 3, 4, 5, 6, 7, 8],
         playState: false,
         currentPlayList: [],
+        currentMusicIndex: -1,
         music: {},
         audio: null
     },
     getters: {
-        filterNumbers(state) {
-            return state.numbers.filter((item) => {
-                return item > 3;
-            });
-        }
     },
     mutations: {
         setAudio(state, audio) {
@@ -25,6 +21,9 @@ export default new Vuex.Store({
         },
         changeCurrentPlayList(state, list) {
             state.currentPlayList = list;
+        },
+        changeCurrentMusicIndex(state, index) {
+            state.currentMusicIndex = index;
         },
         changeMusic(state, music) {
             state.music = music;

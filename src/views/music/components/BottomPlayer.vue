@@ -46,7 +46,8 @@
                 }
             },
             gotoPlayer(){
-                this.$router.push({ path: '/music/play' });
+                // this.$router.push({ path: '/music/play' });
+                GlobalBus.$emit('showMainPlayer');
             }
         },
         watch: {

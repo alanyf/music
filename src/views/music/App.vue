@@ -1,10 +1,10 @@
 <template>
 	<div id="app">
-		<AudioPlayer/>
+		
 		<!-- <RouteLink/> -->
 		<router-view/>
 		<!-- <Menu/> -->
-		<!-- <Play/> -->
+		<Play/>
 	</div>
 </template>
 
@@ -13,7 +13,6 @@ import RouteLink from './components/RouteLink';
 import Play from './pages/play/play';
 import Menu from './pages/menu/menu';
 import {mapState} from 'vuex'
-import AudioPlayer from './components/AudioPlayer';
 
 export default {
 	name: 'App',
@@ -23,11 +22,10 @@ export default {
 	components: {
 		RouteLink,
 		Play,
-		Menu,
-		AudioPlayer
+		Menu
 	},
 	mounted(){
-		this.init();
+		//this.init();
 	},
 	methods: {
 		init(){

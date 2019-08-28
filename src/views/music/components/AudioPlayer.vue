@@ -32,9 +32,7 @@ export default {
         ...mapState(['audio']),
     },
     watch: {
-        playState() {
-            this.playState ? this.audio.playAsync() : '';
-        }
+        
     }
 }
 </script>
