@@ -82,9 +82,9 @@ export default {
 			width: 100%;
 			flex-grow: 1;
 			flex-shrink: 1;
-			padding: 0.2rem 0 0 0;
 			position: fixed;
 			background-color: #fff;
+			align-items: center;
 			top: 0;
 			z-index: 2;
 			.letf-sidebar-button{

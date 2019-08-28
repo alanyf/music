@@ -5,6 +5,7 @@ import My from './pages/my/my';
 import Find from './pages/find/find';
 import Search from './pages/search/search';
 import Comment from './pages/comment/comment';
+import Friend from './pages/friend/friend';
 import Example from './components/Example';
 
 let routes = [
@@ -16,7 +17,7 @@ let routes = [
             {path: 'my', component: My},
             {path: '', component: Find},
             {path: 'find', component: Find},
-            {path: 'friend', component: Example},
+            {path: 'friend', component: Friend},
             {path: 'video', component: Example}
         ]
     },
