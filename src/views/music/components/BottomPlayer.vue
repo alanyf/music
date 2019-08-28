@@ -82,7 +82,7 @@
         z-index: 3;
         width: 100%;
         height: 1.5rem;
-        background: rgba(255, 255, 255, 0.85);
+        background-color: white;
         border-top: 1px solid #ddd;
         .icon {
             flex-basis: 1.8rem;

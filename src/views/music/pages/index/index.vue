@@ -43,12 +43,11 @@ export default {
 	},
 	methods: {
 		showSidebar(){
-			//this.isShowSidebar = true;
 			this.$refs.accountSidebar.show();
-			//this.$emit('showSidebar', this.isShowSidebar);
+			this.$store.commit('changeIsShowSidebar', true);
 		},
 		hiddenSidebar(){
-			//this.isShowSidebar = false;
+			this.$store.commit('changeIsShowSidebar', false);
 		},
 		focus(tab, index){
 			return (this.$route.path===tab.to || (this.$route.path==='/music/index' && index === 1 ) ) ? 'focus' : '';

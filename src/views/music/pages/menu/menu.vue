@@ -173,8 +173,8 @@ export default {
 		// z-index: 2;
 		.header{
 			display: flex;
-			flex-basis: 1.8rem;
-			line-height: 1.8rem;
+			flex-basis: 1.5rem;
+			line-height: 1.5rem;
 			text-align: center;
 			align-items: center;
 			justify-content: center;

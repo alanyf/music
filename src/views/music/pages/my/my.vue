@@ -119,10 +119,10 @@ export default {
 		GlobalBus
 	},
 	created(){
-		GlobalBus.$on('listInListening', (type)=>{
-			console.log('在听歌单:', type);
-			this.listInListening = type;
-		});
+		// GlobalBus.$on('listInListening', (type)=>{
+		// 	console.log('在听歌单:', type);
+		// 	this.listInListening = type;
+		// });
 	},
 	mounted(){
 		const locla_user = localStorage.user;

@@ -213,6 +213,9 @@ export default {
 				flex-basis: 1.5rem;
 				line-height: 1.5rem;
 				font-size: 0.6rem;
+				display: flex;
+				align-items: center;
+				justify-content: center;
 			}
 			.music-title{
 				height: 1.5rem;

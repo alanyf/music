@@ -397,10 +397,10 @@ export default {
 	},
 	watch: {
 		playState(){
-			this.playState ? this.reStart() : this.stop();
+			this.playState ? this.start() : this.stop();
 		},
 		music(){
-			//this.playMusic(this.music);
+			
 		}
 	}
 }
@@ -421,8 +421,8 @@ export default {
 	left: 0;
 	.header{
 		display: flex;
-		flex-basis: 1.8rem;
-		line-height: 1.8rem;
+		flex-basis: 1.5rem;
+		line-height: 1.5rem;
 		text-align: center;
 		align-items: center;
 		justify-content: center;

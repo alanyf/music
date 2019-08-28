@@ -9,7 +9,8 @@ export default new Vuex.Store({
         currentPlayList: [],
         currentMusicIndex: -1,
         music: {},
-        audio: null
+        audio: null,
+        isShowSidebar: false
     },
     getters: {
     },
@@ -30,6 +31,9 @@ export default new Vuex.Store({
         },
         changePlayState(state, musicState) {
             state.playState = Boolean(musicState);
+        },
+        changeIsShowSidebar(state, isShowSidebar) {
+            state.isShowSidebar = Boolean(isShowSidebar);
         }
     },
     actions: {
