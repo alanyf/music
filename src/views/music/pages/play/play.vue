@@ -63,11 +63,9 @@ import { Toast, Icon, NoticeBar, Slider } from 'vant';
 import Vue from 'vue';
 import {mapState} from 'vuex'
 import { defaultCoreCipherList } from 'constants';
-import { setTimeout } from 'timers';
 import AudioPlayer from '../../components/AudioPlayer';
 
 Vue.use(Toast).use(Icon).use(NoticeBar).use(Slider);
-//import { setTimeout } from 'timers';
 export default {
 	name: 'Index',
 	data(){

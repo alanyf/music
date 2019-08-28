@@ -68,7 +68,6 @@ import Vue from 'vue';
 import { defaultCoreCipherList } from 'constants';
 
 Vue.use(Toast).use(Icon).use(NoticeBar).use(Slider);
-//import { setTimeout } from 'timers';
 export default {
 	name: 'Index',
 	data(){
