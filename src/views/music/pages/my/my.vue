@@ -119,19 +119,10 @@ export default {
 		GlobalBus
 	},
 	created(){
-		// GlobalBus.$on('listInListening', (type)=>{
-		// 	console.log('在听歌单:', type);
-		// 	this.listInListening = type;
-		// });
+		
 	},
 	mounted(){
-		const locla_user = localStorage.user;
-		if(locla_user){
-			const user = JSON.parse(localStorage.user);
-			this.listInListening = user.musicListNameIsListening;
-		}else{
-			return;
-		}
+		
 	}
 }
 </script>
@@ -200,7 +191,7 @@ export default {
         }
         .music-list{
 			display: flex;
-			flex-basis: 6rem;
+			flex-basis: 4rem;
 			flex-direction: column;
 			padding-bottom: 2rem;
 			.header-bar{

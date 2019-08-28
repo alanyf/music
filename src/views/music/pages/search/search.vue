@@ -38,13 +38,12 @@
           </div>
           <div class="row-content" @click="touchlist(item)">
             <div class="content-column1">
-              <span class="searchword">{{item.searchWord}}</span>
-              <span class="score">{{item.score}}</span>
-              <img :src="item.iconUrl" />
+              <div class="searchword">{{item.searchWord}}</div>
+              <div class="score">{{item.score}}</div>
+              <div class="icon"><img :src="item.iconUrl" /></div>
+              
             </div>
-            <div class="content-column2">
-              <span>{{item.content}}</span>
-            </div>
+            <div class="content-column2">{{item.content}}</div>
           </div>
         </div>
       </div>
@@ -56,109 +55,99 @@
 import { Tag,Dialog  } from "vant";
 import GlobalBus from "../../components/GlobalBus";
 export default {
-  name: "Search",
-  props: {
-    placeholder: {
-      type: String,
-      default: ""
-    }
-  },
-  data() {
-    return {
-      query: "",
-      tags: [],
-      hotlist: []
-    };
-  },
-  methods: {
-    init() {
-      const host = "http://localhost:3000";
-      const urlLocal = host + "/search/hot/detail";
-      const urlSearch=host+"/search/default";
-      const that = this;
-      const local_user = localStorage.user;
-      let user = null;
-      if (local_user) {
-        user = JSON.parse(localStorage.user);
-         if(!user.recentSearch)user.recentSearch=this.tags;
-          this.tags = user.recentSearch;
-      }
-      else{
-				user = {
-					name: 'Alan',
-					recentSearch: this.tags,
+	name: "Search",
+	props: {
+		placeholder: {
+		type: String,
+		default: ""
+		}
+	},
+	data() {
+		return {
+			query: "",
+			tags: [],
+			hotlist: [],
+			timer: null
+		};
+	},
+	methods: {
+		init() {
+			const host = "http://localhost:3000";
+			const urlLocal = host + "/search/hot/detail";
+			const urlSearch=host+"/search/default";
+			const that = this;
+			const local_user = localStorage.user;
+			let user = null;
+			if (local_user) {
+				user = JSON.parse(localStorage.user);
+				if(!user.recentSearch)user.recentSearch=this.tags;
+				this.tags = user.recentSearch;
+			}
+			else{
+						user = {
+							name: 'Alan',
+							recentSearch: this.tags,
+						}
+					};
+					localStorage.user = JSON.stringify(user);
+			that.$http.get(urlLocal).then(res => {
+				this.hotlist = res.data;
+			});
+			that.$http.get(urlSearch).then(res => {
+				this.placeholder = res.data.realkeyword;
+			});
+		},
+		clear() {
+			this.query = "";
+		},
+		back() {
+			this.$router.back(); //返回上一层
+		},
+		touchtags(tag){
+			this.query=tag.searchword;
+		},
+		touchlist(item){
+			this.query=item.searchWord;
+		},
+		clearHistory(){
+			Dialog.confirm({message: '确定清空全部历史记录'}).then(() => {
+				const local_user = localStorage.user;
+				let user = null;
+				if (local_user) {
+					user = JSON.parse(localStorage.user);
+					user.recentSearch = [],
+					this.tags = user.recentSearch;
+					localStorage.user = JSON.stringify(user);
 				}
-			};
-			localStorage.user = JSON.stringify(user);
-      that.$http.get(urlLocal).then(res => {
-        this.hotlist = res.data;
-      });
-       that.$http.get(urlSearch).then(res => {
-        this.placeholder = res.data.realkeyword;
-      });
-    },
-    clear() {
-      this.query = "";
-    },
-    back() {
-      this.$router.back(); //返回上一层
-    },
-    touchtags(tag){
-      this.query=tag.searchword;
-    },
-    touchlist(item){
-      this.query=item.searchWord;
-    },
-    clearHistory(){
-        Dialog.confirm({
-        message: '确定清空全部历史记录'
-        }).then(() => {
-          const local_user = localStorage.user;
-          let user = null;
-          if (local_user) {
-            user = JSON.parse(localStorage.user);
-            user.recentSearch=[],
-            this.tags = user.recentSearch;
-      }
-      else{
-				user = {
-					name: 'Alan',
-					recentSearch: [],
+			}).catch(() => {});
+		}
+	},
+	mounted() {
+		this.init();
+	},
+	watch:{
+		query(){
+			const that = this;
+			clearTimeout(that.timer);
+			that.timer = setTimeout(()=>{
+				if(that.query){
+					const host = "http://localhost:3000";
+					const urlLocal = host + "/search?keywords=" + that.query;
+					that.tags.unshift({searchword: that.query});
+					that.$http.get(urlLocal).then(res => {
+						console.log(res);
+					});
+					const local_user = localStorage.user;
+					if (local_user) {
+						const user = JSON.parse(localStorage.user);
+						user.recentSearch = that.tags;
+						localStorage.user = JSON.stringify(user);
+					}
 				}
-      };
-      localStorage.user = JSON.stringify(user);
-        }).catch(() => {
-        });
-    }
-  },
-  mounted() {
-    this.init();
-  },
-  watch:{
-    query(){
-      if(this.query){
-      const host = "http://localhost:3000";
-      const urlLocal = host + "/search?keywords="+this.query;
-      this.tags.unshift({searchword:this.query});
-      const that = this;
-       that.$http.get(urlLocal).then(res => {
-        console.log(res);
-      });
-      const local_user = localStorage.user;
-          let user = null;
-          if (local_user) {
-            user = JSON.parse(localStorage.user);
-            user.recentSearch=this.tags;
-      }
-      else{
-				user = {
-					name: 'Alan',
-					recentSearch: this.tags,
-				}
-      };
-      localStorage.user = JSON.stringify(user);
-    }}
-  }
+			}, 1000);
+			
+		}
+	}
 };
 </script>
 
@@ -181,8 +170,12 @@ export default {
     flex-wrap: nowrap;
     flex-basis: 1rem;
     height: 1rem;
+    font-size: 0.6rem;
     i {
       flex: 0 0 15%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
     .search-box {
       flex: 0 0 70%;
@@ -196,7 +189,7 @@ export default {
         line-height: 25px;
         background: rgba(255, 255, 255, 0.6);
         color: black;
-        font-size: 0.5rem;
+        font-size: 0.47rem;
         border: none;
         outline: medium;
 
@@ -207,13 +200,13 @@ export default {
     }
   }
   .search-history {
-    margin: 1rem 0.5rem;
+    margin: 1.5rem 0.5rem 0 0.5rem;
     display: flex;
     flex-basis: 6rem;
     flex-direction: column;
     .title {
       display: flex;
-      flex-basis: 1rem;
+      flex-basis: 0.5rem;
       justify-content: space-between;
       align-items: center;
       .hearder-title {
@@ -257,26 +250,48 @@ export default {
       display: flex;
       flex-direction: column;
       .list-row {
+        height: 1.5rem;
         display: flex;
-        justify-content: center;
+        padding: 0.1rem 0;
+        //justify-content: center;
         .row-index {
           flex: 0 0 10%;
           font-size: 0.5rem;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: #999;
         }
         .row-content {
           display: flex;
           flex-direction: column;
           .content-column1 {
-            display: inline;
+            flex-basis: 1rem;
+            display: flex;
             .searchword {
-              font-size: 0.5rem;
+              font-size: 0.45rem;
+              display: flex;
+              align-items: center;
+              justify-content: center;
             }
             .score {
-              font-size: 0.2rem;
+              font-size: 0.28rem;
+              color: #999;
+              display: flex;
+              align-items: center;
+              padding: 0 0.2rem;
+            }
+            .icon{
+              line-height: 0.6rem;
+              img{
+                margin: 0;
+              }
             }
           }
           .content-column2 {
-            font-size: 0.2rem;
+            font-size: 0.28rem;
+            line-height: 0.4rem;
+            color: #999;
           }
         }
       }
