@@ -8,11 +8,11 @@
       </div>
       <van-icon name="manager-o"/>
     </section>
-    <section class="search-history">
+    <section class="search-history" v-show="tags.length">
       <div class="title">
         <div class="hearder-title">历史记录</div>
         <div class="hearder-button">
-            <van-icon name="delete"/>
+            <van-icon name="delete" @click="clearHistory"/>
         </div>
       </div>
       <div class="tags">
@@ -24,18 +24,19 @@
           text-color="#202223"
           color="#e6e8ea"
           :class="tagrow"
-        >{{tag.name}}</van-tag>
+          @click="touchtags(tag)"
+        >{{tag.searchword}}</van-tag>
       </div>
     </section>
     <section class="hot-list">
       <div class="title">热搜</div>
       <div class="list">
-        <div class="list-row" v-for="(item, index) in hotlist" :key="index">
+        <div class="list-row" v-for="(item, index) in hotlist" :key="index" >
           <div class="row-index">
             <span v-if="index<3" style="color:red">{{index+1}}</span>
             <span v-else>{{index+1}}</span>
           </div>
-          <div class="row-content">
+          <div class="row-content" @click="touchlist(item)">
             <div class="content-column1">
               <span class="searchword">{{item.searchWord}}</span>
               <span class="score">{{item.score}}</span>
@@ -52,42 +53,20 @@
 </template>
 
 <script>
-import { Tag } from "vant";
+import { Tag,Dialog  } from "vant";
 import GlobalBus from "../../components/GlobalBus";
 export default {
   name: "Search",
   props: {
     placeholder: {
       type: String,
-      default: "如何在云村有房"
+      default: ""
     }
   },
   data() {
     return {
       query: "",
-      tags: [
-        { searchword: "Kendrick Lamar" },
-        { searchword: "周杰伦" },
-        { searchword: "林俊杰" },
-        { searchword: "追风筝的孩子" },
-        { searchword: "后来的我们" },
-        { searchword: "公路之歌" },
-        { searchword: "爱情三十六计" },
-        { searchword: "Kendrick Lamar" },
-        { searchword: "周杰伦" },
-        { searchword: "林俊杰" },
-        { searchword: "追风筝的孩子" },
-        { searchword: "后来的我们" },
-        { searchword: "公路之歌" },
-        { searchword: "爱情三十六计" },
-        { searchword: "Kendrick Lamar" },
-        { searchword: "周杰伦" },
-        { searchword: "林俊杰" },
-        { searchword: "追风筝的孩子" },
-        { searchword: "后来的我们" },
-        { searchword: "公路之歌" },
-        { searchword: "爱情三十六计" }
-      ],
+      tags: [],
       hotlist: []
     };
   },
@@ -95,26 +74,27 @@ export default {
     init() {
       const host = "http://localhost:3000";
       const urlLocal = host + "/search/hot/detail";
+      const urlSearch=host+"/search/default";
       const that = this;
       const local_user = localStorage.user;
       let user = null;
       if (local_user) {
         user = JSON.parse(localStorage.user);
-        const _list = user.recentSearch;
-        if (_list.searchword !== this.tags.searchword) {
-          _list.unshift(this.tags);
-          if (_list.length > 20) {
-            _list.pop();
-          }
-          user.tags=_list;
-        }
-        else{
-
-        }
+         if(!user.recentSearch)user.recentSearch=this.tags;
+          this.tags = user.recentSearch;
       }
+      else{
+				user = {
+					name: 'Alan',
+					recentSearch: this.tags,
+				}
+			};
+			localStorage.user = JSON.stringify(user);
       that.$http.get(urlLocal).then(res => {
         this.hotlist = res.data;
-        console.log(this.hotlist);
+      });
+       that.$http.get(urlSearch).then(res => {
+        this.placeholder = res.data.realkeyword;
       });
     },
     clear() {
@@ -122,10 +102,62 @@ export default {
     },
     back() {
       this.$router.back(); //返回上一层
+    },
+    touchtags(tag){
+      this.query=tag.searchword;
+    },
+    touchlist(item){
+      this.query=item.searchWord;
+    },
+    clearHistory(){
+        Dialog.confirm({
+        message: '确定清空全部历史记录'
+        }).then(() => {
+          const local_user = localStorage.user;
+          let user = null;
+          if (local_user) {
+            user = JSON.parse(localStorage.user);
+            user.recentSearch=[],
+            this.tags = user.recentSearch;
+      }
+      else{
+				user = {
+					name: 'Alan',
+					recentSearch: [],
+				}
+      };
+      localStorage.user = JSON.stringify(user);
+        }).catch(() => {
+        });
     }
   },
   mounted() {
     this.init();
+  },
+  watch:{
+    query(){
+      if(this.query){
+      const host = "http://localhost:3000";
+      const urlLocal = host + "/search?keywords="+this.query;
+      this.tags.unshift({searchword:this.query});
+      const that = this;
+       that.$http.get(urlLocal).then(res => {
+        console.log(res);
+      });
+      const local_user = localStorage.user;
+          let user = null;
+          if (local_user) {
+            user = JSON.parse(localStorage.user);
+            user.recentSearch=this.tags;
+      }
+      else{
+				user = {
+					name: 'Alan',
+					recentSearch: this.tags,
+				}
+      };
+      localStorage.user = JSON.stringify(user);
+    }}
   }
 };
 </script>
@@ -214,7 +246,7 @@ export default {
   .hot-list {
     display: flex;
     flex-direction: column;
-    margin: 0.2rem 0.5rem;
+    margin: 1rem 0.5rem;
     .title {
       display: flex;
       font-size: 0.35rem;
