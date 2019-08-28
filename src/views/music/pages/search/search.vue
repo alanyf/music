@@ -1,18 +1,18 @@
 <template>
   <div class="search-container">
     <section class="search-box-container">
-      <van-icon name="arrow-left" @click="back"/>
+      <van-icon name="arrow-left" @click="back" />
       <div class="search-box">
         <input :placeholder="placeholder" v-model="query" type="text" class="box" />
         <i v-show="query" class="delete el-icon-close" @click="clear"></i>
       </div>
-      <van-icon name="manager-o"/>
+      <van-icon name="manager-o" />
     </section>
-    <section class="search-history" v-show="tags.length">
+    <section class="search-history" v-show="tags.length&isSearch">
       <div class="title">
         <div class="hearder-title">历史记录</div>
         <div class="hearder-button">
-            <van-icon name="delete" @click="clearHistory"/>
+          <van-icon name="delete" @click="clearHistory" />
         </div>
       </div>
       <div class="tags">
@@ -28,10 +28,10 @@
         >{{tag.searchword}}</van-tag>
       </div>
     </section>
-    <section class="hot-list">
+    <section class="hot-list" v-show="isSearch">
       <div class="title">热搜</div>
       <div class="list">
-        <div class="list-row" v-for="(item, index) in hotlist" :key="index" >
+        <div class="list-row" v-for="(item, index) in hotlist" :key="index">
           <div class="row-index">
             <span v-if="index<3" style="color:red">{{index+1}}</span>
             <span v-else>{{index+1}}</span>
@@ -40,114 +40,127 @@
             <div class="content-column1">
               <div class="searchword">{{item.searchWord}}</div>
               <div class="score">{{item.score}}</div>
-              <div class="icon"><img :src="item.iconUrl" /></div>
-              
+              <div class="icon">
+                <img :src="item.iconUrl" />
+              </div>
             </div>
             <div class="content-column2">{{item.content}}</div>
           </div>
         </div>
       </div>
     </section>
+    <section class="reach-result" v-show="!isSearch">
+      <div class="result-tabs">
+        <van-tabs swipeable animated>
+          <van-tab v-for="index in 8" :title="'标签 ' + index" :key="index">内容 {{ index }}</van-tab>
+        </van-tabs>
+      </div>
+    </section>
   </div>
 </template>
 
 <script>
-import { Tag,Dialog  } from "vant";
+import Vue from "vue";
+import { Tag, Dialog, Tab, Tabs } from "vant";
 import GlobalBus from "../../components/GlobalBus";
+Vue.use(Tag)
+  .use(Dialog)
+  .use(Tab)
+  .use(Tabs);
 export default {
-	name: "Search",
-	props: {
-		placeholder: {
-		type: String,
-		default: ""
-		}
-	},
-	data() {
-		return {
-			query: "",
-			tags: [],
-			hotlist: [],
-			timer: null
-		};
-	},
-	methods: {
-		init() {
-			const host = "http://localhost:3000";
-			const urlLocal = host + "/search/hot/detail";
-			const urlSearch=host+"/search/default";
-			const that = this;
-			const local_user = localStorage.user;
-			let user = null;
-			if (local_user) {
-				user = JSON.parse(localStorage.user);
-				if(!user.recentSearch)user.recentSearch=this.tags;
-				this.tags = user.recentSearch;
-			}
-			else{
-						user = {
-							name: 'Alan',
-							recentSearch: this.tags,
-						}
-					};
-					localStorage.user = JSON.stringify(user);
-			that.$http.get(urlLocal).then(res => {
-				this.hotlist = res.data;
-			});
-			that.$http.get(urlSearch).then(res => {
-				this.placeholder = res.data.realkeyword;
-			});
-		},
-		clear() {
-			this.query = "";
-		},
-		back() {
-			this.$router.back(); //返回上一层
-		},
-		touchtags(tag){
-			this.query=tag.searchword;
-		},
-		touchlist(item){
-			this.query=item.searchWord;
-		},
-		clearHistory(){
-			Dialog.confirm({message: '确定清空全部历史记录'}).then(() => {
-				const local_user = localStorage.user;
-				let user = null;
-				if (local_user) {
-					user = JSON.parse(localStorage.user);
-					user.recentSearch = [],
-					this.tags = user.recentSearch;
-					localStorage.user = JSON.stringify(user);
-				}
-			}).catch(() => {});
-		}
-	},
-	mounted() {
-		this.init();
-	},
-	watch:{
-		query(){
-			const that = this;
-			clearTimeout(that.timer);
-			that.timer = setTimeout(()=>{
-				if(that.query){
-					const host = "http://localhost:3000";
-					const urlLocal = host + "/search?keywords=" + that.query;
-					that.tags.unshift({searchword: that.query});
-					that.$http.get(urlLocal).then(res => {
-						console.log(res);
-					});
-					const local_user = localStorage.user;
-					if (local_user) {
-						const user = JSON.parse(localStorage.user);
-						user.recentSearch = that.tags;
-						localStorage.user = JSON.stringify(user);
-					}
-				}
-			}, 1000);
-			
-		}
-	}
+  name: "Search",
+  props: {
+    placeholder: {
+      type: String,
+      default: ""
+    }
+  },
+  data() {
+    return {
+      query: "",
+      tags: [],
+      hotlist: [],
+      timer: null,
+      isSearch: false
+    };
+  },
+  methods: {
+    init() {
+      const host = "http://localhost:3000";
+      const urlLocal = host + "/search/hot/detail";
+      const urlSearch = host + "/search/default";
+      const that = this;
+      const local_user = localStorage.user;
+      let user = null;
+      if (local_user) {
+        user = JSON.parse(localStorage.user);
+        if (!user.recentSearch) user.recentSearch = this.tags;
+        this.tags = user.recentSearch;
+      } else {
+        user = {
+          name: "Alan",
+          recentSearch: this.tags
+        };
+      }
+      localStorage.user = JSON.stringify(user);
+      that.$http.get(urlLocal).then(res => {
+        this.hotlist = res.data;
+      });
+      that.$http.get(urlSearch).then(res => {
+        this.placeholder = res.data.realkeyword;
+      });
+    },
+    clear() {
+      this.query = "";
+    },
+    back() {
+      this.$router.back(); //返回上一层
+    },
+    touchtags(tag) {
+      this.query = tag.searchword;
+    },
+    touchlist(item) {
+      this.query = item.searchWord;
+    },
+    clearHistory() {
+      Dialog.confirm({ message: "确定清空全部历史记录" })
+        .then(() => {
+          const local_user = localStorage.user;
+          let user = null;
+          if (local_user) {
+            user = JSON.parse(localStorage.user);
+            (user.recentSearch = []), (this.tags = user.recentSearch);
+            localStorage.user = JSON.stringify(user);
+          }
+        })
+        .catch(() => {});
+    }
+  },
+  mounted() {
+    this.init();
+  },
+  watch: {
+    query() {
+      const that = this;
+      clearTimeout(that.timer);
+      that.timer = setTimeout(() => {
+        if (that.query) {
+          const host = "http://localhost:3000";
+          const urlLocal = host + "/search?keywords=" + that.query;
+          that.tags.unshift({ searchword: that.query });
+          that.$http.get(urlLocal).then(res => {
+            console.log(res);
+          });
+          const local_user = localStorage.user;
+          if (local_user) {
+            const user = JSON.parse(localStorage.user);
+            user.recentSearch = that.tags;
+            localStorage.user = JSON.stringify(user);
+          }
+        }
+      }, 1000);
+    }
+  }
 };
 </script>
 
@@ -235,7 +248,6 @@ export default {
       }
     }
   }
-
   .hot-list {
     display: flex;
     flex-direction: column;
@@ -281,9 +293,9 @@ export default {
               align-items: center;
               padding: 0 0.2rem;
             }
-            .icon{
+            .icon {
               line-height: 0.6rem;
-              img{
+              img {
                 margin: 0;
               }
             }
@@ -295,6 +307,12 @@ export default {
           }
         }
       }
+    }
+  }
+  .reach-result {
+    margin-top: 1rem;
+    .result-tabs {
+      top: 1rem;
     }
   }
 }
