@@ -1,9 +1,10 @@
 <template>
 	<div id="app">
+		<AudioPlayer/>
 		<!-- <RouteLink/> -->
 		<router-view/>
-		<Menu/>
-		<Play/>
+		<!-- <Menu/> -->
+		<!-- <Play/> -->
 	</div>
 </template>
 
@@ -11,6 +12,8 @@
 import RouteLink from './components/RouteLink';
 import Play from './pages/play/play';
 import Menu from './pages/menu/menu';
+import {mapState} from 'vuex'
+import AudioPlayer from './components/AudioPlayer';
 
 export default {
 	name: 'App',
@@ -20,7 +23,31 @@ export default {
 	components: {
 		RouteLink,
 		Play,
-		Menu
+		Menu,
+		AudioPlayer
+	},
+	mounted(){
+		this.init();
+	},
+	methods: {
+		init(){
+			const userStr = localStorage.user;
+			if(userStr){
+				const user = JSON.parse(userStr);
+				// 初始化当前播放列表
+				if(!this.currentPlayList||(this.currentPlayList&&this.currentPlayList.length===0)){
+					this.$store.commit('changeCurrentPlayList', user.currentPlayList);
+				}
+				// 初始化当前播放音乐
+				if(user.recentPlay){
+					this.$store.commit('changeMusic', user.recentPlay[0]);
+				}
+			}
+		}
+	},
+	computed: {
+		...mapState(['currentPlayList']),
+		...mapState(['music']),
 	}
 }
 

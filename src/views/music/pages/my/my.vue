@@ -7,16 +7,16 @@
 		</section>
 		<section class="my-lists">
 			<div v-for="item in myList" :key="item.listName">
-					<div class="list-row" @click="gotoMusicList(item)">
-						<div class="icon">
-							<van-icon :name="item.icon"/>
-						</div>
-						<div class="list-name">
-							{{item.title}}
-							<div class="item-num">({{item.num}})</div>
-							<van-icon v-if="listInListening===item.title" name="volume" class="isListening"/>
-						</div>
+				<div class="list-row" @click="gotoMusicList(item)">
+					<div class="icon">
+						<van-icon :name="item.icon"/>
 					</div>
+					<div class="list-name">
+						{{item.title}}
+						<div class="item-num">({{item.num}})</div>
+						<van-icon v-if="listInListening===item.title" name="volume" class="isListening"/>
+					</div>
+				</div>
 			</div>
 		</section>
 		<secxtion class="music-list">
@@ -65,11 +65,11 @@ export default {
 				{icon: 'service-o', title: '电台'},
 			],
 			myList: [
-				{icon: 'music-o', title: '本地音乐', num: 19,  to: '/music/localList'},
-				{icon: 'service-o', title: '最近播放', num: 102, to: '/music/localList'},
-				{icon: '/static/images/icon/icon_download.svg', title: '下载管理', num: 6,   to: '/music/localList'},
-				{icon: 'service-o', title: '我的电台', num: 0,   to: '/music/localList'},
-				{icon: 'star-o', title: '我的收藏', num: 3,   to: '/music/localList'}
+				{icon: 'music-o', title: '本地音乐', num: 19,  to: '/music/menu', type: 'local'},
+				{icon: 'service-o', title: '最近播放', num: 102, to: '/music/menu', type: 'recent'},
+				{icon: '/static/images/icon/icon_download.svg', title: '下载管理', num: 6,   to: '/music/menu', type: 'download'},
+				{icon: 'service-o', title: '我的电台', num: 0,   to: '/music/menu', type: 'radio'},
+				{icon: 'star-o', title: '我的收藏', num: 3,   to: '/music/menu', type: 'collection'}
 			],
 			musicList: [
 				{
@@ -103,8 +103,15 @@ export default {
 			this.$set(this.isShowMusicList, index, !this.isShowMusicList[index]);
 		},
 		gotoMusicList(listObj){
-			console.log(listObj);
-			GlobalBus.$emit('getPlayListInfo', listObj);
+			this.$router.push({
+				path: listObj.to,
+				query: {
+					type: listObj.type,
+					id: listObj.id||243816,
+					title: listObj.title
+				}
+			});
+			// this.$store.commit('changeMuiscList', this.playlist);
 		}
 	},
 	components: {
