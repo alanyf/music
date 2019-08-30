@@ -56,5 +56,6 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
 > 11. 本地移动端开发，可实时在手机上测试（静态页面可以，如何解决页面请求不到数据问题？）；  
 > 12. 缓存，前进刷新，后退不刷新
 > 13. 使用slot插槽优化，能否抽象出常用组件，容器组件等
+> 14. `(ok)`子路由刷新报404（服务器设置所有带music路径的请求都只想本项目的index.html）
 
 

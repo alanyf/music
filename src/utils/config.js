@@ -6,5 +6,5 @@ module.exports = {
     host: 'http://localhost:3000/',                     // 选择线上接口时使用的host
     localhost: 'http://localhost:' + config.dev.port,   // 选择本地接口时使用的host
     website: '/music/',                                 // 当前站点名称
-    useMock: !isDev                                     // 通过判断是否为测试环境，决定是否使用本地mock数据
+    useMock: false                                     // 通过判断是否为测试环境，决定是否使用本地mock数据
 };

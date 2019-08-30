@@ -67,7 +67,6 @@ export default {
                 level: 7
             },
             activeFlag: false,
-            // showFlag: false
         }
     },
     methods: {
@@ -75,7 +74,6 @@ export default {
             this.activeFlag = false;
             const that = this;
             setTimeout(()=>{
-                that.showFlag = false;
                 that.$store.commit('changeIsShowSidebar', false);
             }, 500);
         },
