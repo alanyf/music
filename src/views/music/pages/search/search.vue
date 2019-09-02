@@ -8,7 +8,7 @@
       </div>
       <van-icon name="manager-o" />
     </section>
-    <section class="search-history" v-show="tags.length&isSearch">
+    <section class="search-history" v-show="tags.length&!isSearchCompelete">
       <div class="title">
         <div class="hearder-title">历史记录</div>
         <div class="hearder-button">
@@ -28,7 +28,7 @@
         >{{tag.searchword}}</van-tag>
       </div>
     </section>
-    <section class="hot-list" v-show="isSearch">
+    <section class="hot-list" v-show="!isSearchCompelete">
       <div class="title">热搜</div>
       <div class="list">
         <div class="list-row" v-for="(item, index) in hotlist" :key="index">
@@ -49,10 +49,43 @@
         </div>
       </div>
     </section>
-    <section class="reach-result" v-show="!isSearch">
+    <section class="reach-result" v-show="isSearchCompelete">
       <div class="result-tabs">
-        <van-tabs swipeable animated>
-          <van-tab v-for="index in 8" :title="'标签 ' + index" :key="index">内容 {{ index }}</van-tab>
+        <van-tabs swipeable animated @change="tabOnclick">
+          <van-tab :title="'综合'"></van-tab>
+          <van-tab :title="'单曲'">
+            <div class="list-container">
+              <van-list finished-text="木了" :finished="true">
+                <van-cell
+                  v-for="(music, i) in songlist"
+                  :key="music.id"
+                  class="list-row"
+                  @click="playMusic(music, i)"
+                >
+                  <div class="music-info">
+                    <div class="music-title">{{music.name}}</div>
+                    <div class="detail-info">
+                      <div class="music-quality">
+                        <div class="icon">SQ</div>
+                      </div>
+                      <div class="author-album">{{music.artists[0].name}} - {{music.album.name}}</div>
+                    </div>
+                  </div>
+                  <div class="music-mv">
+                  </div>
+                  <div class="more-operation" @click.stop>
+                    <van-icon name="ellipsis" class="rotate-90" />
+                  </div>
+                </van-cell>
+              </van-list>
+            </div>
+          </van-tab>
+          <van-tab :title="'视频'">{{title}}</van-tab>
+          <van-tab :title="'歌手'">{{title}}</van-tab>
+          <van-tab :title="'专辑'">{{title}}</van-tab>
+          <van-tab :title="'歌单'">{{title}}</van-tab>
+          <van-tab :title="'主播电台'">{{title}}</van-tab>
+          <van-tab :title="'用户'">{{title}}</van-tab>
         </van-tabs>
       </div>
     </section>
@@ -63,6 +96,7 @@
 import Vue from "vue";
 import { Tag, Dialog, Tab, Tabs } from "vant";
 import GlobalBus from "../../components/GlobalBus";
+import { mapState } from "vuex";
 Vue.use(Tag)
   .use(Dialog)
   .use(Tab)
@@ -81,7 +115,8 @@ export default {
       tags: [],
       hotlist: [],
       timer: null,
-      isSearch: false
+      songlist: [],
+      isSearchCompelete: false
     };
   },
   methods: {
@@ -114,7 +149,10 @@ export default {
       this.query = "";
     },
     back() {
-      this.$router.back(); //返回上一层
+      if (this.isSearchCompelete) {
+        this.isSearchCompelete = !this.isSearchCompelete;
+        this.query = "";
+      } else this.$router.back(); //返回上一层
     },
     touchtags(tag) {
       this.query = tag.searchword;
@@ -134,6 +172,58 @@ export default {
           }
         })
         .catch(() => {});
+    },
+    tabOnclick(name, title) {
+      this.$toast(title);
+      let type;
+      switch (title) {
+        case "综合":
+          type = 1018;
+          break;
+        case "单曲":
+          type = 1;
+          break;
+        case "视频":
+          type = 1014;
+          break;
+        case "歌手":
+          type = 100;
+          break;
+        case "专辑":
+          type = 10;
+          break;
+        case "歌单":
+          type = 1000;
+          break;
+        case "主播电台":
+          type = 1009;
+          break;
+        case "用户":
+          type = 1002;
+          break;
+        default:
+          type = 1; //默认单曲
+          break;
+      }
+      const that = this;
+      const host = "http://localhost:3000";
+      const urlLocal =
+        host + "/search?keywords=" + that.query + "&type=" + type;
+      that.tags.unshift({ searchword: that.query });
+      that.$http.get(urlLocal).then(res => {
+        if (type == 1) {
+          that.songlist = res.result.songs;
+          console.log(res.result.songs);
+          console.log(that.songlist);
+          console.log(type);
+        }
+      });
+      const local_user = localStorage.user;
+      if (local_user) {
+        const user = JSON.parse(localStorage.user);
+        user.recentSearch = that.tags;
+        localStorage.user = JSON.stringify(user);
+      }
     }
   },
   mounted() {
@@ -145,8 +235,10 @@ export default {
       clearTimeout(that.timer);
       that.timer = setTimeout(() => {
         if (that.query) {
+          that.isSearchCompelete = true;
           const host = "http://localhost:3000";
-          const urlLocal = host + "/search?keywords=" + that.query;
+          const urlLocal =
+            host + "/search?keywords=" + that.query + "&type=1018";
           that.tags.unshift({ searchword: that.query });
           that.$http.get(urlLocal).then(res => {
             console.log(res);
@@ -160,6 +252,9 @@ export default {
         }
       }, 1000);
     }
+  },
+  computed: {
+    ...mapState(["music"])
   }
 };
 </script>
@@ -310,9 +405,86 @@ export default {
     }
   }
   .reach-result {
-    margin-top: 1rem;
+    margin-top: 1.2rem;
     .result-tabs {
-      top: 1rem;
+      .van-ellipsis {
+        font-size: 0.4rem;
+      }
+      .list-container {
+        //width: 100%;
+        height: 100%;
+        flex-flow: 1;
+        overflow: scroll;
+        padding: 0 0.5rem 2rem 0.5rem;
+        .list-row {
+          display: flex;
+          height: 1.5rem;
+          padding: 0.1rem 0;
+          text-align: left;
+          border-bottom: 1px solid rgb(240, 238, 238);
+          display: flex;
+          align-items: center;
+          .music-info {
+            flex-basis: 8.5rem;
+            .music-title {
+              font-size: 0.45rem;
+              width: 6.5rem;
+              height: 0.6rem;
+              line-height: 0.6rem;
+              overflow: hidden;
+              text-overflow: ellipsis; //溢出用省略号显示
+              white-space: nowrap; //溢出不换行
+            }
+            .detail-info {
+              font-size: 0.3rem;
+              height: 0.5rem;
+              line-height: 0.5rem;
+              display: flex;
+              color: #999;
+              .music-quality {
+                flex-basis: 0.6rem;
+                text-align: center;
+                display: flex;
+                align-items: center;
+                .icon {
+                  font-size: 0.22rem;
+                  font-weight: bolder;
+                  height: 0.28rem;
+                  line-height: 0.3rem;
+                  border: 1px solid red;
+                  color: red;
+                  padding: 0 0.04rem;
+                }
+              }
+              .author-album {
+                flex-basis: 5rem;
+                width: 5.5rem;
+                flex-grow: 1;
+                overflow: hidden;
+                text-overflow: ellipsis; //溢出用省略号显示
+                white-space: nowrap; //溢出不换行
+              }
+            }
+          }
+          .music-mv {
+            flex-basis: 1rem;
+            color: #888;
+          }
+          .more-operation {
+            flex-basis: 0.5rem;
+            color: #888;
+          }
+          .isListening {
+            color: red;
+            margin-right: 0.2rem;
+          }
+        }
+        .van-list__finished-text {
+          font-size: 0.35rem;
+          height: 0.6rem;
+          line-height: 0.6rem;
+        }
+      }
     }
   }
 }
