@@ -1,7 +1,8 @@
 <template>
-    <div class="video-player-container">
+    <div class="video-player-container" >
         <video 
             :src="src"
+            :poster="poster"
             class="video"
             ref="video"
             x5-video-player-type="h5"
@@ -34,7 +35,9 @@ export default {
     name: 'VideoPlayer',
     props: {
         src: {type: String},
-        playState: {type: Boolean, default: false}
+        playState: {type: Boolean, default: false},
+        poster: {type: Boolean}
+
     },
     data(){
         return {
@@ -60,6 +63,8 @@ export default {
                 this.currentTimeStr = secondToMinute(this.video.currentTime);
                 this.playProcess = 100*(this.video.currentTime/this.video.duration);
             }, 500);
+            window.addEventListener('scroll', this.scrollHandle, true);
+            
         },
         start(){
             this.video.play();
@@ -92,6 +97,16 @@ export default {
         },
         playOver(){
             this.playState = false;
+        },
+        scrollHandle () {
+            const offset = this.$el.getBoundingClientRect(); // vue中，使用this.$el获取当前组件的根元素
+            const offsetTop = offset.top;
+            const offsetBottom = offset.bottom;
+            const offsetHeight = offset.height;
+            // 移出可视区域
+            if (offsetTop > window.innerHeight || offsetBottom < 0) {
+                this.playState = false;
+            }
         }
     },
     watch: {
