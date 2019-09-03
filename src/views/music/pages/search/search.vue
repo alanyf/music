@@ -52,8 +52,7 @@
     <section class="reach-result" v-show="isSearchCompelete">
       <div class="result-tabs">
         <van-tabs swipeable animated @change="tabOnclick">
-          <van-tab :title="'综合'"></van-tab>
-          <van-tab :title="'单曲'">
+           <van-tab :title="'单曲'">
             <div class="list-container">
               <van-list finished-text="木了" :finished="true">
                 <van-cell
@@ -80,6 +79,7 @@
               </van-list>
             </div>
           </van-tab>
+          <van-tab :title="'综合'"></van-tab>
           <van-tab :title="'视频'">{{title}}</van-tab>
           <van-tab :title="'歌手'">{{title}}</van-tab>
           <van-tab :title="'专辑'">{{title}}</van-tab>
@@ -89,11 +89,13 @@
         </van-tabs>
       </div>
     </section>
+    <BottomPlayer/>
   </div>
 </template>
 
 <script>
 import Vue from "vue";
+import BottomPlayer from '../../components/BottomPlayer';
 import { Tag, Dialog, Tab, Tabs } from "vant";
 import GlobalBus from "../../components/GlobalBus";
 import { mapState } from "vuex";
@@ -174,7 +176,6 @@ export default {
         .catch(() => {});
     },
     tabOnclick(name, title) {
-      this.$toast(title);
       let type;
       switch (title) {
         case "综合":
@@ -213,15 +214,12 @@ export default {
       that.$http.get(urlLocal).then(res => {
         if (type == 1) {
           that.songlist = res.result.songs;
-          console.log(res.result.songs);
-          console.log(that.songlist);
-          console.log(type);
         }
       });
       const local_user = localStorage.user;
       if (local_user) {
         const user = JSON.parse(localStorage.user);
-        user.recentSearch = that.tags;
+        user.recentSearch = this.tags;
         localStorage.user = JSON.stringify(user);
       }
     }
@@ -238,15 +236,15 @@ export default {
           that.isSearchCompelete = true;
           const host = "http://localhost:3000";
           const urlLocal =
-            host + "/search?keywords=" + that.query + "&type=1018";
+            host + "/search?keywords=" + that.query + "&type=1";
           that.tags.unshift({ searchword: that.query });
           that.$http.get(urlLocal).then(res => {
-            console.log(res);
+             that.songlist = res.result.songs;
           });
           const local_user = localStorage.user;
           if (local_user) {
             const user = JSON.parse(localStorage.user);
-            user.recentSearch = that.tags;
+            user.recentSearch = this.tags;
             localStorage.user = JSON.stringify(user);
           }
         }
@@ -255,6 +253,9 @@ export default {
   },
   computed: {
     ...mapState(["music"])
+  },
+  components:{
+    BottomPlayer
   }
 };
 </script>
@@ -269,6 +270,7 @@ export default {
   background-color: white;
   overflow: scroll;
   .search-box-container {
+    z-index: 1;
     display: flex;
     position: absolute;
     top: 0;
