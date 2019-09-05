@@ -345,20 +345,10 @@ export default {
 					}
 					user.name = 'Alan';
 					user.recentPlay = _list;
-					user.musicListNameIsListening = this.musicListName;
 					user.musicListIsListening = this.currentPlayList;
-				}else{
-					return;
-				}
-			}else{
-				user = {
-					name: 'Alan',
-					recentPlay: [this.music],
-					musicListNameIsListening: this.musicListName,
-					musicListIsListening: this.currentPlayList
+					localStorage.user = JSON.stringify(user);
 				}
 			}
-			localStorage.user = JSON.stringify(user);
 			// console.log('user', user);
 		},
 		showPlayer(){

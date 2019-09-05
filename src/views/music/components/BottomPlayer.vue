@@ -38,13 +38,6 @@
             stop() {
                 this.$store.commit('changePlayState', false);
             },
-            getRecentMusic(){
-                const locla_user = localStorage.user;
-                if(locla_user){
-                    const user = JSON.parse(localStorage.user);
-                    this.music = user.recentPlay[0];
-                }
-            },
             gotoPlayer(){
                 // this.$router.push({ path: '/music/play' });
                 GlobalBus.$emit('showMainPlayer');
@@ -59,14 +52,24 @@
             
         },
         mounted(){
+            let recentMusic = null;
             const locla_user = localStorage.user;
 			if(locla_user){
 				const user = JSON.parse(localStorage.user);
-				const recentMusic = user.recentPlay[0];
-                this.$store.commit('changeMusic', recentMusic);
+				recentMusic = user.recentPlay[0];
             }else{
-                return;
+                recentMusic = {
+                    id: 27808044,
+                    name: '丑八怪',
+                    url: 'http://m7.music.126.net/20190903201737/682be7f263a1ee6a23dfdc14fa8859d3/ymusic/9789/6f81/73b8/1e02e771252c10dc09bdd8f8db8888d2.flac',
+                    picUrl: 'http://p2.music.126.net/WPHmBisDxnoF4DrBLKwl3Q==/109951163169021112.jpg',
+                    album: '意外',
+                    mv: 193084,
+                    quality: 'SQ',
+                    author: '薛之谦'
+                };
             }
+            this.$store.commit('changeMusic', recentMusic);
         }
     }
 

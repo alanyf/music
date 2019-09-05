@@ -12,7 +12,7 @@
 import RouteLink from './components/RouteLink';
 import Play from './pages/play/play';
 import Menu from './pages/menu/menu';
-import {mapState} from 'vuex'
+import {mapState} from 'vuex';
 
 export default {
 	name: 'App',
@@ -25,22 +25,43 @@ export default {
 		Menu
 	},
 	mounted(){
-		//this.init();
+		this.init();
 	},
 	methods: {
 		init(){
 			const userStr = localStorage.user;
+			let recentMusic = null;
+			let currentPlayList = null;
 			if(userStr){
-				const user = JSON.parse(userStr);
+				const userObj = JSON.parse(userStr);
 				// 初始化当前播放列表
 				if(!this.currentPlayList||(this.currentPlayList&&this.currentPlayList.length===0)){
-					this.$store.commit('changeCurrentPlayList', user.currentPlayList);
+					currentPlayList = userObj.currentPlayList;
 				}
 				// 初始化当前播放音乐
-				if(user.recentPlay){
-					this.$store.commit('changeMusic', user.recentPlay[0]);
+				if(userObj.recentPlay){
+					recentMusic = userObj.recentPlay[0];
 				}
+			}else{
+				const user = {};
+				recentMusic = {
+					album: "时光.漫步",
+					author: "许巍",
+					id: 168091,
+					mv: 0,
+					name: "蓝莲花",
+					picUrl: "http://p1.music.126.net/C6txAWMGlVmAcAD37RVutQ==/122045790684028.jpg",
+					quality: "SQ",
+					url: "http://m7.music.126.net/20190905102832/602e4b2b94e5d6edce5e658716579180/ymusic/ce70/d44c/021f/31d3215f707625a65663ab51858d6a86.mp3"
+				};
+				currentPlayList = [recentMusic];
+				user.name = 'Alan';
+				user.recentPlay = [recentMusic];
+				user.currentPlayList = [recentMusic];
+				localStorage.user = JSON.stringify(user);
 			}
+			this.$store.commit('changeMusic', recentMusic);
+			this.$store.commit('changeCurrentPlayList', currentPlayList);
 		}
 	},
 	computed: {
