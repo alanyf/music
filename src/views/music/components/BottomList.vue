@@ -84,6 +84,7 @@ export default {
             display: flex;
             flex-direction: column;
             font-size: 0.46rem;
+            padding-top: 1.5rem;
             .list-row{
                 display: flex;
                 align-items: center;

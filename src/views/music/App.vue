@@ -27,8 +27,11 @@ export default {
 		Menu,
 		BottomList
 	},
-	mounted(){
+	created(){
 		this.init();
+	},
+	mounted(){
+		
 	},
 	methods: {
 		init(){
