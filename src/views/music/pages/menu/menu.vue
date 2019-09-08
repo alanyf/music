@@ -194,6 +194,9 @@ export default {
 				text-align: left;
 				vertical-align: middle;
 				font-size: 0.5rem;
+				overflow: hidden;
+				text-overflow:ellipsis; //溢出用省略号显示
+				white-space:nowrap; //溢出不换行
 			}
 			.share{
 				display: flex;

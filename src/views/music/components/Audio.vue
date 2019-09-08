@@ -3,9 +3,8 @@
 </template>
 
 <script>
-import routes from '../route';
 export default {
-  name: 'RouteLink',
+  name: 'Audio',
   data(){
      return {
        audio: null,

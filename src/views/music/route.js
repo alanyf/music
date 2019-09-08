@@ -7,6 +7,7 @@ import Search from './pages/search/search';
 import Comment from './pages/comment/comment';
 import Friend from './pages/friend/friend';
 import Video from './pages/video/video';
+import PlayList from './pages/playList/playList';
 
 let routes = [
     {
@@ -45,6 +46,11 @@ let routes = [
         path: '/music/comment/:id',
         name: 'comment',
         component: Comment
+    },
+    {
+        path: '/music/playlist',
+        name: 'playlist',
+        component: PlayList
     }
 
 ];
