@@ -51,7 +51,7 @@
 				<van-icon name="play-circle-o" v-else @click="start"/>
 			</div>
 			<div class="next-music"><van-icon name="arrow" @click="next"/></div>
-			<div class="recent-music-menu"><van-icon name="bars"/></div>
+			<div class="recent-music-menu" @click="$store.commit('changeIsShowBottomSidebar', true);"><van-icon name="bars"/></div>
 		</section>
 	</div>
 </template>
@@ -64,6 +64,7 @@ import Vue from 'vue';
 import {mapState} from 'vuex'
 import { defaultCoreCipherList } from 'constants';
 import AudioPlayer from '../../components/AudioPlayer';
+
 
 Vue.use(Toast).use(Icon).use(NoticeBar).use(Slider);
 export default {
@@ -127,19 +128,6 @@ export default {
 	      	}
 			this.timeNow = this.secondToMinute(audio.currentTime);
 			this.contentHeight = this.$refs.mainContent.clientHeight;
-			// 读取历史记录中的播放列表和歌曲
-			const userStr = localStorage.user;
-			if(userStr){
-				const user = JSON.parse(userStr);
-				// 初始化当前播放列表
-				if(!this.currentPlayList||(this.currentPlayList&&this.currentPlayList.length===0)){
-					this.$store.commit('changeCurrentPlayList', user.currentPlayList);
-				}
-				// 初始化当前播放音乐
-				if(user.recentPlay && !this.music){
-					this.$store.commit('changeMusic', user.recentPlay[0]);
-				}
-			}
 		},
 		// 获取歌词
 		getSongWord(id){

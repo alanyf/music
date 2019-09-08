@@ -10,7 +10,8 @@ export default new Vuex.Store({
         currentMusicIndex: -1,
         music: {},
         audio: null,
-        isShowSidebar: false
+        isShowSidebar: false,
+        isShowBottomSidebar: false
     },
     getters: {
     },
@@ -34,6 +35,9 @@ export default new Vuex.Store({
         },
         changeIsShowSidebar(state, isShowSidebar) {
             state.isShowSidebar = Boolean(isShowSidebar);
+        },
+        changeIsShowBottomSidebar(state, isShowBottomSidebar) {
+            state.isShowBottomSidebar = Boolean(isShowBottomSidebar);
         }
     },
     actions: {

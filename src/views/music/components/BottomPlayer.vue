@@ -8,11 +8,11 @@
             <div class="desc">{{music.author+' - '+music.album}}</div>
         </div>
         <div class="play-control">
-        <van-icon  v-if="playState" name="pause-circle-o" @click.stop="stop"/>
+            <van-icon  v-if="playState" name="pause-circle-o" @click.stop="stop"/>
             <van-icon v-else name="play-circle-o" @click.stop="start"/>
         </div>
         <div class="play-control">
-            <van-icon name="bars" @click.stop/>
+            <van-icon name="bars"  @click.stop="$store.commit('changeIsShowBottomSidebar', true);"/>
         </div>
     </div>
 </template>

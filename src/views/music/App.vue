@@ -5,6 +5,7 @@
 		<router-view/>
 		<!-- <Menu/> -->
 		<Play/>
+		<BottomList/>
 	</div>
 </template>
 
@@ -12,6 +13,7 @@
 import RouteLink from './components/RouteLink';
 import Play from './pages/play/play';
 import Menu from './pages/menu/menu';
+import BottomList from './components/BottomList';
 import {mapState} from 'vuex';
 
 export default {
@@ -22,7 +24,8 @@ export default {
 	components: {
 		RouteLink,
 		Play,
-		Menu
+		Menu,
+		BottomList
 	},
 	mounted(){
 		this.init();
@@ -35,9 +38,7 @@ export default {
 			if(userStr){
 				const userObj = JSON.parse(userStr);
 				// 初始化当前播放列表
-				if(!this.currentPlayList||(this.currentPlayList&&this.currentPlayList.length===0)){
-					currentPlayList = userObj.currentPlayList;
-				}
+				currentPlayList = userObj.currentPlayList;
 				// 初始化当前播放音乐
 				if(userObj.recentPlay){
 					recentMusic = userObj.recentPlay[0];
