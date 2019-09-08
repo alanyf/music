@@ -7,6 +7,7 @@ import Search from './pages/search/search';
 import Comment from './pages/comment/comment';
 import Friend from './pages/friend/friend';
 import Video from './pages/video/video';
+import PlayListSquare from './pages/playListSquare/playListSquare';
 import PlayList from './pages/playList/playList';
 
 let routes = [
@@ -48,11 +49,15 @@ let routes = [
         component: Comment
     },
     {
-        path: '/music/playlist',
-        name: 'playlist',
+        path: '/music/playListSquare',
+        name: 'playListSquare',
+        component: PlayListSquare
+    },
+    {
+        path: '/music/playList',
+        name: 'playList',
         component: PlayList
     }
-
 ];
 
 module.exports = routes;

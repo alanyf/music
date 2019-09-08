@@ -20,7 +20,7 @@
       <div class="list-hearder">
         <div class="hearder-title">推荐歌单</div>
         <div class="hearder-button">
-          <router-link to="/music/playlist"> <van-tag round plain color="#333">歌单广场</van-tag></router-link>
+          <router-link to="/music/playListSquare"> <van-tag round plain color="#333">歌单广场</van-tag></router-link>
         </div>
       </div>
       <div class="list-content">
@@ -77,7 +77,7 @@ export default {
 			],
 			toolsList: [
 				{ icon: "notes-o", title: "每日推荐", to: '/music/index/find' },
-				{ icon: "orders-o", title: "歌单", to: '/music/playlist'},
+				{ icon: "orders-o", title: "歌单", to: '/music/playListSquare'},
 				{ icon: "bar-chart-o", title: "排行榜", to: '/music/index/find' },
 				{ icon: "bulb-o", title: "电台", to: '/music/index/find' },
 				{ icon: "cashier-o", title: "直播", to: '/music/index/find' }

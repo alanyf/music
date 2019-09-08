@@ -105,7 +105,6 @@ export default {
 					}
 				}
 			}
-			console.log(this.musicIsListeningIndex, this.music.id, this.isSameList);
 		},
 		saveCurrentPlayList(playList){
 			const locla_user = localStorage.user;

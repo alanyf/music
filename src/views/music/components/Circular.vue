@@ -28,6 +28,7 @@ export default {
 	.circular-container{
 		display: flex;
 		flex-direction: column;
+		align-items: center;
 		height: 2rem;
 		margin: 0 0.3rem;
 		.circular-pic{
