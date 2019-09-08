@@ -46,8 +46,8 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
 > 6. `(ok)`ui框架逐步用移动端ui框架vant替换element-ui；  
 > 7. 生产环节打包，放置于github.io上访问测试；**怎么发上线？前端路由问题**
 > 8. webpack打包时自动搬运静态文件到static目录下；  
-> 9. 图片和长列表懒加载
->    * 骨架屏占位()
+> 9. `(ok)`图片和长列表懒加载(视频页下拉刷新ok)
+>    * `(ok)`骨架屏占位
 >    * 1px边框问题、
 >    * 横屏问题、
 >    * 设备判断及兼容、
