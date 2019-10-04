@@ -102,9 +102,12 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 
 // serve pure static assets
-var staticPath = path.posix.join(config.dev.assetsPublicPath, config.dev.assetsSubDirectory)
+// var staticPath = path.posix.join(config.dev.assetsPublicPath, config.dev.assetsSubDirectory)
 // console.log(staticPath);
-app.use(staticPath, express.static('./static'))
+// app.use(staticPath, express.static('./dist'))
+var _staticPath = path.resolve(__dirname, config.build.assetsRoot);
+app.use(express.static(_staticPath))// 静态目录
+
 
 app.use(mock);
 var uri = 'http://localhost:' + port

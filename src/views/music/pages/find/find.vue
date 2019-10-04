@@ -69,75 +69,95 @@ export default {
     data() {
 		return {
 			carouselItems: [
-				{picUrl: '/static/images/carousels_1.jpg', to: ''},
-				{picUrl: '/static/images/carousels_2.jpg', to: ''},
-				{picUrl: '/static/images/carousels_3.jpg', to: ''},
-				{picUrl: '/static/images/carousels_4.jpg', to: ''},
-				{picUrl: '/static/images/carousels_5.jpg', to: ''},
+				{picUrl: './static/images/carousels_1.jpg', to: ''},
+				{picUrl: './static/images/carousels_2.jpg', to: ''},
+				{picUrl: './static/images/carousels_3.jpg', to: ''},
+				{picUrl: './static/images/carousels_4.jpg', to: ''},
+				{picUrl: './static/images/carousels_5.jpg', to: ''},
 			],
 			toolsList: [
 				{ icon: "notes-o", title: "每日推荐", to: '/music/index/find' },
 				{ icon: "orders-o", title: "歌单", to: '/music/playListSquare'},
 				{ icon: "bar-chart-o", title: "排行榜", to: '/music/index/find' },
 				{ icon: "bulb-o", title: "电台", to: '/music/index/find' },
-				{ icon: "cashier-o", title: "直播", to: '/music/index/find' }
+				{ icon: "cashier-o", title: "直播", to: '/music/index/find' },
+				{ icon: "bulb-o", title: "商店", to: '/music/index/find' },
+				{ icon: "bulb-o", title: "商店", to: '/music/index/find' },
 			],
 			playList: [
 				{
 					id: 1,
 					playCount: 26564652,
-					picUrl: "/static/images/head-img-1.jpeg",
+					picUrl: "./static/images/head-img-1.jpeg",
 					name: "[华语私人定制]你爱的好歌都在这儿"
 				},
 				{
 					id: 2,
 					playCount: 24652,
-					picUrl: "/static/images/head-img-2.jpeg",
+					picUrl: "./static/images/head-img-2.jpeg",
 					name: "男友嗓|俏皮声线的温柔暴击",
 					tag: "男友嗓"
 				},
 				{
 					id: 3,
 					playCount: 12222,
-					picUrl: "/static/images/head-img-3.jpeg",
+					picUrl: "./static/images/head-img-3.jpeg",
 					name: "乐队的夏天|31支乐队的酷爽一夏"
 				},
 				{
 					id: 4,
 					playCount: 12222121,
-					picUrl: "/static/images/head-img-4.jpeg",
+					picUrl: "./static/images/head-img-4.jpeg",
 					name: "后摇的夏天",
 					tag: ""
 				},
 				{
 					id: 1,
 					playCount: 26564652,
-					picUrl: "/static/images/head-img-5.jpeg",
+					picUrl: "./static/images/head-img-5.jpeg",
 					name: "夏至已至:准备好一双舞鞋和躁动的心"
 				},
 				{
 					id: 5,
 					playCount: 2612564652,
-					picUrl: "/static/images/head-img-6.jpeg",
+					picUrl: "./static/images/head-img-6.jpeg",
+					name: "励志演讲|愿你还在坚持你的梦想"
+				},
+				{
+					id: 5,
+					playCount: 2612564652,
+					picUrl: "./static/images/head-img-6.jpeg",
+					name: "励志演讲|愿你还在坚持你的梦想"
+				},
+				{
+					id: 5,
+					playCount: 2612564652,
+					picUrl: "./static/images/head-img-6.jpeg",
+					name: "励志演讲|愿你还在坚持你的梦想"
+				},
+				{
+					id: 5,
+					playCount: 2612564652,
+					picUrl: "./static/images/head-img-6.jpeg",
 					name: "励志演讲|愿你还在坚持你的梦想"
 				}
 			],
 			songList: [
 			{
 				id: 1,
-				picUrl: "/static/images/head-img-6.jpeg",
+				picUrl: "./static/images/head-img-6.jpeg",
 				name: "王一博热门单曲",
 				artist: ""
 			},
 			{
 				id: 2,
-				picUrl: "/static/images/head-img-7.jpeg",
+				picUrl: "./static/images/head-img-7.jpeg",
 				name: "骄傲男孩",
 				artist: "白举纲"
 			},
 			{
 				id: 3,
-				picUrl: "/static/images/head-img-3.jpeg",
+				picUrl: "./static/images/head-img-3.jpeg",
 				name: "没什么大不了",
 				artist: "高珊"
 			}
@@ -181,6 +201,7 @@ export default {
   width: 100%;
   height: 100%;
   flex-direction: column;
+  overflow: scroll;
     .hearder-button {
       flex-basis: 2rem;
       .van-tag{
@@ -191,10 +212,10 @@ export default {
       }
     }
   .carousels {
-    flex-basis: 4rem;
+    flex-basis: 5rem;
     margin: 0.2rem 0.5rem;
     .van-swipe__track{
-      height: 4rem;
+      height: 4.6rem;
     }
     .van-swipe__indicator{
       background-color: #444;
@@ -211,14 +232,14 @@ export default {
   }
   .tools {
     display: flex;
-    flex-basis: 1.2rem;
-    flex-shrink: 1;
+    flex-basis: 2.8rem;
+    //flex-shrink: 1;
+    margin: 0.2rem 0;
     border-block-end: #ddd;
     border-block-end-style: solid;
     border-block-end-width: 0.005rem;
     .tools-row {
       display: flex;
-      margin: 0.2rem 0;
     }
   }
   .recommend-list {
@@ -312,6 +333,7 @@ export default {
       display: flex;
       flex-flow: row wrap;
       align-content: flex-start;
+      flex-grow: 1;
       .list-row {
         flex: 0 0 33.33%;
         display: flex;

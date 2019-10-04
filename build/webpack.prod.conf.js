@@ -210,7 +210,7 @@ for(var page in pages) {
   console.log('page',page)
   var conf = {
     alwaysWriteToDisk: true,
-    filename: page + '/index.html',
+    filename: 'index.html',
     template: `!!raw-loader!./src/views/${page}/index.html`, //模板路径
     inject: true,
     excludeChunks: Object.keys(pages).filter(item => {

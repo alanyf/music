@@ -77,7 +77,7 @@ export default {
 		}
 		.header{
 			display: flex;
-			height: 1rem;
+			height: 1.5rem;
 			width: 100%;
 			flex-grow: 1;
 			flex-shrink: 1;
@@ -91,6 +91,7 @@ export default {
 			}
 			.link-tabs{
 				flex-basis: 6.5rem;
+				flex-grow: 1;
 				display: flex;
 				margin: 0 0.5rem;
 				.link-tab{

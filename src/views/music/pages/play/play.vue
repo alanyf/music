@@ -6,7 +6,7 @@
 				{{music.name}}
 			</div>
 			<div class="share" >
-				<van-icon name="/static/images/icon/icon_upload.svg" @click="share"/>
+				<van-icon name="./static/images/icon/icon_upload.svg" @click="share"/>
 			</div>
 		</header>
 		<section class="main-content" ref="mainContent" @click="showWord">
@@ -75,7 +75,7 @@ export default {
 			// 	// 	id: 0,
 			// 	// 	name: '情非得已',
 			// 	// 	url: '/static/media/song.mp3',
-			// 	// 	picUrl: '/static/images/head-img1.png',
+			// 	// 	picUrl: './static/images/head-img1.png',
 			// 	// 	author: '庾澄庆',
 			// 	// 	album: '电视剧《流星花园》主题曲',
 			// 	// 	video: null,
@@ -414,6 +414,7 @@ export default {
 			height: 1.5rem;
 			line-height: 1.5rem;
 			flex-basis: 7rem;
+			flex-grow: 1;
 			text-align: left;
 			vertical-align: middle;
 			overflow: hidden;

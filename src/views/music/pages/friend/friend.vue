@@ -28,42 +28,42 @@ export default {
         return {
             indexList: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'],
             friendList: [
-                {id: 0, name: 'Alan', initial: 'A', group: '朋友', picUrl: '/static/images/head-img-1.jpeg'},
-                {id: 1, name: 'Bom', initial: 'B', group: '朋友', picUrl: '/static/images/head-img-2.jpeg'},
-                {id: 2, name: 'Cat', initial: 'C', group: '朋友', picUrl: '/static/images/head-img-3.jpeg'},
-                {id: 3, name: 'Done', initial: 'D', group: '朋友', picUrl: '/static/images/head-img-4.jpeg'},
-                {id: 4, name: 'Elice', initial: 'E', group: '朋友', picUrl: '/static/images/head-img-5.jpeg'},
-                {id: 3, name: '方圆', initial: 'F', group: '朋友', picUrl: '/static/images/head-img-1.jpeg'},
-                {id: 3, name: '郭冬临', initial: 'G', group: '朋友', picUrl: '/static/images/head-img-2.jpeg'},
-                {id: 3, name: '黄家驹', initial: 'H', group: '朋友', picUrl: '/static/images/head-img-3.jpeg'},
-                {id: 3, name: 'ice', initial: 'I', group: '朋友', picUrl: '/static/images/head-img-4.jpeg'},
-                {id: 3, name: 'jone', initial: 'J', group: '朋友', picUrl: '/static/images/head-img-5.jpeg'},
-                {id: 3, name: '康有为', initial: 'K', group: '朋友', picUrl: '/static/images/head-img-6.jpeg'},
-                {id: 3, name: '李响', initial: 'L', group: '朋友', picUrl: '/static/images/head-img-1.jpeg'},
-                {id: 3, name: '米粒', initial: 'M', group: '朋友', picUrl: '/static/images/head-img-2.jpeg'},
-                {id: 3, name: 'nick', initial: 'N', group: '朋友', picUrl: '/static/images/head-img-3.jpeg'},
-                {id: 3, name: 'Open', initial: 'O', group: '朋友', picUrl: '/static/images/head-img-4.jpeg'},
-                {id: 3, name: '庞云', initial: 'P', group: '朋友', picUrl: '/static/images/head-img-5.jpeg'},
-                {id: 3, name: '琪琪', initial: 'Q', group: '朋友', picUrl: '/static/images/head-img-6.jpeg'},
-                {id: 3, name: 'rick', initial: 'R', group: '朋友', picUrl: '/static/images/head-img-1.jpeg'},
-                {id: 3, name: '斯文', initial: 'S', group: '朋友', picUrl: '/static/images/head-img-2.jpeg'},
-                {id: 3, name: '腾飞', initial: 'T', group: '朋友', picUrl: '/static/images/head-img-3.jpeg'},
-                {id: 3, name: 'Unix', initial: 'U', group: '朋友', picUrl: '/static/images/head-img-4.jpeg'},
-                {id: 3, name: 'vivan', initial: 'V', group: '朋友', picUrl: '/static/images/head-img-5.jpeg'},
-                {id: 3, name: '王丽', initial: 'W', group: '朋友', picUrl: '/static/images/head-img-6.jpeg'},
-                {id: 3, name: '小明', initial: 'X', group: '朋友', picUrl: '/static/images/head-img-1.jpeg'},
-                {id: 3, name: 'Yun', initial: 'Y', group: '朋友', picUrl: '/static/images/head-img-2.jpeg'},
-                {id: 3, name: '张宇', initial: 'Z', group: '朋友', picUrl: '/static/images/head-img-3.jpeg'},
+                {id: 0, name: 'Alan', initial: 'A', group: '朋友', picUrl: './static/images/head-img-1.jpeg'},
+                {id: 1, name: 'Bom', initial: 'B', group: '朋友', picUrl: './static/images/head-img-2.jpeg'},
+                {id: 2, name: 'Cat', initial: 'C', group: '朋友', picUrl: './static/images/head-img-3.jpeg'},
+                {id: 3, name: 'Done', initial: 'D', group: '朋友', picUrl: './static/images/head-img-4.jpeg'},
+                {id: 4, name: 'Elice', initial: 'E', group: '朋友', picUrl: './static/images/head-img-5.jpeg'},
+                {id: 3, name: '方圆', initial: 'F', group: '朋友', picUrl: './static/images/head-img-1.jpeg'},
+                {id: 3, name: '郭冬临', initial: 'G', group: '朋友', picUrl: './static/images/head-img-2.jpeg'},
+                {id: 3, name: '黄家驹', initial: 'H', group: '朋友', picUrl: './static/images/head-img-3.jpeg'},
+                {id: 3, name: 'ice', initial: 'I', group: '朋友', picUrl: './static/images/head-img-4.jpeg'},
+                {id: 3, name: 'jone', initial: 'J', group: '朋友', picUrl: './static/images/head-img-5.jpeg'},
+                {id: 3, name: '康有为', initial: 'K', group: '朋友', picUrl: './static/images/head-img-6.jpeg'},
+                {id: 3, name: '李响', initial: 'L', group: '朋友', picUrl: './static/images/head-img-1.jpeg'},
+                {id: 3, name: '米粒', initial: 'M', group: '朋友', picUrl: './static/images/head-img-2.jpeg'},
+                {id: 3, name: 'nick', initial: 'N', group: '朋友', picUrl: './static/images/head-img-3.jpeg'},
+                {id: 3, name: 'Open', initial: 'O', group: '朋友', picUrl: './static/images/head-img-4.jpeg'},
+                {id: 3, name: '庞云', initial: 'P', group: '朋友', picUrl: './static/images/head-img-5.jpeg'},
+                {id: 3, name: '琪琪', initial: 'Q', group: '朋友', picUrl: './static/images/head-img-6.jpeg'},
+                {id: 3, name: 'rick', initial: 'R', group: '朋友', picUrl: './static/images/head-img-1.jpeg'},
+                {id: 3, name: '斯文', initial: 'S', group: '朋友', picUrl: './static/images/head-img-2.jpeg'},
+                {id: 3, name: '腾飞', initial: 'T', group: '朋友', picUrl: './static/images/head-img-3.jpeg'},
+                {id: 3, name: 'Unix', initial: 'U', group: '朋友', picUrl: './static/images/head-img-4.jpeg'},
+                {id: 3, name: 'vivan', initial: 'V', group: '朋友', picUrl: './static/images/head-img-5.jpeg'},
+                {id: 3, name: '王丽', initial: 'W', group: '朋友', picUrl: './static/images/head-img-6.jpeg'},
+                {id: 3, name: '小明', initial: 'X', group: '朋友', picUrl: './static/images/head-img-1.jpeg'},
+                {id: 3, name: 'Yun', initial: 'Y', group: '朋友', picUrl: './static/images/head-img-2.jpeg'},
+                {id: 3, name: '张宇', initial: 'Z', group: '朋友', picUrl: './static/images/head-img-3.jpeg'},
 
-                {id: 0, name: '阿辉', initial: 'A', group: '朋友', picUrl: '/static/images/head-img-2.jpeg'},
-                {id: 2, name: '曹操', initial: 'C', group: '朋友', picUrl: '/static/images/head-img-3.jpeg'},
-                {id: 3, name: '大卫', initial: 'D', group: '朋友', picUrl: '/static/images/head-img-4.jpeg'},
-                {id: 3, name: '郭嘉', initial: 'G', group: '朋友', picUrl: '/static/images/head-img-2.jpeg'},
-                {id: 3, name: '黄盖', initial: 'H', group: '朋友', picUrl: '/static/images/head-img-3.jpeg'},
-                {id: 3, name: 'ice', initial: 'I', group: '朋友', picUrl: '/static/images/head-img-4.jpeg'},
-                {id: 3, name: '郭达', initial: 'G', group: '朋友', picUrl: '/static/images/head-img-4.jpeg'},
-                {id: 3, name: '黄家驹', initial: 'H', group: '朋友', picUrl: '/static/images/head-img-2.jpeg'},
-                {id: 3, name: 'ice', initial: 'I', group: '朋友', picUrl: '/static/images/head-img-9.jpeg'},
+                {id: 0, name: '阿辉', initial: 'A', group: '朋友', picUrl: './static/images/head-img-2.jpeg'},
+                {id: 2, name: '曹操', initial: 'C', group: '朋友', picUrl: './static/images/head-img-3.jpeg'},
+                {id: 3, name: '大卫', initial: 'D', group: '朋友', picUrl: './static/images/head-img-4.jpeg'},
+                {id: 3, name: '郭嘉', initial: 'G', group: '朋友', picUrl: './static/images/head-img-2.jpeg'},
+                {id: 3, name: '黄盖', initial: 'H', group: '朋友', picUrl: './static/images/head-img-3.jpeg'},
+                {id: 3, name: 'ice', initial: 'I', group: '朋友', picUrl: './static/images/head-img-4.jpeg'},
+                {id: 3, name: '郭达', initial: 'G', group: '朋友', picUrl: './static/images/head-img-4.jpeg'},
+                {id: 3, name: '黄家驹', initial: 'H', group: '朋友', picUrl: './static/images/head-img-2.jpeg'},
+                {id: 3, name: 'ice', initial: 'I', group: '朋友', picUrl: './static/images/head-img-9.jpeg'},
             ],
             friendSort: []
         }
@@ -112,6 +112,7 @@ export default {
         font-size: 0.4rem;
         background-color: #fff;
         padding-bottom: 1rem;
+        overflow: scroll;
         .van-index-bar{
             text-align: left;
             .list-row{
@@ -161,6 +162,9 @@ export default {
                     font-size: 0.4rem;
                     border: none;
                 }
+            }
+            .van-index-bar__sidebar{
+                margin-right: 0.3rem;
             }
 
         }

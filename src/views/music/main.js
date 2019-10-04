@@ -12,7 +12,7 @@ Vue.use(VueRouter);
 let routeConfig = {
     base: __dirname,
     routes: configRouter,
-    mode: 'history',
+    mode: 'hash',
     fallback: false
 };
 const router = new VueRouter(routeConfig);

@@ -57,7 +57,7 @@ export default {
 	data() {
 		return {
 			toolsList: [
-				{icon: '/static/images/icon/icon_flash.svg', title: '最新电音'},
+				{icon: './static/images/icon/icon_flash.svg', title: '最新电音'},
 				{icon: 'contact', title: '私人FM'},
 				{icon: 'star-o', title: '私藏推荐'},
 				{icon: 'thumb-circle-o', title: '古典推荐'},
@@ -67,29 +67,29 @@ export default {
 			myList: [
 				{icon: 'music-o', title: '本地音乐', num: 19,  to: '/music/menu', type: 'local'},
 				{icon: 'service-o', title: '最近播放', num: 102, to: '/music/menu', type: 'recent'},
-				{icon: '/static/images/icon/icon_download.svg', title: '下载管理', num: 6,   to: '/music/menu', type: 'download'},
+				{icon: './static/images/icon/icon_download.svg', title: '下载管理', num: 6,   to: '/music/menu', type: 'download'},
 				{icon: 'service-o', title: '我的电台', num: 0,   to: '/music/menu', type: 'radio'},
 				{icon: 'star-o', title: '我的收藏', num: 3,   to: '/music/menu', type: 'collection'}
 			],
 			musicList: [
 				{
 					title: '我的歌单', list: [
-						{picUrl: '/static/images/head-img-1.jpeg', title: '民谣', num: 210, downloadNum: 5},
-						{picUrl: '/static/images/head-img-2.jpeg', title: '抒情', num: 378, downloadNum: 24},
-						{picUrl: '/static/images/head-img-3.jpeg', title: '欧美', num: 32, downloadNum: 35},
-						{picUrl: '/static/images/head-img-4.jpeg', title: '流行', num: 45, downloadNum: 6},
-						{picUrl: '/static/images/head-img-5.jpeg', title: '阿拉贝拉', num: 98, downloadNum: 4},
-						{picUrl: '/static/images/head-img-6.jpeg', title: '佛拉门戈', num: 24, downloadNum: 6},
-						{picUrl: '/static/images/head-img-7.jpeg', title: '中国风', num: 34, downloadNum: 23},
-						{picUrl: '/static/images/head-img-8.jpeg', title: '吉他曲', num: 58, downloadNum: 4},
+						{picUrl: './static/images/head-img-1.jpeg', title: '民谣', num: 210, downloadNum: 5},
+						{picUrl: './static/images/head-img-2.jpeg', title: '抒情', num: 378, downloadNum: 24},
+						{picUrl: './static/images/head-img-3.jpeg', title: '欧美', num: 32, downloadNum: 35},
+						{picUrl: './static/images/head-img-4.jpeg', title: '流行', num: 45, downloadNum: 6},
+						{picUrl: './static/images/head-img-5.jpeg', title: '阿拉贝拉', num: 98, downloadNum: 4},
+						{picUrl: './static/images/head-img-6.jpeg', title: '佛拉门戈', num: 24, downloadNum: 6},
+						{picUrl: './static/images/head-img-7.jpeg', title: '中国风', num: 34, downloadNum: 23},
+						{picUrl: './static/images/head-img-8.jpeg', title: '吉他曲', num: 58, downloadNum: 4},
 					]
 				},
 				{
 					title: '收藏的歌单', list: [
-						{picUrl: '/static/images/head-img-5.jpeg', title: '布鲁斯', num: 98, downloadNum: 4},
-						{picUrl: '/static/images/head-img-6.jpeg', title: 'R&B', num: 24, downloadNum: 6},
-						{picUrl: '/static/images/head-img-7.jpeg', title: '古典', num: 34, downloadNum: 23},
-						{picUrl: '/static/images/head-img-8.jpeg', title: '钢琴曲', num: 58, downloadNum: 4},
+						{picUrl: './static/images/head-img-5.jpeg', title: '布鲁斯', num: 98, downloadNum: 4},
+						{picUrl: './static/images/head-img-6.jpeg', title: 'R&B', num: 24, downloadNum: 6},
+						{picUrl: './static/images/head-img-7.jpeg', title: '古典', num: 34, downloadNum: 23},
+						{picUrl: './static/images/head-img-8.jpeg', title: '钢琴曲', num: 58, downloadNum: 4},
 					]
 				},
 
@@ -221,6 +221,7 @@ export default {
 					flex-basis: 7rem;
 					text-align: left;
 					line-height: 0.8rem;
+					flex-grow: 1;
 					.item-num{
 						margin-left: 0.1rem;
 						font-size: 0.35rem;

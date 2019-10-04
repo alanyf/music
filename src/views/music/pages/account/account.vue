@@ -51,7 +51,7 @@ export default {
                 {title: '附近的人', icon: 'location'},
                 {title: '我的订单', icon: 'cart-o'},
                 {title: '定时停止播放', icon: 'clock-o'},
-                {title: '扫一扫', icon: '/static/images/icon/icon_scan.svg'},
+                {title: '扫一扫', icon: './static/images/icon/icon_scan.svg'},
                 {title: '音乐闹钟', icon: 'underway'},
                 {title: '音乐云盘', icon: 'points'},
                 {title: '在线听歌免流量', icon: 'service-o'},
@@ -63,7 +63,7 @@ export default {
             ],
             user: {
                 nickname: "Alan",
-                headImg: "/static/images/head-img-1.jpeg",
+                headImg: "./static/images/head-img-1.jpeg",
                 level: 7
             },
             activeFlag: false,

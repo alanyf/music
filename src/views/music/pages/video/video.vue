@@ -37,10 +37,10 @@ export default {
     data(){
         return {
             videoList: [
-                {id: 12345, url: '/static/media/video-1.mp4', desc: '很棒', like: 234, comment: 37, user: { id: '1234', nickname: 'Alan', picUrl: '/static/images/head-img-1.jpeg'} },
-                {id: 12345, url: '/static/media/video-1.mp4', desc: '很棒', like: 234, comment: 37, user: { id: '1234', nickname: 'Alan', picUrl: '/static/images/head-img-2.jpeg'} },
-                {id: 12345, url: '/static/media/video-1.mp4', desc: '很棒', like: 234, comment: 37, user: { id: '1234', nickname: 'Alan', picUrl: '/static/images/head-img-3.jpeg'} },
-                {id: 12345, url: '/static/media/video-1.mp4', desc: '很棒', like: 234, comment: 37, user: { id: '1234', nickname: 'Alan', picUrl: '/static/images/head-img-4.jpeg'} },
+                {id: 12345, url: '/static/media/video-1.mp4', desc: '很棒', like: 234, comment: 37, user: { id: '1234', nickname: 'Alan', picUrl: './static/images/head-img-1.jpeg'} },
+                {id: 12345, url: '/static/media/video-1.mp4', desc: '很棒', like: 234, comment: 37, user: { id: '1234', nickname: 'Alan', picUrl: './static/images/head-img-2.jpeg'} },
+                {id: 12345, url: '/static/media/video-1.mp4', desc: '很棒', like: 234, comment: 37, user: { id: '1234', nickname: 'Alan', picUrl: './static/images/head-img-3.jpeg'} },
+                {id: 12345, url: '/static/media/video-1.mp4', desc: '很棒', like: 234, comment: 37, user: { id: '1234', nickname: 'Alan', picUrl: './static/images/head-img-4.jpeg'} },
             ],
             loadingData: true,
             isLoading: false
@@ -80,7 +80,7 @@ export default {
                         // console.log(detail);
                         const artists = await this.$ajax.get('/music/artist/desc?id='+detail.data.artistId);
                         console.log(artists);
-                        const picUrl = (artists.topicData&&artists.topicData[0])?artists.topicData[0].coverUrl:'/static/images/head-img-2.jpeg';
+                        const picUrl = (artists.topicData&&artists.topicData[0])?artists.topicData[0].coverUrl:'./static/images/head-img-2.jpeg';
                         const urlObj = await this.$ajax.get('/music/mv/url?id='+e.id);
                         // console.log(urlObj);
                         const out = {

@@ -4,7 +4,7 @@
 			<div class="arrow" @click="back"><van-icon name="arrow-left"/></div>
 			<div class="music-title">评论</div>
 			<div class="share" >
-				<van-icon name="/static/images/icon/icon_upload.svg" @click="share"/>
+				<van-icon name="./static/images/icon/icon_upload.svg" @click="share"/>
 			</div>
 		</header>
 		<div class="main-content">
@@ -221,6 +221,7 @@ export default {
 				height: 1.5rem;
 				line-height: 1.5rem;
 				flex-basis: 7rem;
+				flex-grow: 1;
 				text-align: left;
 				vertical-align: middle;
 				overflow: hidden;
