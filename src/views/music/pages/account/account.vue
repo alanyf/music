@@ -116,23 +116,21 @@ export default {
         bottom: 0; 
         z-index: 4;
         .account-content{
-            width: 80%;
             height: 100%;
+            width: 80%;
             background-color: white;
-            display: flex;
             position: absolute;
             top: 0;
             left: 0;
             z-index: 2;
             transition: 0.5s all;
+            overflow: scroll;
             .account-main-content{
                 display: flex;
                 flex-direction: column;
                 width: 100%;
-                height: 100%;
-                overflow: scroll;
                 .account-header{
-                    flex-basis: 6rem;
+                    height: 6rem;
                     display: flex;
                     flex-direction: column;
                     justify-content: center;
@@ -183,7 +181,7 @@ export default {
                     }
                 }
                 .tools{
-                    flex-basis: 1.5rem;
+                    height: 2.4rem;
                     padding: 0 0.5rem;
                     .tools-row{
                         display: flex;
@@ -202,9 +200,9 @@ export default {
                     //flex-basis: 20rem;
                     .list-row{
                         display: flex;
-                        flex-basis: 1.4rem;
+                        height: 1.4rem;
                         .head-img{
-                            flex-basis: 2rem;
+                            width: 1.4rem;
                             height: 1.4rem;
                             display: flex;
                             align-items: center;
@@ -212,17 +210,16 @@ export default {
                         }
                         .row-content{
                             display: flex;
-                            flex-basis: 7rem;
+                            flex-grow: 1;
                             height: 1.4rem;
                             line-height: 1.4rem;
                             font-size: 0.4rem;
                             flex-direction: column;
                             text-align: left;
-                            vertical-align: top;
+                            justify-content: center;
                             .list-title{
-                                flex-basis: 60%;
                                 display: flex;
-                                align-items: flex-end;
+                                
                             }
                         }
                         .more-icon{

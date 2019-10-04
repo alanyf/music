@@ -75,8 +75,8 @@ export default {
 			const urlLocal = host+'/playlist/detail?id=243816';
 			const id = this.$route.query.id||243816;
 			const url = '/music/playlist/detail?id=' + id;
-			this.$axios.get(url).then((res)=>{
-				//console.log(res);
+			this.$ajax.get(url).then((res)=>{
+				console.log(res);
 				this.playlist = res.playlist.tracks.map(e=>{
 					const obj = {
 						id: e.id,
@@ -224,6 +224,7 @@ export default {
 				align-items: center;
 				.music-info{
 					flex-basis: 8.5rem;
+					flex-grow: 1;
 					.music-title{
 						font-size: 0.45rem;
 						width: 6.5rem;

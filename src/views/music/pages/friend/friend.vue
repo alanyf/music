@@ -118,6 +118,7 @@ export default {
             .list-row{
                 display: flex;
                 padding-left: 0.3rem;
+                align-items: center;
                 .head-img{
                     flex-basis: 1rem;
                     height: 1.4rem;
@@ -132,6 +133,7 @@ export default {
                 }
                 .list-title{
                     flex-basis: 60%;
+                    height: 1.7rem;
                     flex-grow: 1;
                     display: flex;
                     align-items: center;
@@ -157,14 +159,14 @@ export default {
                 display: flex;
                 align-items: center;
                 .van-button{
-                    padding: 0 0.3rem;
+                    padding: 0 0.8rem;
                     height: 100%;
                     font-size: 0.4rem;
                     border: none;
                 }
             }
             .van-index-bar__sidebar{
-                margin-right: 0.3rem;
+                margin-right: 0.2rem;
             }
 
         }

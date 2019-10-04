@@ -55,6 +55,7 @@ export default {
             align-items: center;
             .music-info{
                 flex-basis: 8.5rem;
+                flex-grow: 1;
                 .music-title{
                     font-size: 0.45rem;
                     width: 6.5rem;

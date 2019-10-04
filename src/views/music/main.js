@@ -7,6 +7,7 @@ import '@/utils/ajax';
 import '@/utils/url';
 import store from './store/index';
 
+import '@/utils/ajax-mock.js';
 Vue.use(VueRouter);
 
 let routeConfig = {

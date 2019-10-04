@@ -29,10 +29,10 @@ export default {
 	data(){
 		return {
 			tabsArr: [
-				{ text: '我的', to: '/music/index/my' },
-				{ text: '发现', to: '/music/index/find' },
-				{ text: '朋友', to: '/music/index/friend' },
-				{ text: '视频', to: '/music/index/video' },
+				{ text: '我的', to: '/my' },
+				{ text: '发现', to: '/find' },
+				{ text: '朋友', to: '/friend' },
+				{ text: '视频', to: '/video' },
 			],
 			isShowSidebar: false
 		}
@@ -45,6 +45,7 @@ export default {
 		showSidebar(){
 			this.$refs.accountSidebar.show();
 			this.$store.commit('changeIsShowSidebar', true);
+			alert('changeIsShowSidebar');
 		},
 		hiddenSidebar(){
 			this.$store.commit('changeIsShowSidebar', false);
@@ -96,7 +97,7 @@ export default {
 				margin: 0 0.5rem;
 				.link-tab{
 					flex-grow: 1;
-					font-size: 0.45rem;
+					font-size: 0.55rem;
 					text-align: center;
 					color: #2c3e50;
 					&:active{
@@ -104,7 +105,7 @@ export default {
 					}
 				}
 				.focus{
-					font-size: 0.5rem;
+					font-size: 0.6rem;
 					color: #000;
 					font-weight: bolder;
 				}
@@ -118,7 +119,7 @@ export default {
 			flex-basis: 16rem;
 			flex-grow: 1;
 			flex-shrink: 1;
-			margin-top: 1rem;
+			margin: 1.5rem 0;
 		}
 		// .footer{
 		// 	position: fixed;

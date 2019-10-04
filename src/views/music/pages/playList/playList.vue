@@ -63,7 +63,7 @@ export default {
         getPlayList(){
 			const id = this.$route.query.id||243816;
 			const url = '/music/playlist/detail?id=' + id;
-			this.$axios.get(url).then((res)=>{
+			this.$ajax.get(url).then((res)=>{
                 console.log(res);
                 this.listInf = {
                     id: id,

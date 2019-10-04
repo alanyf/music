@@ -21,11 +21,11 @@
 		</section>
 		<secxtion class="music-list">
 			<div class="list-item" v-for="(musicListItem, i) in musicList" :key="musicListItem.title">
-				<div class="header-bar">
-					<div class="door-icon" @click="triggerMusicList(i)">
+				<div class="header-bar"  @click="triggerMusicList(i)">
+					<div class="door-icon">
 						<van-icon name="arrow-down" :class="`${isShowMusicList[i]?'':'rotate'}`" />
 					</div>
-					<div class="title">{{musicListItem.title}}<div class="item-num">({{musicListItem.list.length}})</div></div>
+					<div class="title" >{{musicListItem.title}}<div class="item-num">({{musicListItem.list.length}})</div></div>
 					<div class="add-icon" @click.stop><van-icon name="plus"/></div>
 					<div class="more-icon" @click.stop><van-icon name="ellipsis" class="rotate-90 "/></div>
 				</div>
@@ -37,7 +37,7 @@
 										<div class="list-title">{{item.title}}</div>
 										<div class="list-info">{{item.num}}首，已下载{{item.downloadNum}}首</div>
 									</div>
-									<div class="more-icon" @click.stop>
+									<div class="more-icon">
 										<van-icon v-if="listInListening===item.title" name="volume" class="isListening"/>
 										<van-icon v-else name="ellipsis" class="rotate-90"/>
 									</div>
@@ -137,19 +137,21 @@ export default {
 		background-color: #fff;
         .tools{
           display: flex;
-          flex-basis: 1.5rem;
-		  flex-shrink: 1;
+          flex-basis: 2.4rem;
+			min-height: 2.4rem;
+			margin: 0.2rem 0;
+		//margin: 0.2rem 0;
 		  
 		  .tools-row{
 			  	display: flex;
 				overflow: scroll;
-				margin: 0.2rem 0;
 		  }
         }
         .my-lists{
 			display: flex;
-			flex-basis: 7rem;
+			min-height: 7.5rem;
 			flex-direction: column;
+			margin-bottom: 0.5rem;
 			.list-row{
 				display: flex;
 				height: 1.5rem;
@@ -164,27 +166,23 @@ export default {
 					text-align: center;
 					font-size: 0.5rem;
 					i{
-						font-size: 0.7rem;
+						font-size: 0.8rem;
 						transition: none;
 					}
 				}
 				.list-name{
 					display: flex;
 					flex-basis: 8rem;
+					flex-grow: 1;
 					line-height: 1.5rem;
-					font-size: 0.44rem;
-					border-bottom: 1px solid #ddd;
+					font-size: 0.55rem;
 					align-items: center;
+					border-bottom: 1px solid #ddd;
 					.item-num{
 						color: #aaa;
 						font-size: 0.3rem;
 						line-height: 1.4rem;
 						margin-left: 0.1rem;
-					}
-				}
-				&:last-child{
-					.list-name{
-						border-bottom: none;
 					}
 				}
 			}
@@ -193,16 +191,16 @@ export default {
 			display: flex;
 			flex-basis: 4rem;
 			flex-direction: column;
-			padding-bottom: 2rem;
+			padding: 0.2rem 0 2rem 0;
 			.header-bar{
 				display: flex;
-				flex-basis: 1rem;
+				height: 1rem;
+				padding-bottom: 0.05rem;
 				.door-icon{
 					flex-basis: 1rem;
 					display: flex;
 					align-items: center;
 					justify-content: center;
-					font-weight: lighter;
 					i{
 						transition-property: transform; /*过渡属性名*/
 						transition-duration:0.1s; /*过渡花费时间 默认0*/
@@ -222,6 +220,8 @@ export default {
 					text-align: left;
 					line-height: 0.8rem;
 					flex-grow: 1;
+					align-items: center;
+					font-size: 0.55rem;
 					.item-num{
 						margin-left: 0.1rem;
 						font-size: 0.35rem;
@@ -265,8 +265,9 @@ export default {
 					.row-content{
 						display: flex;
 						flex-basis: 7rem;
+						flex-grow: 1;
 						height: 1.4rem;
-						font-size: 0.4rem;
+						font-size: 0.5rem;
 						flex-direction: column;
 						text-align: left;
 						vertical-align: top;

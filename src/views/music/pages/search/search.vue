@@ -52,6 +52,33 @@
     <section class="reach-result" v-show="isSearchCompelete">
       <div class="result-tabs">
         <van-tabs swipeable animated @change="tabOnclick">
+          <van-tab v-for="(type, i) in searchResult" :key="type" :active="i===1" :title="type.type">
+            <div class="list-container">
+              <van-list finished-text="木了" :finished="true">
+                <van-cell
+                  v-for="(music, i) in type.data"
+                  :key="music.id"
+                  class="list-row"
+                  @click="playMusic(music, i)"
+                >
+                  <div class="music-info">
+                    <div class="music-title">{{music.name}}</div>
+                    <div class="detail-info">
+                      <div class="music-quality">
+                        <div class="icon">SQ</div>
+                      </div>
+                      <div class="author-album">{{music.ar[0].name}} - {{music.al.name}}</div>
+                    </div>
+                  </div>
+                  <div class="music-mv">
+                  </div>
+                  <div class="more-operation" @click.stop>
+                    <van-icon name="ellipsis" class="rotate-90" />
+                  </div>
+                </van-cell>
+              </van-list>
+            </div>
+          </van-tab>
           <van-tab :title="'综合'"></van-tab>
           <van-tab :title="'单曲'">
             <div class="list-container">
@@ -68,7 +95,7 @@
                       <div class="music-quality">
                         <div class="icon">SQ</div>
                       </div>
-                      <div class="author-album">{{music.artists[0].name}} - {{music.album.name}}</div>
+                      <div class="author-album">{{music.ar[0].name}} - {{music.al.name}}</div>
                     </div>
                   </div>
                   <div class="music-mv">
@@ -116,14 +143,21 @@ export default {
       hotlist: [],
       timer: null,
       songlist: [],
-      isSearchCompelete: false
+      isSearchCompelete: false,
+      searchResult: [
+        { type: '综合', data: []},
+        { type: '单曲', data: []},
+        { type: '视频', data: []},
+        { type: '歌手', data: []},
+        { type: '用户', data: []},
+      ]
     };
   },
   methods: {
     init() {
       const host = "http://localhost:3000";
-      const urlLocal = host + "/search/hot/detail";
-      const urlSearch = host + "/search/default";
+      const urlLocal = "/music/search/hot/detail";
+      const urlSearch = "/music/search/default";
       const that = this;
       const local_user = localStorage.user;
       let user = null;
@@ -138,10 +172,10 @@ export default {
         };
       }
       localStorage.user = JSON.stringify(user);
-      that.$http.get(urlLocal).then(res => {
+      that.$ajax.get(urlLocal).then(res => {
         this.hotlist = res.data;
       });
-      that.$http.get(urlSearch).then(res => {
+      that.$ajax.get(urlSearch).then(res => {
         this.placeholder = res.data.realkeyword;
       });
     },
@@ -207,16 +241,13 @@ export default {
       }
       const that = this;
       const host = "http://localhost:3000";
-      const urlLocal =
-        host + "/search?keywords=" + that.query + "&type=" + type;
+      const urlLocal = "/music/search?keywords=" + that.query + "&type=" + type;
       that.tags.unshift({ searchword: that.query });
-      that.$http.get(urlLocal).then(res => {
-        if (type == 1) {
-          that.songlist = res.result.songs;
-          console.log(res.result.songs);
-          console.log(that.songlist);
-          console.log(type);
-        }
+      that.$ajax.get(urlLocal).then(res => {
+        //if (type == 1) {
+          that.songlist = res.result.song.songs;
+          that.searchResult.forEach(e=>e.data=that.songlist)
+        //}
       });
       const local_user = localStorage.user;
       if (local_user) {
@@ -237,10 +268,9 @@ export default {
         if (that.query) {
           that.isSearchCompelete = true;
           const host = "http://localhost:3000";
-          const urlLocal =
-            host + "/search?keywords=" + that.query + "&type=1018";
+          const urlLocal ="/music/search?keywords=" + that.query + "&type=1018";
           that.tags.unshift({ searchword: that.query });
-          that.$http.get(urlLocal).then(res => {
+          that.$ajax.get(urlLocal).then(res => {
             console.log(res);
           });
           const local_user = localStorage.user;
@@ -261,10 +291,8 @@ export default {
 
 <style lang="less">
 .search-container {
-  display: flex;
   width: 100%;
   height: 100%;
-  flex-direction: column;
   margin: 0.2rem, 0.5rem;
   background-color: white;
   overflow: scroll;
@@ -279,6 +307,7 @@ export default {
     flex-basis: 1rem;
     height: 1rem;
     font-size: 0.6rem;
+    z-index: 4;
     i {
       flex: 0 0 15%;
       display: flex;
@@ -349,40 +378,42 @@ export default {
     margin: 1rem 0.5rem;
     .title {
       display: flex;
-      font-size: 0.35rem;
+      font-size: 0.5rem;
       font-weight: 600;
-      line-height: 0.4rem;
+      height: 0.5rem;
+      margin: 0.3rem 0;
     }
     .list {
-      display: flex;
-      flex-direction: column;
+      
       .list-row {
         height: 1.5rem;
         display: flex;
         padding: 0.1rem 0;
         //justify-content: center;
         .row-index {
-          flex: 0 0 10%;
+          //flex: 0 0 10%;
           font-size: 0.5rem;
           display: flex;
           align-items: center;
           justify-content: center;
           color: #999;
+          padding-right: 0.2rem;
         }
         .row-content {
           display: flex;
           flex-direction: column;
+          text-align: left;
           .content-column1 {
             flex-basis: 1rem;
             display: flex;
             .searchword {
-              font-size: 0.45rem;
+              font-size: 0.5rem;
               display: flex;
               align-items: center;
               justify-content: center;
             }
             .score {
-              font-size: 0.28rem;
+              font-size: 0.35rem;
               color: #999;
               display: flex;
               align-items: center;
@@ -471,8 +502,11 @@ export default {
             color: #888;
           }
           .more-operation {
-            flex-basis: 0.5rem;
-            color: #888;
+            i{
+              flex-basis: 0.2rem!important;
+              color: #888;
+
+            }
           }
           .isListening {
             color: red;

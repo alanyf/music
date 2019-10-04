@@ -12,7 +12,7 @@ import PlayList from './pages/playList/playList';
 
 let routes = [
     {
-        path: '/music/index',
+        path: '/',
         name: 'index',
         component: Index,
         children: [

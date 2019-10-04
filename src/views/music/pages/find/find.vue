@@ -1,5 +1,5 @@
 <template>
-  <div class="my-container">
+  <div class="find-container">
     <section class="carousels">
       <van-swipe :autoplay="3000">
         <van-swipe-item v-for="item in carouselItems" :key="item.to">
@@ -24,8 +24,8 @@
         </div>
       </div>
       <div class="list-content">
-        <div class="list-row" v-for="item in playList" :key="item.id"  @click="gotoMusicList(item)">
-          <div class="row-image">
+        <div class="list-row" v-for="_arr in playListForm.slice(0, 2)" :key="_arr[0].id">
+          <div class="row-image" v-for="item in _arr" :key="item.id" @click="gotoMusicList(item)">
             <div class="head-img">
               <img :src="item.picUrl" />
               <div class="play-count">
@@ -38,19 +38,31 @@
         </div>
       </div>
     </section>
-    <section class="new-album">
+    <section class="recommend-list">
       <div class="list-hearder">
         <div class="hearder-title">新碟</div>
         <div class="hearder-button">
-          <van-tag round plain color="#333">更多新碟</van-tag>
+          <router-link to="/music/playListSquare"> <van-tag round plain color="#333">更多新碟</van-tag></router-link>
         </div>
       </div>
          <div class="list-content">
-        <div class="list-row" v-for="item in songList" :key="item.id">
+        <!-- <div class="list-row" v-for="item in songList" :key="item.id">
           <div class="row-image">
             <img :src="item.picUrl" />
             <div class="row-title">{{item.name}}</div>
             <div class="row-title">{{item.artist}}</div>
+          </div>
+        </div> -->
+        <div class="list-row" v-for="_arr in songListForm" :key="_arr[0].id">
+          <div class="row-image" v-for="item in _arr" :key="item.id" @click="gotoMusicList(item)">
+            <div class="head-img">
+              <img :src="item.picUrl" />
+              <div class="play-count">
+                <van-icon name="play-circle-o"/>
+                <div class="play-count-num">{{Math.floor(item.playCount / 10000) }}万</div>
+              </div>
+            </div>
+            <div class="row-title">{{item.name}}</div>
           </div>
         </div>
       </div>
@@ -76,13 +88,13 @@ export default {
 				{picUrl: './static/images/carousels_5.jpg', to: ''},
 			],
 			toolsList: [
-				{ icon: "notes-o", title: "每日推荐", to: '/music/index/find' },
+				{ icon: "notes-o", title: "每日推荐", to: '/music/playList' },
 				{ icon: "orders-o", title: "歌单", to: '/music/playListSquare'},
-				{ icon: "bar-chart-o", title: "排行榜", to: '/music/index/find' },
-				{ icon: "bulb-o", title: "电台", to: '/music/index/find' },
-				{ icon: "cashier-o", title: "直播", to: '/music/index/find' },
-				{ icon: "bulb-o", title: "商店", to: '/music/index/find' },
-				{ icon: "bulb-o", title: "商店", to: '/music/index/find' },
+				{ icon: "bar-chart-o", title: "排行榜", to: '/music/playListSquare' },
+				{ icon: "bulb-o", title: "电台", to: '/music/playListSquare' },
+				{ icon: "cashier-o", title: "直播", to: '/music/playListSquare' },
+				{ icon: "bulb-o", title: "商店", to: '/music/playListSquare' },
+				{ icon: "bulb-o", title: "商店", to: '/music/playListSquare' },
 			],
 			playList: [
 				{
@@ -141,27 +153,29 @@ export default {
 					picUrl: "./static/images/head-img-6.jpeg",
 					name: "励志演讲|愿你还在坚持你的梦想"
 				}
-			],
+      ],
+      playListForm: [],
 			songList: [
-			{
-				id: 1,
-				picUrl: "./static/images/head-img-6.jpeg",
-				name: "王一博热门单曲",
-				artist: ""
-			},
-			{
-				id: 2,
-				picUrl: "./static/images/head-img-7.jpeg",
-				name: "骄傲男孩",
-				artist: "白举纲"
-			},
-			{
-				id: 3,
-				picUrl: "./static/images/head-img-3.jpeg",
-				name: "没什么大不了",
-				artist: "高珊"
-			}
-			]
+        {
+          id: 1,
+          picUrl: "./static/images/head-img-6.jpeg",
+          name: "王一博热门单曲",
+          artist: ""
+        },
+        {
+          id: 2,
+          picUrl: "./static/images/head-img-7.jpeg",
+          name: "骄傲男孩",
+          artist: "白举纲"
+        },
+        {
+          id: 3,
+          picUrl: "./static/images/head-img-3.jpeg",
+          name: "没什么大不了",
+          artist: "高珊"
+        }
+      ],
+      songListForm: []
 		};
     },
     components: {
@@ -177,13 +191,24 @@ export default {
 					picUrl: e.coverImgUrl,
 					tag: e.tag
 				};
-			});
-		});
+      });
+      let i = 0, step = 3;
+      while(i < this.playList.length){
+        this.playListForm.push(this.playList.slice(i, i+step));
+        i += step;
+      }
+      console.log(this.playListForm);
+    });
+    let i = 0, step = 3;
+    while(i < this.songList.length){
+      this.songListForm.push(this.songList.slice(i, i+step));
+      i += step;
+    }
 	},
 	methods: {
 		gotoMusicList(item){
             this.$router.push({
-				path: '/music/menu',
+				path: '/music/playList?id='+item.id,
 				query: {
 					type: item.name,
 					id: item.id,
@@ -196,26 +221,25 @@ export default {
 </script>
 
 <style lang="less">
-.my-container {
+.find-container {
   display: flex;
   width: 100%;
   height: 100%;
   flex-direction: column;
   overflow: scroll;
-    .hearder-button {
-      flex-basis: 2rem;
-      .van-tag{
-        font-size: 0.3rem;
-      }
-      .van-tag::after{
-        border-color: #aaa;
-      }
+  .hearder-button {
+    .van-tag{
+      font-size: 0.3rem;
     }
+    .van-tag::after{
+      border-color: #aaa;
+    }
+  }
   .carousels {
     flex-basis: 5rem;
     margin: 0.2rem 0.5rem;
     .van-swipe__track{
-      height: 4.6rem;
+      height: 5rem;
     }
     .van-swipe__indicator{
       background-color: #444;
@@ -232,43 +256,38 @@ export default {
   }
   .tools {
     display: flex;
-    flex-basis: 2.8rem;
-    //flex-shrink: 1;
-    margin: 0.2rem 0;
-    border-block-end: #ddd;
-    border-block-end-style: solid;
-    border-block-end-width: 0.005rem;
+    min-height: 2.4rem;
     .tools-row {
       display: flex;
+      overflow: scroll;
     }
   }
   .recommend-list {
-    margin: 0.2rem 0.5rem;
-    display: flex;
-    flex-basis: 6rem;
-    flex-direction: column;
+    //margin: 0.2rem 0.5rem;
     .list-hearder {
       display: flex;
-      flex-basis: 1rem;
-      justify-content: space-between;
+      height: 1.2rem;
+      padding: 0 0.5rem;
+      align-items: center;
       .hearder-title {
         font-size: 0.5rem;
         font-weight: 600;
         line-height: 0.8rem;
       }
+      .hearder-button{
+        margin-left: auto;
+      }
     }
     .list-content {
-      display: flex;
-      flex-flow: row wrap;
-      align-content: flex-start;
       .list-row {
-          flex: 0 0 33.33%;
           display: flex;
-          justify-content: center;
           margin-bottom: 0.2rem;
           // min-height: 4rem;
           .row-image {
-
+              flex-grow: 1;
+              display: flex;
+              flex-direction: column;
+              align-items: center;
               .head-img{
                   width: 2.5rem;
                   height: 2.5rem!important;
@@ -318,6 +337,7 @@ export default {
     margin: 0.2rem 0.5rem;
     display: flex;
     flex-basis: 6rem;
+    min-height: 6rem;
     flex-direction: column;
     .list-hearder {
       display: flex;
@@ -331,16 +351,12 @@ export default {
     }
      .list-content {
       display: flex;
-      flex-flow: row wrap;
-      align-content: flex-start;
       flex-grow: 1;
       .list-row {
-        flex: 0 0 33.33%;
         display: flex;
-        flex-direction: column;
-        justify-content: space-between;
         .row-image {
           display: flex;
+          flex-basis: 3.33rem;
           flex-direction: column;
           justify-content: space-between;
           align-items: center;
@@ -359,6 +375,7 @@ export default {
             text-align: left;
           }
         }
+        
       }
     }
   }
