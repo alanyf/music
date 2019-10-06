@@ -16,16 +16,18 @@
         </div>
       </div>
       <div class="tags">
-        <van-tag
-          v-for="tag in tags"
-          :key="tag.searchword"
-          round
-          size="large"
-          text-color="#202223"
-          color="#e6e8ea"
-          :class="tagrow"
-          @click="touchtags(tag)"
-        >{{tag.searchword}}</van-tag>
+        <div class="tags-row">
+          <van-tag
+            v-for="tag in tags"
+            :key="tag.searchword"
+            round
+            size="large"
+            text-color="#202223"
+            color="#e6e8ea"
+            :class="tagrow"
+            @click="touchtags(tag)"
+          >{{tag.searchword}}</van-tag>
+        </div>
       </div>
     </section>
     <section class="hot-list" v-show="!isSearchCompelete">
@@ -51,8 +53,8 @@
     </section>
     <section class="reach-result" v-show="isSearchCompelete">
       <div class="result-tabs">
-        <van-tabs swipeable animated @change="tabOnclick">
-          <van-tab v-for="(type, i) in searchResult" :key="type" :active="i===1" :title="type.type">
+        <van-tabs swipeable animated  :v-model="activeName" @change="tabOnclick">
+          <van-tab v-for="type in searchResult" :key="type" :title="type.type" :name="type.type">
             <div class="list-container">
               <van-list finished-text="木了" :finished="true">
                 <van-cell
@@ -67,7 +69,7 @@
                       <div class="music-quality">
                         <div class="icon">SQ</div>
                       </div>
-                      <div class="author-album">{{music.ar[0].name}} - {{music.al.name}}</div>
+                      <div class="author-album">{{music.author}} - {{music.album}}</div>
                     </div>
                   </div>
                   <div class="music-mv">
@@ -79,43 +81,10 @@
               </van-list>
             </div>
           </van-tab>
-          <van-tab :title="'综合'"></van-tab>
-          <van-tab :title="'单曲'">
-            <div class="list-container">
-              <van-list finished-text="木了" :finished="true">
-                <van-cell
-                  v-for="(music, i) in songlist"
-                  :key="music.id"
-                  class="list-row"
-                  @click="playMusic(music, i)"
-                >
-                  <div class="music-info">
-                    <div class="music-title">{{music.name}}</div>
-                    <div class="detail-info">
-                      <div class="music-quality">
-                        <div class="icon">SQ</div>
-                      </div>
-                      <div class="author-album">{{music.ar[0].name}} - {{music.al.name}}</div>
-                    </div>
-                  </div>
-                  <div class="music-mv">
-                  </div>
-                  <div class="more-operation" @click.stop>
-                    <van-icon name="ellipsis" class="rotate-90" />
-                  </div>
-                </van-cell>
-              </van-list>
-            </div>
-          </van-tab>
-          <van-tab :title="'视频'">{{title}}</van-tab>
-          <van-tab :title="'歌手'">{{title}}</van-tab>
-          <van-tab :title="'专辑'">{{title}}</van-tab>
-          <van-tab :title="'歌单'">{{title}}</van-tab>
-          <van-tab :title="'主播电台'">{{title}}</van-tab>
-          <van-tab :title="'用户'">{{title}}</van-tab>
         </van-tabs>
       </div>
     </section>
+    <BottomPlayer/>
   </div>
 </template>
 
@@ -123,6 +92,7 @@
 import Vue from "vue";
 import { Tag, Dialog, Tab, Tabs } from "vant";
 import GlobalBus from "../../components/GlobalBus";
+import BottomPlayer from '../../components/BottomPlayer';
 import { mapState } from "vuex";
 Vue.use(Tag)
   .use(Dialog)
@@ -144,6 +114,7 @@ export default {
       timer: null,
       songlist: [],
       isSearchCompelete: false,
+      activeName: '综合',
       searchResult: [
         { type: '综合', data: []},
         { type: '单曲', data: []},
@@ -207,7 +178,23 @@ export default {
         })
         .catch(() => {});
     },
-    tabOnclick(name, title) {
+    playMusic(music, index){
+			// 改变正在播放的音乐
+			if(this.music.id !== music.id){
+				this.$store.commit('changeMusic', music);
+				this.$store.commit('changePlayState', true);
+				GlobalBus.$emit('playMusic', music);
+				this.$store.commit('changeCurrentMusicIndex', index);
+			}
+			// 改变正在播放的音乐列表
+			if(!this.isSameList){
+				this.$store.commit('changeCurrentPlayList', this.playlist);
+				this.saveCurrentPlayList(this.currentPlayList);
+			}
+			// 现在在听的音乐在播放列表中的索引
+			this.musicIsListeningIndex = index;
+		},
+    tabOnclick(title) {
       this.$toast(title);
       let type;
       switch (title) {
@@ -245,7 +232,20 @@ export default {
       that.tags.unshift({ searchword: that.query });
       that.$ajax.get(urlLocal).then(res => {
         //if (type == 1) {
-          that.songlist = res.result.song.songs;
+          that.songlist = res.result.song.songs.map(e=>{
+            const obj = {
+              id: e.id,
+              name: e.name,
+              url: e.url,
+              picUrl: e.al.picUrl,
+              album: e.al.name,
+              mv: e.mv,
+              quality: 'SQ',
+              author: e.ar.map(singer=>singer.name).join(' ')
+            };
+            return obj;
+          });
+          //that.songlist = res.result.song.songs;
           that.searchResult.forEach(e=>e.data=that.songlist)
         //}
       });
@@ -272,6 +272,7 @@ export default {
           that.tags.unshift({ searchword: that.query });
           that.$ajax.get(urlLocal).then(res => {
             console.log(res);
+            that.tabOnclick(that.activeName);
           });
           const local_user = localStorage.user;
           if (local_user) {
@@ -285,6 +286,9 @@ export default {
   },
   computed: {
     ...mapState(["music"])
+  },
+  components: {
+    BottomPlayer
   }
 };
 </script>
@@ -347,9 +351,9 @@ export default {
       justify-content: space-between;
       align-items: center;
       .hearder-title {
-        font-size: 0.35rem;
+        font-size: 0.5rem;
         font-weight: 600;
-        line-height: 0.4rem;
+        margin: 0.3rem 0;
       }
       .hearder-button {
         flex-basis: 0.2rem;
@@ -360,15 +364,22 @@ export default {
       }
     }
     .tags {
-      display: flex;
-      flex-basis: 0.5rem;
-      overflow: scroll;
-      span {
-        margin-left: 0.1rem;
-        margin-right: 0.1rem;
-        font-weight: 500;
-        font-size: 0.3rem;
+      height: 1rem;
+      width: 100%;
+      overflow-x: scroll;
+      overflow-y: hidden;
+      .tags-row{
+        height: 100%;
+        line-height: 1rem;
         white-space: nowrap;
+        span {
+          margin: 0 0.1rem;
+          padding: 0.1rem 0.3rem;
+          // height: 0.38rem;
+          font-weight: 500;
+          font-size: 0.3rem;
+          
+        }
       }
     }
   }
@@ -376,6 +387,7 @@ export default {
     display: flex;
     flex-direction: column;
     margin: 1rem 0.5rem;
+    margin-bottom: 1.5rem;
     .title {
       display: flex;
       font-size: 0.5rem;
@@ -407,7 +419,7 @@ export default {
             flex-basis: 1rem;
             display: flex;
             .searchword {
-              font-size: 0.5rem;
+              font-size: 0.46rem;
               display: flex;
               align-items: center;
               justify-content: center;
@@ -420,9 +432,10 @@ export default {
               padding: 0 0.2rem;
             }
             .icon {
-              line-height: 0.6rem;
+              line-height: 0.5rem;
               img {
                 margin: 0;
+                height: 0.4rem;
               }
             }
           }
@@ -438,6 +451,7 @@ export default {
   .reach-result {
     margin-top: 1.2rem;
     .result-tabs {
+      padding-top: 0.2rem;
       .van-ellipsis {
         font-size: 0.4rem;
       }
@@ -457,6 +471,7 @@ export default {
           align-items: center;
           .music-info {
             flex-basis: 8.5rem;
+            flex-grow: 1;
             .music-title {
               font-size: 0.45rem;
               width: 6.5rem;
@@ -503,9 +518,7 @@ export default {
           }
           .more-operation {
             i{
-              flex-basis: 0.2rem!important;
-              color: #888;
-
+              font-size: 0.5rem!important;
             }
           }
           .isListening {

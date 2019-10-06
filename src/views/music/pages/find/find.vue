@@ -158,18 +158,21 @@ export default {
 			songList: [
         {
           id: 1,
+          playCount: 264652,
           picUrl: "./static/images/head-img-6.jpeg",
           name: "王一博热门单曲",
           artist: ""
         },
         {
           id: 2,
+          playCount: 261252,
           picUrl: "./static/images/head-img-7.jpeg",
           name: "骄傲男孩",
           artist: "白举纲"
         },
         {
           id: 3,
+          playCount: 225652,
           picUrl: "./static/images/head-img-3.jpeg",
           name: "没什么大不了",
           artist: "高珊"

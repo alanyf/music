@@ -175,7 +175,7 @@ export default {
 					flex-basis: 8rem;
 					flex-grow: 1;
 					line-height: 1.5rem;
-					font-size: 0.55rem;
+					font-size: 0.46rem;
 					align-items: center;
 					border-bottom: 1px solid #ddd;
 					.item-num{
@@ -221,7 +221,7 @@ export default {
 					line-height: 0.8rem;
 					flex-grow: 1;
 					align-items: center;
-					font-size: 0.55rem;
+					font-size: 0.52rem;
 					.item-num{
 						margin-left: 0.1rem;
 						font-size: 0.35rem;
@@ -267,7 +267,7 @@ export default {
 						flex-basis: 7rem;
 						flex-grow: 1;
 						height: 1.4rem;
-						font-size: 0.5rem;
+						font-size: 0.45rem;
 						flex-direction: column;
 						text-align: left;
 						vertical-align: top;

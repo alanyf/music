@@ -45,7 +45,6 @@ export default {
 		showSidebar(){
 			this.$refs.accountSidebar.show();
 			this.$store.commit('changeIsShowSidebar', true);
-			alert('changeIsShowSidebar');
 		},
 		hiddenSidebar(){
 			this.$store.commit('changeIsShowSidebar', false);
@@ -97,7 +96,7 @@ export default {
 				margin: 0 0.5rem;
 				.link-tab{
 					flex-grow: 1;
-					font-size: 0.55rem;
+					font-size: 0.5rem;
 					text-align: center;
 					color: #2c3e50;
 					&:active{
@@ -105,7 +104,7 @@ export default {
 					}
 				}
 				.focus{
-					font-size: 0.6rem;
+					font-size: 0.55rem;
 					color: #000;
 					font-weight: bolder;
 				}
@@ -120,6 +119,8 @@ export default {
 			flex-grow: 1;
 			flex-shrink: 1;
 			margin: 1.5rem 0;
+			background-color: #fff;
+			overflow: scroll;
 		}
 		// .footer{
 		// 	position: fixed;

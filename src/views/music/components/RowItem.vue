@@ -50,7 +50,7 @@ export default {
             height: 1.5rem;
             padding: 0.1rem 0.5rem;
             text-align: left;
-            border-bottom: 1px solid #ccc;
+            border-bottom: 1px solid #ddd;
             display: flex;
             align-items: center;
             .music-info{
