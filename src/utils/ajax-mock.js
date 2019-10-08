@@ -53,7 +53,7 @@ class Ajax {
 function getReqName(url){
     return url.split('/').join('_');
 }
-//if(isProd){
-if(1){
+if(isProd){
+//if(1){
     Vue.prototype.$ajax = new Ajax();
 }
