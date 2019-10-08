@@ -116,6 +116,9 @@ export default {
         padding: 0.2rem 0.5rem;
         margin-bottom: 1rem;
         background-color: white;
+        .van-pull-refresh{
+            overflow: scroll;
+        }
         .van-pull-refresh__head{
             span, div{
                 font-size: 0.4rem!important;
