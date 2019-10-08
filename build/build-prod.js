@@ -11,9 +11,14 @@ var chalk = require('chalk')
 var webpack = require('webpack')
 var config = require('../config')
 var webpackConfig = require('./webpack.prod.conf')
+var utils = require('./utils')
 
 var spinner = ora('building for production...')
 spinner.start()
+
+// 拷贝静态文件
+utils.copyFile(path.resolve(__dirname, '../static'), path.resolve(__dirname, '../dist'));
+
 
 /*  var download = function(url, dest, cb) {
   var file = fs.createWriteStream(dest);

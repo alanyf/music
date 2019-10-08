@@ -2,6 +2,7 @@ var path = require('path')
 var config = require('../config')
 var MiniCssExtractPlugin = require("mini-css-extract-plugin");
 var glob = require('glob');
+const { exec } = require('child_process');
 exports.assetsPath = function (_path) {
   var assetsSubDirectory = process.env.NODE_ENV === 'production'
     ? config.build.assetsSubDirectory
@@ -85,4 +86,9 @@ exports.getEntries = function (globPath) {
     entries[moduleName] = entry
   });
   return entries;
+}
+
+exports.copyFile = function(from, to){
+  console.log('\ncopy', from, 'to', to, '\n');
+  exec('cp -r ' + from + ' ' + to);
 }

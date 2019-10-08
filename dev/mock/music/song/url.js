@@ -6,7 +6,7 @@ module.exports = {
         data: [
             {
                 "id": 168091,
-                "url": "http://m8.music.126.net/20190821230848/7f74399568fc6cc39b7111d2b373cbbb/ymusic/ce70/d44c/021f/31d3215f707625a65663ab51858d6a86.mp3",
+                "url": "./static/media/music.mp3",
                 "br": 128000,
                 "size": 4329682,
                 "md5": "31d3215f707625a65663ab51858d6a86",
