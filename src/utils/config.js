@@ -1,6 +1,6 @@
 import config from '../../config';
-const isDev = window.CURENT_ENV === 'development';      // 拿到当前环境，判断是否为测试环境
-console.log('current environment:', window.CURENT_ENV);
+const isDev = window.CURRENT_ENV === 'development';      // 拿到当前环境，判断是否为测试环境
+console.log('current environment:', window.CURRENT_ENV);
 module.exports = {
     protocal: 'http',                                   // 协议名，用来判断请求的url是否带有host
     host: 'http://localhost:3000/',                     // 选择线上接口时使用的host
