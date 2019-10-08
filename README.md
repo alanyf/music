@@ -38,8 +38,36 @@ npm run build
 
 [演示链接](https://alan147258.gitee.io/musicapp)
 
+## 介绍
+### 页面
+1. 首页-发现页面
+2. 首页-我的页面
+3. 首页-好友页面
+4. 首页-视频页面
+5. 账户中心页
+6. 歌曲列表页
+7. 歌曲播放页
+8. 歌单广场页
+9. 歌单详情页
+10. 搜索页
+11. 底部当前播放列表页  
 
-## 优化计划
+### 页面截图  
+
+<img src="./static/images/screenshot/find.jpg" style="width:300px;height:533px;">
+<img src="./static/images/screenshot/my.jpg" style="width:300px;height:533px;">
+<img src="./static/images/screenshot/friend.jpg" style="width:300px;height:533px;">
+<img src="./static/images/screenshot/video.jpg" style="width:300px;height:533px;">
+<img src="./static/images/screenshot/account.jpg" style="width:300px;height:533px;">
+<img src="./static/images/screenshot/menu.jpg" style="width:300px;height:533px;">
+<img src="./static/images/screenshot/play.jpg" style="width:300px;height:533px;">
+<img src="./static/images/screenshot/playList.jpg" style="width:300px;height:533px;">
+<img src="./static/images/screenshot/playListDetail.jpg" style="width:300px;height:533px;">
+<img src="./static/images/screenshot/search.jpg" style="width:300px;height:533px;">
+<img src="./static/images/screenshot/search-result.jpg" style="width:300px;height:533px;">
+<img src="./static/images/screenshot/bottom-list-play.jpg" style="width:300px;height:533px;">
+
+## 优化记录
 > 1. `(ok)`丰富本地mock数据，使项目在没有网易云api接口的情况下依然正常运行，最好可以自动判断运行环境，本地开发使用接口，线上使用mock（ajax-mock.js中import()实现前端动态加载mock数据）；  
 > 2. `(ok)`play歌曲播放页架构优化，现在架构较为混乱，代码耦合性较高；  
 > 3. `(ok)`当前还未使用vuex，计划使用vuex优化组件建通信和状态管理；  
@@ -59,17 +87,3 @@ npm run build
 > 12. 缓存，前进刷新，后退不刷新
 > 13. 使用slot插槽优化，能否抽象出常用组件，容器组件等
 > 14. `(ok)`子路由刷新报404（服务器设置所有带music路径的请求都只想本项目的index.html，路由使用哈希模式）
-
-
-## 介绍
-### 1. 首页
-
-![首页]()
-
-![菜单页]()
-
-![首页]()
-
-![首页]()
-
-![首页]()
