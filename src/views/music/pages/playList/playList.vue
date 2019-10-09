@@ -128,7 +128,7 @@ export default {
 		isSameList(){
 			let sameListFlag = true;
 			for(let i=0;i<this.playList.length;i++){
-				if(!this.currentPlayList ||(this.currentPlayList[i] && this.playList[i].id !== this.currentPlayList[i].id)){
+				if(!this.currentPlayList || this.playList.length !== this.currentPlayList.length ||(this.currentPlayList[i] && this.playList[i].id !== this.currentPlayList[i].id)){
 					sameListFlag = false;
 					break;
 				}
