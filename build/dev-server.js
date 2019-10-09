@@ -9,6 +9,7 @@ var webpackConfig = require('./webpack.dev.conf')
 var bodyParser = require('body-parser')
 var mock = require('./mock');
 var config = require('../config')
+var chalk = require('chalk')
 
 if (!process.env.NODE_ENV) {
   process.env.NODE_ENV = JSON.parse(config.dev.env.NODE_ENV)
@@ -113,6 +114,11 @@ app.use(mock);
 var uri = 'http://localhost:' + port
 
 devMiddleware.waitUntilValid(function () {
+  if(!fs.existsSync(path.resolve(__dirname, '../dist/static'))){
+    console.log(chalk.yellow('\nstart copy static file...'));
+    // 拷贝静态文件
+    utils.copyFile(path.resolve(__dirname, '../static'), path.resolve(__dirname, '../dist'));
+  }
   console.log('> Listening at ' + uri + '\n')
 })
 
@@ -122,3 +128,4 @@ module.exports = server.listen(port, function (err) {
     return
   }
 })
+

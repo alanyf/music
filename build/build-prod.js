@@ -16,8 +16,6 @@ var utils = require('./utils')
 var spinner = ora('building for production...')
 spinner.start()
 
-// 拷贝静态文件
-utils.copyFile(path.resolve(__dirname, '../static'), path.resolve(__dirname, '../dist'));
 
 
 /*  var download = function(url, dest, cb) {
@@ -50,6 +48,9 @@ var pack = function() {
         '  Tip: built files are meant to be served over an HTTP server.\n' +
         '  Opening index.html over file:// won\'t work.\n'
       ))
+      console.log(chalk.yellow('\nstart copy static file...\n'));
+      // 拷贝静态文件
+      utils.copyFile(path.resolve(__dirname, '../static'), path.resolve(__dirname, '../dist'));
     })
 };
 
