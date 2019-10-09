@@ -57,7 +57,7 @@ export default {
 				this.$store.commit('changeCurrentMusicIndex', index);
 			}
 			// 改变正在播放的音乐列表
-			if(!this.isSameList){
+			if(this.isSameList !== true){
 				this.$store.commit('changeCurrentPlayList', this.playlist);
 				this.saveCurrentPlayList(this.currentPlayList);
 			}
@@ -147,7 +147,7 @@ export default {
 		isSameList(){
 			let sameListFlag = true;
 			for(let i=0;i<this.playlist.length;i++){
-				if(!this.currentPlayList ||(this.currentPlayList[i] && this.playlist[i].id !== this.currentPlayList[i].id)){
+				if(!this.currentPlayList || this.playlist.length !== this.currentPlayList.length ||(this.currentPlayList[i] && this.playlist[i].id !== this.currentPlayList[i].id)){
 					sameListFlag = false;
 					break;
 				}
