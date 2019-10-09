@@ -56,7 +56,7 @@ export default {
 					name: "蓝莲花",
 					picUrl: "http://p1.music.126.net/C6txAWMGlVmAcAD37RVutQ==/122045790684028.jpg",
 					quality: "SQ",
-					url: "http://m7.music.126.net/20190905102832/602e4b2b94e5d6edce5e658716579180/ymusic/ce70/d44c/021f/31d3215f707625a65663ab51858d6a86.mp3"
+					url: "./static/media/music.mp3"
 				};
 				currentPlayList = [recentMusic];
 				user.name = 'Alan';
