@@ -1,34 +1,33 @@
 module.exports = {
-    "env": {
-        "mocha": true,
-        "es6": true,
-        "node": true
-    },
-    "globals": {
-        "expect": true,
-        "sinon": true,
-        "document": false,
-        "navigator": false,
-        "window": true,
-        "Image": false,
-        "FormData": false
-    },
-    "plugins": ["vue"],
-    "parserOptions": {
-        "parser": "babel-eslint",
+	root: true,
+	env: {
+		browser: true,
+        node: true,
+        es6: true,
+	},
+	parserOptions: {
+        parser: 'babel-eslint',
         "ecmaVersion": 6,
         "sourceType": "module",
         "ecmaFeatures": {
             "experimentalObjectRestSpread": true,
             "jsx": true
         }
-    },
-    "rules": {
+	},
+	extends: [
+        'eslint:recommended',
+        'plugin:vue/recommended',
+	],
+	// 校验 .vue 文件
+	plugins: [
+		'vue'
+	],
+	rules: {
         "accessor-pairs": 2,
         "array-bracket-spacing": [2, "never"],
         "arrow-spacing": [2, { "before": true, "after": true }],
         "brace-style": [1, "stroustrup", {}],
-        "comma-dangle": [2, "never"],
+        "comma-dangle": [1, "never"],
         "comma-spacing": [2, {"before": false, "after": true}],
         "comma-style": [2, "last"],
         "constructor-super": 2,
@@ -39,13 +38,34 @@ module.exports = {
         "eqeqeq": [2, "allow-null"],
         "generator-star-spacing": [2, { "before": true, "after": true }],
         "guard-for-in": 1,
-        "indent":  [2, 4, {"SwitchCase": 1}],
+        // "indent":  [2, 4, {"SwitchCase": 1}],
+		// 'indent': [1, "error", "tab"],
+		// // 配置vue/script脚本缩进规则
+        // 'vue/script-indent': ['error', 'tab',
+        //     {
+        //         'baseIndent': 1
+        //     }
+		// ],
+        'vue/script-indent': ['error', 4,
+            {
+                'baseIndent': 1
+            }
+		],
+		// // 配置vue/template模版缩进规则
+		// "vue/html-indent": ["error", 'tab', {
+		// 	"attribute": 1,
+		// 	"baseIndent": 1,
+		// 	"closeBracket": 0,
+		// 	"alignAttributesVertically": true,
+		// 	"ignores": []
+        // }],
+        "vue/html-indent": ["error", 4],
         "quote-props": [2, "as-needed"],
         "max-statements": [1, 50],
         "key-spacing": [2, {"beforeColon": false, "afterColon": true}],
         "keyword-spacing": 2,
         "max-depth": [1, 6],
-        "max-len": [2, 120, 4, {
+        "max-len": [1, 200, 4, {
             "ignoreUrls": true,
             "ignoreComments": true,
             "ignorePattern": "\\+ [\\w\\W]+>'"
@@ -56,7 +76,7 @@ module.exports = {
         "new-parens": 1,
         "no-array-constructor": 2,
         "no-cond-assign": 2,
-        "no-console": 1,
+        "no-console": 0,
         "no-const-assign": 2,
         "no-constant-condition": 1,
         "no-debugger": 2,
@@ -108,7 +128,7 @@ module.exports = {
         "no-spaced-func": 2,
         "no-sparse-arrays": 2,
         "no-this-before-super": 2,
-        "no-trailing-spaces": 2,
+        "no-trailing-spaces": 1,
         "no-undef": 2,
         "no-undef-init": 1,
         "no-unexpected-multiline": 2,
@@ -130,7 +150,7 @@ module.exports = {
         "operator-linebreak": [2, "before"],
         "quotes": [2, "single", {"avoidEscape": true, "allowTemplateLiterals": true}],
         "radix": 2,
-        "semi": [2, "always"],
+        "semi": [1, "always"],
         "semi-spacing": 2,
         "space-before-function-paren": [2, {"anonymous": "always", "named": "never"}],
         "space-before-blocks": [2, "always"],
@@ -154,5 +174,13 @@ module.exports = {
             "requireParamDescription": true
         }],
         "yield-star-spacing": [2, "both"]
-    }
-};
+	},
+	overrides: [
+		{
+			"files": ["*.vue"],
+			"rules": {
+				"indent": "off"
+			}
+		}
+	],
+}

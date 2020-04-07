@@ -1,47 +1,42 @@
-require('./check-versions')()
+require('./check-versions')();
 
 var fs = require('fs-extra');
-var path = require('path')
-var express = require('express')
-var webpack = require('webpack')
-var proxyMiddleware = require('http-proxy-middleware')
-var webpackConfig = require('./webpack.dev.conf')
-var bodyParser = require('body-parser')
+var path = require('path');
+var express = require('express');
+var webpack = require('webpack');
+var proxyMiddleware = require('http-proxy-middleware');
+var webpackConfig = require('./webpack.dev.conf');
+var bodyParser = require('body-parser');
 var mock = require('./mock');
-var config = require('../config')
-var chalk = require('chalk')
+var config = require('../config');
 
 if (!process.env.NODE_ENV) {
-  process.env.NODE_ENV = JSON.parse(config.dev.env.NODE_ENV)
+    process.env.NODE_ENV = JSON.parse(config.dev.env.NODE_ENV);
 }
 
 // default port where dev server listens for incoming traffic
-var port = process.env.PORT || config.dev.port
+var port = process.env.PORT || config.dev.port;
 
 // Define HTTP proxies to your custom API backend
 // https://github.com/chimurai/http-proxy-middleware
-var proxyTable = config.dev.proxyTable
+var proxyTable = config.dev.proxyTable;
 
-
-var app = express()
+var app = express();
 var server = require('http').createServer(app);
 
-var compiler = webpack(webpackConfig)
-
+var compiler = webpack(webpackConfig);
 
 var devMiddleware = require('webpack-dev-middleware')(compiler, {
-  publicPath: webpackConfig.output.publicPath,
-  quiet: true
-})
-
-
+    publicPath: webpackConfig.output.publicPath,
+    quiet: true
+});
 
 var hotMiddleware = require('webpack-hot-middleware')(compiler, {
-  log: () => {}
-})
+    log: () => {}
+});
 // force page reload when html-webpack-plugin template changes
 
-//compiler.plugin('compilation', function (compilation) {
+// compiler.plugin('compilation', function (compilation) {
 /* compiler.hooks.compilation.tap('hotReloadAfterHtmlEmit', compilation => {
   compilation.plugin('html-webpack-plugin-after-emit', function (data, cb) {
     hotMiddleware.publish({ action: 'reload' })
@@ -50,23 +45,23 @@ var hotMiddleware = require('webpack-hot-middleware')(compiler, {
 }) */
 
 compiler.hooks.compilation.tap('html-webpack-plugin-after-emit', () => {
-  hotMiddleware.publish({
+    hotMiddleware.publish({
         action: 'reload'
-  });
+    });
 });
 
-//compiler.plugin("done", function(statsResult) {
+// compiler.plugin("done", function(statsResult) {
 /* compiler.hooks.done.tap('hotReloadComplierDone', statsResult => {
     hotMiddleware.publish({ action: 'reload' })
 }); */
 
 // proxy api requests
 Object.keys(proxyTable).forEach(function (context) {
-  var options = proxyTable[context]
-  if (typeof options === 'string') {
-    options = { target: options }
-  }
-  app.use(proxyMiddleware(options.filter || context, options))
+    var options = proxyTable[context];
+    if (typeof options === 'string') {
+        options = {target: options};
+    }
+    app.use(proxyMiddleware(options.filter || context, options));
 });
 
 /**
@@ -74,58 +69,49 @@ Object.keys(proxyTable).forEach(function (context) {
  * @param filePath 需要遍历的文件路径
  */
 // 调用文件遍历方法
-var utils = require('./utils')
-var _fList = utils.getEntries('./src/views/**/main.js');
-var _reg = new RegExp("^\/(" + Object.keys(_fList).join("|") + ")");
-app.get(_reg, function(req, res, next) {
-    var _paths = req.url.split('/');
-    var _baseUrl = '../dist/' + _paths[1] + '/index.html';
+app.get('/', function (req, res, next) {
+    var _baseUrl = '../dist/index.html';
     if (req.get('x-requested-with') === 'XMLHttpRequest') {
         next();
         return;
     }
     res.end(fs.readFileSync(path.resolve(__dirname, _baseUrl), 'utf8'));
-})
+});
+
+app.use('*', function (req, res, next) {
+    console.log(req.method, req.path, req.method.toLocaleUpperCase() === 'GET' ? req.query : req.body);
+    next();
+});
 
 // handle fallback for HTML5 history API
-app.use(require('connect-history-api-fallback')())
+app.use(require('connect-history-api-fallback')());
 
 // serve webpack bundle output
-app.use(devMiddleware)
+app.use(devMiddleware);
 
 // enable hot-reload and state-preserving
 // compilation error display
-app.use(hotMiddleware)
-
+app.use(hotMiddleware);
 
 app.use(bodyParser.json()); // for parsing application/json
-app.use(bodyParser.urlencoded({ extended: true }));
-
+app.use(bodyParser.urlencoded({extended: true}));
 
 // serve pure static assets
-// var staticPath = path.posix.join(config.dev.assetsPublicPath, config.dev.assetsSubDirectory)
+var staticPath = path.posix.join(config.dev.assetsPublicPath, config.dev.assetsSubDirectory);
 // console.log(staticPath);
-// app.use(staticPath, express.static('./dist'))
-var _staticPath = path.resolve(__dirname, config.build.assetsRoot);
-app.use(express.static(_staticPath))// 静态目录
-
+app.use(staticPath, express.static('./static'));
+app.use(staticPath, express.static('./dist/static'));
 
 app.use(mock);
-var uri = 'http://localhost:' + port
+var uri = 'http://localhost:' + port;
 
 devMiddleware.waitUntilValid(function () {
-  if(!fs.existsSync(path.resolve(__dirname, '../dist/static'))){
-    console.log(chalk.yellow('\nstart copy static file...'));
-    // 拷贝静态文件
-    utils.copyFile(path.resolve(__dirname, '../static'), path.resolve(__dirname, '../dist'));
-  }
-  console.log('> Listening at ' + uri + '\n')
-})
+    console.log('> Listening at ' + uri + '\n');
+});
 
 module.exports = server.listen(port, function (err) {
-  if (err) {
-    console.log(err)
-    return
-  }
-})
-
+    if (err) {
+        console.log(err);
+        return;
+    }
+});

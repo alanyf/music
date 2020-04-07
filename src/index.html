@@ -1,0 +1,93 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <title>云村在线音乐播放器</title>
+        <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1,user-scalable=yes" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+        <meta content="telephone=no" name="format-detection" />
+        <% 
+            var CURRENT_ENV = htmlWebpackPlugin.options.currentEnv;
+            var BASE_URL = htmlWebpackPlugin.options.baseUrl;// 静态资源根url
+            var ENV_NAME = htmlWebpackPlugin.options.envName;// 环境名称
+            var BRANCH_NAME = htmlWebpackPlugin.options.curentBranch;// 分支名称
+        %>
+        <script name="mount-env-variable">
+            // 环境变量挂载到window
+            window.CURRENT_ENV = "<%= CURRENT_ENV %>";
+            window.ENV_NAME = "<%= ENV_NAME %>";
+            window.BRANCH_NAME = "<%= BRANCH_NAME %>";
+        </script>
+        <!-- 项目打包的css -->
+        <% htmlWebpackPlugin.files.css.forEach(function(css){
+            var cssEntry = css;
+            %><link rel="stylesheet" type="text/css"  href="<%= cssEntry + '?_t=' + Date.now() %>">
+        <%})%>
+        <script>
+            ;(function (baseFontSize) {
+                const _baseFontSize = baseFontSize || 75;
+                const ua = navigator.userAgent;
+                const matches = ua.match(/Android[\S\s]+AppleWebkit\/(\d{3})/i);
+                const isIos = navigator.appVersion.match(/(iphone|ipad|ipod)/gi);
+                let dpr = window.devicePixelRatio || 1;
+                if (!isIos && !(matches && matches[1] > 534)) {
+                    // 如果非iOS, 非Android4.3以上, dpr设为1;
+                    dpr = 1;
+                }
+                const scale = 1 / dpr;
+                const metaEl = document.querySelector('meta[name="viewport"]');
+                if (!metaEl) {
+                    metaEl = document.createElement('meta');
+                    metaEl.setAttribute('name', 'viewport');
+                    window.document.head.appendChild(metaEl);
+                }
+                metaEl.setAttribute('content', 'width=device-width,user-scalable=no,initial-scale=' + scale + ',maximum-scale=' + scale + ',minimum-scale=' + scale);
+
+                document.documentElement.style.fontSize = document.documentElement.clientWidth / (750 / _baseFontSize) + 'px';
+            })();
+        </script>
+
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+            }
+            p,h1,h2,h3,h4,h5,h6{
+                font-size: 0.4rem;
+                margin: 0!important;
+                padding: 0!important;
+            }
+            html, body, #app{
+                height: 100%;
+                /* font-size: 0.4rem; */
+            }
+            i:active{
+                color: black;
+                transform: scale(0.9);
+            }
+            a {
+                color: #2c3e50;
+                text-decoration: none;
+            }
+            a:hover{
+                color: #2c3e50;
+                text-decoration: none;
+            }
+            .router-link-active{
+                text-decoration: none!important;
+                color: #2c3e50!important;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="app"></div>
+        <script type="text/javascript" src="./static/js/vue.js"></script>
+        <!-- 项目打包的js，oa与prod过滤devTools开发工具 -->
+        <% htmlWebpackPlugin.files.js.forEach(function(js){
+            var jsEntry = js;
+            %><script type="text/javascript" src="<%= jsEntry + '?_t=' + Date.now() %>"></script>
+        <%})%>
+    </body>
+</html>

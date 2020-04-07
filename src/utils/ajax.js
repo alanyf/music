@@ -74,29 +74,29 @@ if (!Vue.prototype.$ajax) {
 
         if (true) {
             switch (config.method) {
-                case 'get':
-                case 'delete':
-                case 'head':
-                case 'options':
-                    config.params = config.params || {};
-                    break;
-                case 'post':
-                case 'put':
-                case 'patch':
-                    config.data = config.data || {};
-                    if (typeof config.data === 'string') {
-                        let str = config.data;
-                        try {
-                            config.data = JSON.parse(str);
-                        }
-                        catch (e) {
-                            // data数据在服务那边处理后变成了 name=val&...形式
-                            config.data = parse(str);
-                        }
+            case 'get':
+            case 'delete':
+            case 'head':
+            case 'options':
+                config.params = config.params || {};
+                break;
+            case 'post':
+            case 'put':
+            case 'patch':
+                config.data = config.data || {};
+                if (typeof config.data === 'string') {
+                    let str = config.data;
+                    try {
+                        config.data = JSON.parse(str);
                     }
-                    break;
-                default:
-                    break;
+                    catch (e) {
+                        // data数据在服务那边处理后变成了 name=val&...形式
+                        config.data = parse(str);
+                    }
+                }
+                break;
+            default:
+                break;
             }
         }
 

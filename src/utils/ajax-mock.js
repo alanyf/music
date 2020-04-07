@@ -1,59 +1,94 @@
-const isProd = window.CURRENT_ENV === 'production';
-class Ajax {
-    constructor(){
-        //window.module = {exports: null};
-
-    }
-     // 依靠script加载js文件来实现动态加载mock数据
-     getByScript(url){
-        return new Promise((resolve, reject)=>{
-            const script = document.createElement('script');
-            url = url.split('?')[0];
-            script.src = `./mock${url}.js`;
-            script.async = false;
-            document.body.appendChild(script);
-            script.onload = ()=>{
-                const res = window.module.exports;
-                if(res !== undefined){
-                    resolve(res.body)
-                }else{
-                    reject({code: 0,  message: 'fail', data: null});
-                }
-                document.body.removeChild(script);
-            }
-
-            setTimeout(()=>{
-                try{
-                    if([].indexOf.call(document.body.children, script) !== -1){
-                        console.log('removeChild');
-                        document.body.removeChild(script);
-                    }
-                }catch(err){
-                    reject(err);
-                }
-            }, 500);
-        });
-    }
+const urlModule = require('url');
+const isProd = window.ENV_NAME !== 'local';
+function Ajax() {
     // 依靠import()动态加载js文件来实现动态加载mock数据
-    get(url){
-        return new Promise(async (resolve, reject)=>{
-            url = url.split('?')[0];
+    Ajax.prototype.get = getRequest({method: 'GET'});
+    Ajax.prototype.delete = getRequest({method: 'DELETE'});
+    Ajax.prototype.post = getRequest({method: 'POST'});
+    Ajax.prototype.put = getRequest({method: 'PUT'});
+    Ajax.prototype.getByScript = getByScript;
+}
+
+function getRequest({method}) {
+    return function request(url, option) {
+        return new Promise(async (resolve, reject) => {
+            const path = url.split('?')[0];
             // 动态加载存放mock数据的js文件，动态加载的文件会被webpack编译成按需加载的文件放在输出目录中等待符合条件的情况下加载
             // 通过webpackChunkName为生成的chunk文件取名字，通过"[request]"告知webpack依靠传递的路径下的文件名动态生成chunk文件名
             import(
                 /* webpackChunkName: "[request]"*/
-                `../../dev/mock${url}`
+                `../../dev/mock${path}.js`
             ).then(res => {
-                console.log(res.body);
-                resolve(res&&res.body);
+                if (res && res.default) {
+                    const body = res.default;
+                    if (typeof body === 'function') {
+                        let params = null;
+                        if (method === 'GET' || method === 'DELETE') {
+                            params = urlModule.parse(url, true).query;
+                        }
+                        else if (method === 'POST' || method === 'PUT') {
+                            params = {};
+                        }
+                        option && option.params && Object.assign(params, JSON.parse(JSON.stringify(option.params)));
+                        const data = body({url, params}).body;
+                        resolve(data);
+                    }
+                    else {
+                        resolve(res.body);
+                    }
+                    return;
+                }
+                const err = 'Request not found: ' + url;
+                console.error(err);
+                reject(err);
             }).catch(err => reject(err));
         });
-    }
+    };
 }
-function getReqName(url){
-    return url.split('/').join('_');
+
+// 依靠script加载js文件来实现动态加载mock数据
+function getByScript(url) {
+    return new Promise((resolve, reject) => {
+        const script = document.createElement('script');
+        const path = url.split('?')[0];
+        script.src = `./mock${path}.js`;
+        script.async = false;
+        document.body.appendChild(script);
+        script.onload = () => {
+            const res = window.module.exports;
+            if (res !== undefined) {
+                resolve(res.body);
+            }
+            else {
+                reject({code: 0, message: 'fail', data: null});
+            }
+            document.body.removeChild(script);
+        };
+
+        setTimeout(() => {
+            try {
+                if ([].indexOf.call(document.body.children, script) !== -1) {
+                    console.log('removeChild');
+                    document.body.removeChild(script);
+                }
+            }
+            catch (err) {
+                reject(err);
+            }
+        }, 500);
+    });
 }
-if(isProd){
-//if(1){
+// function parseUrlParams(url) {
+//     const params = {};
+//     if (url.includes('?')) {
+//         const str = url.split('?')[1];
+//         const arr = str.split('&');
+//         for (let i = 0; i < arr.length; i++) {
+//             params[arr[i].split('=')[0]] = decodeURI(arr[i].split('=')[1]);
+//         }
+//     }
+//     return params;
+// }
+if (isProd) {
     Vue.prototype.$ajax = new Ajax();
 }

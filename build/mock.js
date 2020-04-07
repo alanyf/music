@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 let path = require('path');
 let url = require('url');
 // 验证JSOnN
@@ -8,19 +8,18 @@ let Mock = require('mockjs');
 
 module.exports = function (req, res, next) {
     // // 调用文件遍历方法
-    var utils = require('./utils')
-    var _fList =  Object.keys(utils.getEntries('./dev/mock/*/'));
+    var utils = require('./utils');
+    var _fList = Object.keys(utils.getEntries('./dev/mock/*/'));
 
-    var newfList=[]
-    for(var i = 0;i<_fList.length;++i){
-        newfList.push(_fList[i].toString().substring(11))
+    var newfList = [];
+    for (var i = 0; i < _fList.length; ++i) {
+        newfList.push(_fList[i].toString().substring(11));
     }
-    var _reg = new RegExp("^/(" + newfList.join("|") + ")")
+    var _reg = new RegExp('^/(' + newfList.join('|') + ')');
     let pathname = url.parse(req.url).pathname;
     // console.log(pathname, 'pathname_001');
 
     // let filePath = path.resolve('../mock', pathname);
-
 
     function response(data, body) {
         // console.log(data);
@@ -28,14 +27,15 @@ module.exports = function (req, res, next) {
             res.status(data.statusCode).set({
                 'Content-Length': Buffer.byteLength(body),
                 'Content-Type': 'application/json'
-            })
+            });
             // res.setHeader(''+data.statusCode, {
             //     'Content-Length': Buffer.byteLength(body),
             //     'Content-Type': 'application/json'
             // });
             res.end(body);
-        } catch (e) {
-            console.log(e,'response err');
+        }
+        catch (e) {
+            console.log(e, 'response err');
             return;
         }
     }
@@ -69,17 +69,18 @@ module.exports = function (req, res, next) {
             // console.log('mocking:' + filePath);
             if (typeof data === 'function') {
                 if (req.method === 'GET' || req.method === 'DELETE') {
-                    if (id !== undefined) {
-                        req.url += '&id=' + id;
-                    }
-                    data = data(url.parse(req.url, true).query);
+                    // if (id !== undefined) {
+                    //     req.url += '&id=' + id;
+                    // }
+                    const params = url.parse(req.url, true).query;
+                    data = data({url, params});
                     // Mock.mock('/\/call\/metketing\/boardmsgs/', 'get', data(url.parse(req.url, true).query));
                 }
                 else if (req.method === 'POST' || req.method === 'PUT') {
-                    if (id !== undefined) {
-                        req.body.id = id;
-                    }
-                    data = data(req.body);
+                    // if (id !== undefined) {
+                    //     req.body.id = id;
+                    // }
+                    data = data({url, params: req.body});
                 }
             }
             data = Mock.mock(data);
@@ -88,37 +89,37 @@ module.exports = function (req, res, next) {
             if (schemaValidation) {
                 const v = new Validator();
                 let dataSchema = {
-                    "id": "/ResponseData",
-                    "type": "object",
-                    "properties": {
-                        "startDate": {"type": "integer"},
-                        "endDate": {"type": "integer"},
-                        "appid": {"type": "string"},
-                        "domain": {"type": "string"},
-                        "index": {"type": "integer"},
-                        "count": {"type": "integer"},
-                        "total": {"type": "integer"},
-                        "pv": {"type": "integer"},
-                        "uv": {"type": "integer"},
-                        "vv": {"type": "integer"},
+                    id: '/ResponseData',
+                    type: 'object',
+                    properties: {
+                        startDate: {type: 'integer'},
+                        endDate: {type: 'integer'},
+                        appid: {type: 'string'},
+                        domain: {type: 'string'},
+                        index: {type: 'integer'},
+                        count: {type: 'integer'},
+                        total: {type: 'integer'},
+                        pv: {type: 'integer'},
+                        uv: {type: 'integer'},
+                        vv: {type: 'integer'}
                     }
                 };
                 let bodySchema = {
-                    "id": "/ResponseBody",
-                    "type": "object",
-                    "properties": {
-                        "code": {"type": "integer"},
-                        "msg": {"type": "string"},
-                        "data": {"$ref": "/ResponseData"}
+                    id: '/ResponseBody',
+                    type: 'object',
+                    properties: {
+                        code: {type: 'integer'},
+                        msg: {type: 'string'},
+                        data: {$ref: '/ResponseData'}
                     },
-                    "additionalProperties": false
+                    additionalProperties: false
                 };
                 let responseSchema = {
-                    "id": "/Response",
-                    "type": "object",
-                    "properties": {
-                        "statusCode": {"type": "integer"},
-                        "body": {"$ref": "/ResponseBody"}
+                    id: '/Response',
+                    type: 'object',
+                    properties: {
+                        statusCode: {type: 'integer'},
+                        body: {$ref: '/ResponseBody'}
                     }
                 };
                 v.addSchema(dataSchema, '/ResponseData');
@@ -142,13 +143,14 @@ module.exports = function (req, res, next) {
                     response(data, body);
                 }, 300);
             }
-        } catch (e) {
+        }
+        catch (e) {
             console.log(e);
             let data = {
                 statusCode: 500,
                 msg: '缺少mock数据',
                 body: ''
-            }
+            };
             response(data, data.body);
         }
     }

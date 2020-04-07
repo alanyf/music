@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[2],{520:function(s,o){s.exports={statusCode:200,body:{success:!0,data:{a:"ok"},msg:""}}}}]);
