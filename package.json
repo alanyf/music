@@ -9,7 +9,7 @@
     "build": "node build/build-prod.js",
     "publish": "sh build/publish.sh",
     "eslint": "./node_modules/.bin/eslint",
-    "lint-fix": "eslint --quiet --fix",
+    "lint-fix": "./node_modules/.bin/eslint --fix --ext .js,.vue src test/unit",
     "pretty": "node pretty.js"
   },
   "keywords": [
