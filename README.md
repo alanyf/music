@@ -22,12 +22,15 @@ npm install
 npm run dev
 # build for production with minification
 npm run build
+# publish
+git checkout dev
+npm run publish
 ```
 
 ## 三、演示地址
 点击打开下方链接，手机端直接打开链接即可，pc端按**F12**进入开发者模式，调整为手机模式查看。  
 
-[演示链接](https://alan147258.gitee.io/musicapp)
+[演示链接](https://alanyf.gitee.io/music)
 
 ## 四、技术栈
 * **Vue**  
@@ -40,6 +43,7 @@ npm run build
     1. 前端页面中可通过`window.CURRENT_ENV`可以获取当前环境是开发环境还是生产环境(`build/htmlPlugin.js`)；
     2. 使用哈希路由模式不受后台路由限制，可以在生产环境打包后直接打开`index.html`运行或者发布到`gitHub.io`在线上运行；
     3. 在不能启动webpack服务器的情况下，使用webpack动态加载js，来实现前端读取mock数据（`src/utils/ajax-mock.js`）；在上方演示页面的github.io上就是使用了前端mock数据；
+    4. 一个命令`npm run publish`自动编译和部署，
     
 ### 发布到`gitHub.io`的方法  
 1. 本地在dev/mock目录下创建好需要用到的接口数据，mock数据存放目录结构和接口的path一致；
@@ -113,3 +117,4 @@ npm run build
 > 12. 缓存，前进刷新，后退不刷新
 > 13. 使用slot插槽优化，能否抽象出常用组件，容器组件等
 > 14. `(ok)`子路由刷新报404（服务器设置所有带music路径的请求都只想本项目的index.html，路由使用哈希模式）
+> 15. `(ok)`自动构建发布，在dev分支上运行`npm run publish`开始自动`build`将文件打包到`dist`目录下，浏览器打开`index.html`即可访问。且自动`commit push`，完成后到github.io上发布即可完成发布。

@@ -79,7 +79,7 @@ app.get('/', function (req, res, next) {
 });
 
 app.use('*', function (req, res, next) {
-    console.log(req.method, req.path, req.method.toLocaleUpperCase() === 'GET' ? req.query : req.body);
+    // console.log(req.method, req.path, req.method.toLocaleUpperCase() === 'GET' ? req.query : req.body);
     next();
 });
 
