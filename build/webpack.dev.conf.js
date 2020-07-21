@@ -13,7 +13,7 @@ var path = require('path');
 // var MyPlugin = require('./htmlPlugin');
 var MiniCssExtractPlugin = require('mini-css-extract-plugin');
 var OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 // add hot-reload related code to entry chunks
 
 Object.keys(baseWebpackConfig.entry).forEach(function (name) {
@@ -135,10 +135,12 @@ module.exports = merge(baseWebpackConfig, {
         },
         minimizer: [
             // we specify a custom UglifyJsPlugin here to get source maps in production
-            new UglifyJsPlugin({
+            new TerserPlugin({
                 cache: true,
                 parallel: true,
-                uglifyOptions: {
+                terserOptions: {
+                    sourceMap: true,
+                    warnings: false,
                     compress: {
                         // warnings: false
                     },

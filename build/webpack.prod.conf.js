@@ -8,7 +8,7 @@ var CopyWebpackPlugin = require('copy-webpack-plugin');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var MiniCssExtractPlugin = require('mini-css-extract-plugin');
 var OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 
 var env = config.build.env;
 var webpackConfig = merge(baseWebpackConfig, {
@@ -154,14 +154,14 @@ var webpackConfig = merge(baseWebpackConfig, {
     optimization: {
         minimizer: [
             // we specify a custom UglifyJsPlugin here to get source maps in production
-            new UglifyJsPlugin({
-                cache: true,
+            new TerserPlugin({
+                //  cache: true,
                 parallel: true,
-                uglifyOptions: {
+                terserOptions: {
+                    warnings: false,
                     compress: {
-                        // warnings: false
                     },
-                    ecma: 6,
+                    //  ecma: 6,
                     mangle: true
                 },
                 sourceMap: true
